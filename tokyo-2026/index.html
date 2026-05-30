@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>東京・輕井澤・草津 五日旅遊行程書</title>
+<style>
+/* ============================================================
+   ★ 設計：和風旅遊誌 (washi paper editorial)
+   配色：生成り紙底 / 墨黑 / 朱紅 / 藍 / 抹茶
+   字型：系統內建堆疊（離線可用、出國斷網不掉字）
+   ============================================================ */
+:root{
+  --paper:#F2EBDD;
+  --paper2:#EAE0CC;
+  --card:#FBF7EE;
+  --ink:#2A241E;
+  --ink-soft:#5C5247;
+  --vermilion:#C2402A;
+  --vermilion-d:#9E2F1E;
+  --indigo:#2E4A6B;
+  --matcha:#6E8049;
+  --gold:#B08D3C;
+  --line:#D8CDB6;
+  --shadow:0 8px 28px -12px rgba(42,36,30,.35);
+  --f-sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans",-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Songti TC","Noto Serif TC","Yu Mincho","MS Mincho","Source Han Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-sans);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(176,141,60,.05), transparent 40%),
+    radial-gradient(circle at 88% 70%, rgba(46,74,107,.05), transparent 40%);
+}
+.serif{font-family:var(--f-serif)}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+
+/* ---------- 封面 ---------- */
+.cover{
+  position:relative;text-align:center;
+  padding:64px 20px 40px;overflow:hidden;
+}
+.cover .vlabel{
+  position:absolute;top:24px;right:26px;
+  writing-mode:vertical-rl;letter-spacing:.4em;
+  font-family:var(--f-serif);font-size:14px;color:var(--ink-soft);
+}
+.stamp{
+  width:84px;height:84px;border:2.5px solid var(--vermilion);
+  border-radius:14px;color:var(--vermilion);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-serif);font-weight:900;font-size:30px;
+  margin:0 auto 22px;transform:rotate(-6deg);
+  box-shadow:inset 0 0 0 4px rgba(194,64,42,.12);
+  line-height:1.1;
+  animation:stampin .7s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes stampin{from{opacity:0;transform:rotate(-6deg) scale(1.6)}to{opacity:1;transform:rotate(-6deg) scale(1)}}
+.cover h1{
+  font-family:var(--f-serif);font-weight:900;
+  font-size:clamp(34px,7vw,56px);line-height:1.15;letter-spacing:.02em;
+}
+.cover h1 .accent{color:var(--vermilion)}
+.cover .sub{
+  margin-top:14px;font-size:15px;color:var(--ink-soft);letter-spacing:.18em;
+}
+.cover .meta{
+  margin-top:26px;display:inline-flex;flex-wrap:wrap;gap:10px;justify-content:center;
+}
+.chip{
+  background:var(--card);border:1px solid var(--line);
+  padding:7px 16px;border-radius:30px;font-size:13.5px;color:var(--ink-soft);
+  box-shadow:var(--shadow);
+}
+.chip b{color:var(--ink)}
+.cover .rule{width:60px;height:3px;background:var(--vermilion);margin:30px auto 0;border-radius:2px}
+
+/* ---------- 導覽列 ---------- */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(242,235,221,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:10px 0;margin-bottom:8px;
+}
+.nav-inner{display:flex;gap:8px;overflow-x:auto;padding:0 20px;max-width:920px;margin:0 auto;scrollbar-width:none}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav button{
+  flex:0 0 auto;font-family:var(--f-sans);cursor:pointer;
+  background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);
+  padding:8px 16px;border-radius:30px;font-size:13.5px;font-weight:500;
+  transition:.2s;white-space:nowrap;
+}
+.nav button:hover{border-color:var(--vermilion);color:var(--vermilion)}
+.nav button.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.nav button.extra{border-color:var(--vermilion);color:var(--vermilion)}
+.nav button.extra.active{background:var(--vermilion);color:#fff;border-color:var(--vermilion)}
+.nav .divider{flex:0 0 auto;width:1px;background:var(--line);margin:2px 4px}
+
+/* ---------- 每日區塊 ---------- */
+.day{display:none;animation:fade .4s ease both}
+.day.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.day-head{
+  padding:34px 0 18px;position:relative;
+}
+.day-head .num{
+  font-family:var(--f-serif);font-weight:900;font-size:13px;
+  color:var(--vermilion);letter-spacing:.25em;
+}
+.day-head h2{font-family:var(--f-serif);font-size:clamp(24px,4.4vw,32px);font-weight:700;margin-top:4px}
+.day-head .date{color:var(--ink-soft);font-size:14px;margin-top:6px;letter-spacing:.1em}
+.day-head .theme{
+  display:inline-block;margin-top:12px;background:var(--paper2);
+  padding:5px 14px;border-radius:6px;font-size:13px;color:var(--ink-soft);
+  border-left:3px solid var(--matcha);
+}
+.day-summary{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:13px 18px;margin:16px 0 22px;box-shadow:var(--shadow);
+}
+.day-summary .ds-item{display:flex;flex-direction:column;gap:1px}
+.day-summary .ds-item span{font-size:11px;color:var(--ink-soft);letter-spacing:.03em}
+.day-summary .ds-item b{font-size:14px;color:var(--ink);font-weight:700}
+.day-summary .ds-map{
+  margin-left:auto;text-decoration:none;background:var(--vermilion);color:#fff;
+  font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:9px;transition:.18s;white-space:nowrap;
+}
+.day-summary .ds-map:hover{background:var(--vermilion-d)}
+
+/* ---------- 時間軸卡片 ---------- */
+.tl{position:relative;padding-left:0}
+.item{
+  display:grid;grid-template-columns:64px 1fr;gap:14px;
+  padding-bottom:6px;
+}
+.time-col{text-align:right;position:relative;padding-top:18px}
+.time{font-family:var(--f-serif);font-weight:700;font-size:15px;color:var(--indigo)}
+.time-col::after{
+  content:"";position:absolute;right:-8px;top:24px;bottom:-6px;width:2px;
+  background:linear-gradient(var(--line),transparent);
+}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:16px 18px;margin-bottom:16px;box-shadow:var(--shadow);
+  position:relative;transition:transform .18s ease, box-shadow .18s ease;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 14px 34px -14px rgba(42,36,30,.4)}
+.badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:.05em;margin-bottom:8px;
+}
+.b-move{background:#e7eef5;color:var(--indigo)}
+.b-spot{background:#efe6cf;color:var(--gold)}
+.b-food{background:#f5e3de;color:var(--vermilion-d)}
+.b-shop{background:#e9efe0;color:var(--matcha)}
+.b-hotel{background:#e8e3d6;color:var(--ink-soft)}
+.card h3{font-size:17.5px;font-weight:700;line-height:1.4;margin-bottom:4px}
+.card .desc{font-size:14px;color:var(--ink-soft);margin-top:6px}
+.card .metaline{
+  display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:11px;font-size:12.5px;color:var(--ink-soft);
+}
+.card .metaline span b{color:var(--ink);font-weight:500}
+.transit{
+  margin-top:11px;font-size:12.5px;color:var(--indigo);
+  background:#eef3f8;border-radius:8px;padding:8px 11px;line-height:1.6;
+}
+.note{
+  margin-top:11px;font-size:12.5px;color:var(--vermilion-d);
+  background:#faece8;border-radius:8px;padding:8px 11px;line-height:1.6;
+}
+.note::before{content:"💡 顧問提醒　";font-weight:700}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+.btns a{
+  text-decoration:none;font-size:12.5px;font-weight:500;
+  padding:6px 13px;border-radius:8px;transition:.18s;display:inline-flex;align-items:center;gap:5px;
+}
+.btn-map{background:var(--vermilion);color:#fff}
+.btn-map:hover{background:var(--vermilion-d)}
+.btn-link{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn-link:hover{background:var(--indigo);color:#fff}
+
+/* ---------- 區段標題 ---------- */
+.section-title{
+  font-family:var(--f-serif);font-weight:900;font-size:26px;
+  margin:8px 0 6px;display:flex;align-items:center;gap:12px;
+}
+.section-title::before{content:"";width:26px;height:3px;background:var(--vermilion);border-radius:2px}
+.section-sub{color:var(--ink-soft);font-size:13.5px;margin-bottom:22px}
+.ov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.ov-card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:18px 18px 16px;box-shadow:var(--shadow);cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.ov-card:hover{transform:translateY(-3px);box-shadow:0 16px 36px -14px rgba(42,36,30,.42);border-color:var(--vermilion)}
+.ov-day{font-family:var(--f-serif);font-weight:900;font-size:18px;color:var(--vermilion)}
+.ov-day span{font-family:var(--f-sans);font-weight:400;font-size:12.5px;color:var(--ink-soft);margin-left:6px}
+.ov-title{font-weight:700;font-size:16px;margin:6px 0 4px}
+.ov-theme{font-size:12.5px;color:var(--ink-soft);line-height:1.6;min-height:2.6em}
+.ov-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.ov-tags span{background:var(--paper2);border-radius:20px;padding:4px 11px;font-size:11.5px;color:var(--ink-soft)}
+.ov-foot{
+  display:flex;flex-wrap:wrap;gap:14px;margin-top:22px;
+  background:var(--ink);border-radius:14px;padding:18px 22px;
+}
+.ov-foot>div{flex:1 1 150px}
+.ov-foot span{display:block;font-size:12px;color:#cfc6b6}
+.ov-foot b{font-family:var(--f-serif);font-size:16px;color:#fff}
+
+/* ---------- 基本設定：人數切換 ---------- */
+.setup{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:22px;box-shadow:var(--shadow)}
+.setup-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.setup-head h3{font-family:var(--f-serif);font-size:19px;font-weight:700}
+.ppl-toggle{display:inline-flex;background:var(--paper2);border-radius:30px;padding:4px;gap:4px}
+.ppl-toggle button{font-family:var(--f-sans);cursor:pointer;border:none;background:transparent;color:var(--ink-soft);font-size:14px;font-weight:700;padding:7px 18px;border-radius:30px;transition:.18s}
+.ppl-toggle button.on{background:var(--vermilion);color:#fff;box-shadow:var(--shadow)}
+.setup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.su-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+.su-card .su-label{font-size:11.5px;color:var(--ink-soft);letter-spacing:.03em;margin-bottom:4px}
+.su-card .su-val{font-family:var(--f-serif);font-weight:900;font-size:20px;color:var(--ink);line-height:1.25}
+.su-card .su-val small{font-family:var(--f-sans);font-weight:400;font-size:12px;color:var(--ink-soft)}
+.su-card .su-sub{font-size:12px;color:var(--ink-soft);margin-top:5px;line-height:1.55}
+.su-card.hl{border:2px solid var(--vermilion)}
+.su-card.hl .su-val{color:var(--vermilion)}
+
+/* ---------- 預算 ---------- */
+.budget-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
+.tier{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 16px;text-align:center;box-shadow:var(--shadow)}
+.tier.mid{border:2px solid var(--vermilion);position:relative}
+.tier.mid::before{content:"推薦";position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--vermilion);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px}
+.tier .t-name{font-family:var(--f-serif);font-weight:700;font-size:16px}
+.tier .t-num{font-family:var(--f-serif);font-weight:900;font-size:27px;color:var(--vermilion);margin:8px 0 2px}
+.tier .t-unit{font-size:12px;color:var(--ink-soft)}
+.tier .t-desc{font-size:12px;color:var(--ink-soft);margin-top:10px;line-height:1.6}
+.btable{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);font-size:13.5px}
+.btable th,.btable td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line)}
+.btable th{background:var(--paper2);font-weight:700;font-size:12.5px;letter-spacing:.05em}
+.btable td:last-child,.btable th:last-child{text-align:right;white-space:nowrap}
+.btable tr:last-child td{border-bottom:none}
+.btable .total td{font-weight:700;background:#faf4e7;color:var(--vermilion-d)}
+.bud-sub{font-family:var(--f-serif);font-weight:700;font-size:18px;margin-bottom:14px;color:var(--ink)}
+.bud-sub small{font-family:var(--f-sans);font-weight:400;font-size:12.5px;color:var(--ink-soft)}
+.total-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.total-strip>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:var(--shadow)}
+.total-strip>div.hot{background:var(--ink);border-color:var(--ink)}
+.total-strip span{display:block;font-size:13px;color:var(--ink-soft);margin-bottom:6px}
+.total-strip .hot span{color:#cfc6b6}
+.total-strip b{font-family:var(--f-serif);font-weight:900;font-size:19px;color:var(--vermilion)}
+.total-strip .hot b{color:#fff}
+
+/* ---------- 美食 ---------- */
+.food-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.food{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow)}
+.food h4{font-size:16px;font-weight:700;margin-bottom:3px}
+.food .price{display:inline-block;background:#f5e3de;color:var(--vermilion-d);font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;margin:6px 0 8px}
+.food p{font-size:13px;color:var(--ink-soft)}
+.food a{color:var(--vermilion);font-size:12.5px;font-weight:500;text-decoration:none;margin-top:8px;display:inline-block}
+
+/* ---------- 待定／候選比較 ---------- */
+.pgroup{margin-bottom:30px}
+.pgroup-head h3{font-family:var(--f-serif);font-size:19px;font-weight:700;display:flex;align-items:center;gap:10px}
+.pgroup-head h3::before{content:"";width:18px;height:3px;background:var(--matcha);border-radius:2px}
+.pgroup-head p{font-size:13px;color:var(--ink-soft);margin:4px 0 14px}
+.cand-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.cand{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px;box-shadow:var(--shadow);position:relative}
+.cand-pick{border:2px solid var(--vermilion)}
+.cand-status{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.st-open{background:#e7eef5;color:var(--indigo)}
+.st-lean{background:#f5e3de;color:var(--vermilion-d)}
+.st-out{background:#eee;color:#999;text-decoration:line-through}
+.cand h4{font-size:16px;font-weight:700;margin-bottom:3px}
+.cand-price{display:inline-block;background:var(--paper2);color:var(--ink-soft);font-size:12px;font-weight:700;padding:2px 10px;border-radius:20px;margin:4px 0 8px}
+.cand-desc{font-size:13px;color:var(--ink-soft);margin-bottom:8px}
+.cand-pros,.cand-cons{list-style:none;font-size:12.5px;line-height:1.7;margin:6px 0;padding:0}
+.cand-pros li::before{content:"＋ ";color:var(--matcha);font-weight:700}
+.cand-cons li::before{content:"－ ";color:var(--vermilion);font-weight:700}
+.cand-pros li,.cand-cons li{color:var(--ink-soft)}
+.cand .btn-map,.cand .btn-link{margin-top:10px;margin-right:6px}
+
+/* ---------- 工具盒 / 頁尾 ---------- */
+.tools{background:var(--ink);color:var(--paper);border-radius:16px;padding:26px 24px;margin:10px 0 30px}
+.tools h3{font-family:var(--f-serif);font-size:19px;margin-bottom:6px}
+.tools p{font-size:13.5px;color:#cfc6b6;line-height:1.7}
+.tools .big-btn{
+  display:inline-flex;align-items:center;gap:8px;background:var(--vermilion);color:#fff;
+  text-decoration:none;font-weight:700;padding:11px 22px;border-radius:10px;margin-top:14px;font-size:14px;transition:.18s;
+}
+.tools .big-btn:hover{background:var(--vermilion-d)}
+.hotel-box{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.hotel-box .hb{background:rgba(255,255,255,.08);border-radius:10px;padding:10px 14px;font-size:12.5px}
+.hotel-box .hb b{color:#fff}
+.editnote{background:#f7efdf;border:1px dashed var(--gold);border-radius:12px;padding:16px 18px;font-size:13px;color:var(--ink-soft);line-height:1.8;margin-bottom:40px}
+.editnote b{color:var(--ink)}
+.editnote code{background:#ece2cc;padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px}
+footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:12px;border-top:1px solid var(--line)}
+
+@media(max-width:680px){
+  .budget-grid{grid-template-columns:1fr}
+  .total-strip{grid-template-columns:1fr}
+  .ov-grid{grid-template-columns:1fr}
+  .food-grid{grid-template-columns:1fr}
+  .item{grid-template-columns:52px 1fr;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 封面（內容由資料區 TRIP.meta 帶入） ============ -->
+<header class="cover">
+  <div class="vlabel" id="cvVLabel"></div>
+  <div class="stamp" id="cvStamp"></div>
+  <h1 id="cvTitle"></h1>
+  <div class="sub" id="cvSub"></div>
+  <div class="meta" id="cvMeta"></div>
+  <div class="rule"></div>
+</header>
+
+<!-- ============ 導覽 ============ -->
+<nav class="nav">
+  <div class="nav-inner" id="navBar"></div>
+</nav>
+
+<!-- ============ 總覽（首頁分頁） ============ -->
+<section class="wrap day show" id="overview" style="padding-top:30px">
+  <h2 class="section-title">行程總覽</h2>
+  <p class="section-sub">五天一眼看完　·　點任一張卡片跳到當天細節</p>
+
+  <!-- ★ 基本設定：人數／行李 → 自動換算包車與住宿分攤 -->
+  <div class="setup">
+    <div class="setup-head">
+      <h3>👥 基本設定</h3>
+      <div class="ppl-toggle" id="pplToggle"></div>
+    </div>
+    <div class="setup-grid" id="setupGrid"></div>
+  </div>
+
+  <div class="ov-grid" id="ovGrid"></div>
+  <div class="ov-foot" id="ovFoot"></div>
+</section>
+
+<!-- ============ 行程主體 ============ -->
+<main class="wrap" id="days"></main>
+
+<!-- ============ 預算（分頁） ============ -->
+<section class="wrap day" id="budget" style="padding-top:30px">
+  <h2 class="section-title">旅費預算</h2>
+  <p class="section-sub">以每人計　·　匯率約 ¥1 ≈ NT$0.21　·　包車與住宿分攤請見總覽頁「基本設定」的人數切換</p>
+
+  <!-- ① 固定支出（整趟一次性） -->
+  <div class="bud-sub">① 固定支出　<small>整趟一次性、不隨天數變動</small></div>
+  <table class="btable">
+    <thead><tr><th>項目</th><th>說明</th><th>每人估算</th></tr></thead>
+    <tbody>
+      <tr><td>✈️ 機票</td><td>台北 ⇄ 東京（成田／羽田），10 月下旬來回</td><td>NT$11,000–18,000</td></tr>
+      <tr><td>🏨 住宿</td><td>上野／市區 3 晚 ＋ 草津旅館（一泊二食）1 晚，雙人分攤</td><td>NT$11,000–18,000</td></tr>
+      <tr><td>🚗 包車</td><td>東京⇄輕井澤⇄草津 兩日，全程約 ¥130,000–170,000／車，2 人分攤</td><td>NT$13,000–18,000</td></tr>
+      <tr><td>🎆 花火</td><td>東京灣大華火祭（免費觀覽區；付費席另計）</td><td>NT$0–2,000</td></tr>
+      <tr><td>🚇 市區交通</td><td>東京市區 IC 卡 ＋ 機場往返</td><td>NT$1,200–1,600</td></tr>
+      <tr class="total"><td colspan="2">固定支出小計</td><td>NT$36,200–57,600</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ② 每日浮動（三版本只差在這裡） -->
+  <div class="bud-sub" style="margin-top:30px">② 每日浮動　<small>餐飲＋購物＋零用，三種版本只差在這裡</small></div>
+  <div class="budget-grid">
+    <div class="tier">
+      <div class="t-name">省錢</div>
+      <div class="t-num">NT$1,300</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">超商早餐・平價定食・立飲居酒屋・購物克制<br><b style="color:var(--ink)">× 5 天 ≈ NT$6,500</b></div>
+    </div>
+    <div class="tier mid">
+      <div class="t-name">舒適</div>
+      <div class="t-num">NT$2,400</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">一餐吃好的・多慶屋適度採購・伴手禮<br><b style="color:var(--ink)">× 5 天 ≈ NT$12,000</b></div>
+    </div>
+    <div class="tier">
+      <div class="t-name">享受</div>
+      <div class="t-num">NT$3,800</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">壽司天婦羅名店・花火付費席・大方掃貨<br><b style="color:var(--ink)">× 5 天 ≈ NT$19,000</b></div>
+    </div>
+  </div>
+
+  <!-- ③ 全程總計 = 固定 ＋ 每日 × 天數 -->
+  <div class="bud-sub" style="margin-top:30px">③ 全程總計　<small>固定支出 ＋ 每日浮動 × 5 天（2 人分攤版）</small></div>
+  <div class="total-strip">
+    <div><span>省錢版</span><b>NT$43,000–58,000</b></div>
+    <div class="hot"><span>舒適版</span><b>NT$48,000–62,000</b></div>
+    <div><span>享受版</span><b>NT$55,000–77,000</b></div>
+  </div>
+
+  <div class="note" style="margin-top:22px">
+    <b style="color:var(--vermilion-d)">最容易超支：</b>① 包車——2 人分攤每人偏高，若湊到 4 人每人立刻省一半。② 多慶屋／阿美橫丁太好買。<br>
+    <b style="color:var(--vermilion-d)">省錢替代：</b>包車湊滿 4 人最划算；若只有 2 人，輕井澤⇄草津也可改新幹線到輕井澤＋JR巴士到草津（但要自己拉行李轉乘）。多慶屋先設預算上限。
+  </div>
+
+  <div class="tools" style="margin-top:24px">
+    <h3>📍 我的地圖 ＆ 飯店</h3>
+    <p>討論定案後，把所有景點存進 Google「我的地圖」，現場找路最方便。把分享連結貼到下方按鈕的 href。</p>
+    <a class="big-btn" href="https://www.google.com/maps/d/" target="_blank" rel="noopener">🗺️ 開啟我的地圖（替換成你的連結）</a>
+    <div class="hotel-box">
+      <div class="hb">🏨 草津住宿<br><b>湯畑徒步圈旅館</b>（泡湯核心、一泊二食）</div>
+      <div class="hb">🏨 東京住宿<br><b>上野／灣岸一帶</b>，往機場・新幹線・花火皆便利</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 美食（分頁） ============ -->
+<section class="wrap day" id="food" style="padding-top:30px">
+  <h2 class="section-title">必吃・特色餐飲</h2>
+  <p class="section-sub">價位為單人概估（含飲料／甜點）</p>
+  <div class="food-grid" id="foodGrid"></div>
+</section>
+
+<!-- ============ 待定／候選比較（分頁。定案後刪掉資料，此分頁自動隱藏） ============ -->
+<section class="wrap day" id="pending" style="padding-top:30px">
+  <h2 class="section-title">待定・候選比較</h2>
+  <p class="section-sub">還在討論的選項並列在這裡　·　決定後把選中的搬進對應日程、其餘刪除</p>
+  <div id="pendingWrap"></div>
+</section>
+
+<footer id="pageFoot"></footer>
+
+<script>
+/* ============================================================
+   ★★★ 資料區：要改行程，改這裡就好 ★★★
+   type 種類：move(交通) / spot(景點) / food(美食) / shop(購物) / hotel(住宿)
+   ============================================================ */
+const TRIP = {
+  /* ===== 旅程基本資料 ===== */
+  meta:{
+    stamp:"東京",
+    vlabel:"紅葉・温泉・花火の旅",
+    titleMain:"東京・輕井澤・草津", titleAccent:"五日",
+    titleTail:"旅遊行程書",
+    sub:"TOKYO · KARUIZAWA · KUSATSU · AUTUMN 2026",
+    chips:["📅 10/22 (三) – 10/26 (一)","🌙 4 晚 5 天","🎆 東京灣花火 10/24","♨️ 草津溫泉 1 晚"],
+    footStats:[
+      {label:"全程", value:"4 晚 5 天"},
+      {label:"亮點", value:"紅葉・溫泉・花火一次收"},
+      {label:"舒適版總預算", value:"約 NT$48,000–62,000"}
+    ],
+    footer:"紅葉配硫磺泉，秋日東京剛剛好 🍁"
+  },
+
+  /* ===== 人數／行李設定（總覽頁切換器讀這裡，自動換算分攤）=====
+     · charterTotal：包車兩日全程一口價（一台車總價，台幣）
+     · 各人數情境下的車型、房型、每人住宿，可直接改文字                       */
+  setup:{
+    default:4,                         // 預設以幾人顯示
+    options:[
+      {
+        people:2, label:"2 人",
+        charterTotal:150000,           // 2 人用一般車／Alphard，全程約 ¥130k–170k → 取中估台幣
+        car:"一般車／Alphard", carNote:"2 人＋2 大行李箱，標準車廂可容",
+        luggage:"約 2 件大行李",
+        room:"1 間雙人房", roomEach:13000, // 每人住宿（全程 4 晚分攤後）
+        roomNote:"一間房分攤，最單純"
+      },
+      {
+        people:4, label:"4 人",
+        charterTotal:185000,           // 4 人＋4 行李需 Jumbo/Hiace，報價較高
+        car:"Jumbo／Hiace 大型車", carNote:"4 人＋4 大行李箱，需指定大車（可載約 10 箱）",
+        luggage:"約 4 件大行李",
+        room:"2 間雙人房", roomEach:13000,
+        roomNote:"兩間雙人房，或找四人房更省"
+      }
+    ]
+  },
+
+  days:[
+    {
+      tab:"Day 1", num:"DAY ONE", title:"抵達・上野・多慶屋採購日",
+      date:"10/22 (三)", theme:"成田／羽田 → 上野 → 御徒町（多慶屋）→ 阿美橫丁",
+      area:"上野・御徒町", cost:"NT$1,500–3,000", walk:"輕鬆・以上野一帶為主",
+      dayMap:"多慶屋 御徒町",
+      items:[
+        {time:"午後", type:"move", badge:"交通", title:"抵達機場 → 上野",
+         desc:"成田走京成 Skyliner、羽田走京急＋JR，都到上野很快。先寄行李或入住。",
+         transit:"成田 → 上野｜京成 Skyliner 約 45 分／羽田 → 上野｜約 45 分",
+         map:"上野駅"},
+        {time:"15:00", type:"shop", badge:"購物", title:"多慶屋（TAKEYA）御徒町本店",
+         desc:"上野御徒町的綜合折扣百貨，藥妝、雜貨、家電、伴手禮一站買齊，紫色外觀好認。整天行李都丟得進來這天最適合掃貨。",
+         duration:"2.5–3 小時", best:"傍晚較不擠",
+         note:"顧問提醒：多慶屋分多棟，藥妝與食品在不同館；先逛一輪比價再下手。退稅櫃台集中辦理，記得帶護照。",
+         link:"https://stores.takeya.co.jp/", map:"多慶屋 御徒町"},
+        {time:"18:00", type:"spot", badge:"商店街", title:"阿美橫丁（アメ横）",
+         desc:"上野車站旁的熱鬧市場街，海鮮、零食、藥妝、平價美食，邊走邊吃最對味。",
+         duration:"60–90 分", best:"傍晚最熱鬧", map:"アメヤ横丁"},
+        {time:"19:30", type:"food", badge:"晚餐", title:"上野・大統領（立飲居酒屋）",
+         desc:"阿美橫丁老字號串燒立飲，氣氛濃、價格實惠，馬肉串與煮込有名。",
+         duration:"60 分", map:"大統領 上野"},
+        {time:"住宿", type:"hotel", badge:"住宿", title:"上野一帶飯店",
+         desc:"上野交通樞紐，往機場、輕井澤新幹線、市區都方便。", map:"上野駅"}
+      ]
+    },
+
+    {
+      tab:"Day 2", num:"DAY TWO", title:"包車・輕井澤紅葉 → 草津溫泉",
+      date:"10/23 (四)", theme:"東京 →【包車】輕井澤雲場池紅葉 → 白絲瀑布 → 草津溫泉",
+      area:"輕井澤 → 草津", cost:"NT$2,500–4,500", walk:"散策為主・包車代步",
+      dayMap:"雲場池 軽井沢",
+      items:[
+        {time:"08:00", type:"move", badge:"包車", title:"包車出發：東京 → 輕井澤",
+         desc:"司機到飯店接，直奔輕井澤。包車省去新幹線轉巴士的拉行李之苦，紅葉景點之間也機動。",
+         transit:"東京 → 輕井澤｜高速約 2.5–3 小時",
+         note:"顧問提醒：跨縣市包車建議前一週確認車型與全程報價（含過路費、停車），通常全程一口價 ¥60,000–90,000／車。",
+         map:"軽井沢"},
+        {time:"11:00", type:"spot", badge:"紅葉", title:"雲場池（Swan Lake）",
+         desc:"輕井澤代表紅葉名所，環池步道一圈約 20 分，水面倒映楓紅與落葉松金黃。10 月下旬正逢最佳賞楓期。",
+         duration:"45–60 分", best:"上午光線順、人較少",
+         link:"https://karuizawa-kankokyokai.jp/", map:"雲場池 軽井沢"},
+        {time:"12:30", type:"food", badge:"午餐", title:"輕井澤・川上庵（蕎麥麵）",
+         desc:"舊輕井澤人氣手打蕎麥麵，秋天配天婦羅與在地啤酒舒服。",
+         duration:"60 分", map:"川上庵 軽井沢"},
+        {time:"14:00", type:"spot", badge:"景點", title:"白絲瀑布（白糸の滝）",
+         desc:"寬幅絲線狀水簾，被紅葉環繞時最美，停留拍照很快。往草津路上順遊。",
+         duration:"30–40 分", best:"午後",
+         map:"白糸の滝 軽井沢"},
+        {time:"16:30", type:"spot", badge:"溫泉街", title:"抵達草津・湯畑",
+         desc:"草津溫泉的心臟，硫磺湯煙裊裊，傍晚點燈後氛圍最好。湯畑周邊湯本館、足湯、土產一次逛。",
+         duration:"自由", best:"傍晚點燈後",
+         note:"顧問提醒：草津泉質強酸，泡前先沖身、別泡太久；首泡建議體驗「湯もみ」文化的熱乃湯或大型公共湯。",
+         map:"草津温泉 湯畑"},
+        {time:"18:30", type:"food", badge:"晚餐", title:"溫泉旅館會席料理",
+         desc:"草津旅館多含一泊二食，當地高原蔬菜與信州牛、上州豚為主。",
+         duration:"90 分", map:"草津温泉"},
+        {time:"住宿", type:"hotel", badge:"住宿", title:"草津溫泉旅館（核心：泡湯）",
+         desc:"住湯畑徒步圈內最方便，夜裡可再泡一次、隔早再泡一次。", map:"草津温泉 湯畑"}
+      ]
+    },
+
+    {
+      tab:"Day 3", num:"DAY THREE", title:"草津泡湯 → 回東京 → 灣岸花火",
+      date:"10/24 (五)", theme:"草津晨湯 →【包車】回東京 → 晴海・東京灣大華火祭 🎆",
+      area:"草津 → 東京灣岸", cost:"NT$2,000–4,000", walk:"花火會場步行多",
+      dayMap:"東京湾大華火祭 晴海",
+      items:[
+        {time:"07:00", type:"spot", badge:"晨湯", title:"草津晨間泡湯・西の河原",
+         desc:"退房前再泡一次。西之河原露天風呂腹地大，被林木與溪流環繞，晨間舒爽。",
+         duration:"60–90 分", best:"清晨人少",
+         link:"https://www.kusatsu-onsen.ne.jp/", map:"西の河原露天風呂 草津"},
+        {time:"10:00", type:"move", badge:"包車", title:"包車回東京",
+         desc:"上午退房出發，午後回到東京、入住灣岸或市區飯店，傍晚輕裝前往花火會場。",
+         transit:"草津 → 東京｜高速約 3.5 小時",
+         note:"顧問提醒：花火當天灣岸地鐵會極度壅塞，務必提早 2–3 小時抵達、先吃晚餐再進場。",
+         map:"東京"},
+        {time:"16:30", type:"spot", badge:"花火", title:"東京灣大華火祭（晴海會場）",
+         desc:"11 年來首度復活、移到 10 月的灣岸花火，約 1.2 萬發，背景是彩虹大橋與東京鐵塔。秋夜空氣清，煙火更鮮明。",
+         duration:"提早卡位 + 觀賞約 3–4 小時", best:"提早入場避人潮",
+         note:"顧問提醒：最近站都營大江戸線「勝どき」徒步約 15 分；荒天中止不順延，出發前查官方公告。具體施放時間官方近期才公布，請再確認。",
+         link:"https://toyosu.tokyo/event/tokyowandaihanabisai-2026-info/", map:"勝どき駅"},
+        {time:"住宿", type:"hotel", badge:"住宿", title:"東京（灣岸或市區）",
+         desc:"花火散場人潮大，住灣岸或大江戸線沿線回程較輕鬆。", map:"勝どき駅"}
+      ]
+    },
+
+    {
+      tab:"Day 4", num:"DAY FOUR", title:"東京經典觀光日",
+      date:"10/25 (六)", theme:"淺草 → 晴空塔 → 上野公園 →（夜）澀谷或銀座",
+      area:"淺草・押上・上野", cost:"NT$2,000–3,800", walk:"步行多・移動順",
+      dayMap:"浅草寺",
+      items:[
+        {time:"09:00", type:"spot", badge:"景點", title:"淺草・雷門・仲見世",
+         desc:"東京最具代表的老街，雷門、仲見世商店街、淺草寺一次走完，早上人較少好拍。",
+         duration:"90 分", best:"開門後越早越好", map:"浅草寺"},
+        {time:"11:00", type:"spot", badge:"地標", title:"東京晴空塔（Skytree）",
+         desc:"從淺草步行或一站電車即達。展望台看關東平原，底下 Solamachi 商場可逛可吃。",
+         duration:"2 小時", best:"晴天視野佳",
+         link:"https://www.tokyo-skytree.jp/", map:"東京スカイツリー"},
+        {time:"14:00", type:"spot", badge:"公園", title:"上野公園・博物館群",
+         desc:"秋天銀杏轉黃的上野公園，可選國立博物館或西洋美術館深入一間。離多慶屋也近，可補買。",
+         duration:"2–2.5 小時", best:"午後", map:"上野公園"},
+        {time:"18:30", type:"spot", badge:"夜逛", title:"澀谷 或 銀座（二選一）",
+         desc:"想熱鬧潮流選澀谷 SKY＋十字路口；想優雅選銀座逛街。",
+         duration:"2–3 小時", map:"渋谷スクランブル交差点"},
+        {time:"20:00", type:"food", badge:"晚餐", title:"市區壽司或天婦羅",
+         desc:"依所在區挑一家好評店收尾，建議先訂位。",
+         duration:"75 分", map:"東京 寿司"},
+        {time:"住宿", type:"hotel", badge:"住宿", title:"東京市區飯店",
+         desc:"市區任一交通便利處。", map:"東京駅"}
+      ]
+    },
+
+    {
+      tab:"Day 5", num:"DAY FIVE", title:"採購收尾・返程",
+      date:"10/26 (日)", theme:"市區補貨 / 車站伴手禮 → 機場 → 返台",
+      area:"市區・機場", cost:"NT$1,000–2,500", walk:"輕裝半日",
+      dayMap:"東京駅",
+      items:[
+        {time:"09:00", type:"hotel", badge:"退房", title:"退房・寄行李",
+         desc:"行李寄飯店或車站置物櫃，輕裝跑最後半天。", map:"東京駅"},
+        {time:"10:00", type:"shop", badge:"購物", title:"最後採購（依航班時間）",
+         desc:"時間多就回上野多慶屋補漏網；時間緊就在東京車站一番街、大丸採伴手禮。",
+         duration:"2 小時", map:"東京駅一番街"},
+        {time:"13:00", type:"move", badge:"返程", title:"前往機場 → 搭機返台 ✈️",
+         desc:"預留充足時間到機場辦理登機與退稅。",
+         transit:"上野／東京 → 成田 Skyliner／N'EX 約 45–60 分",
+         map:"成田国際空港"}
+      ]
+    }
+  ],
+
+  food:[
+    {name:"大統領（上野・阿美橫丁）", price:"¥2,000–3,000", desc:"老字號串燒立飲，馬肉串與煮込，氣氛濃。"},
+    {name:"川上庵（輕井澤）", price:"¥1,500–2,500", desc:"舊輕井澤人氣手打蕎麥麵，配天婦羅與在地啤酒。"},
+    {name:"草津・溫泉旅館會席", price:"一泊二食含", desc:"高原蔬菜＋信州牛／上州豚，泡湯後的犒賞晚餐。"},
+    {name:"草津・湯畑周邊溫泉饅頭", price:"¥100–500", desc:"現蒸溫泉饅頭與草津名物，散步邊吃。"},
+    {name:"淺草・老牌天婦羅／鰻魚", price:"¥3,000–6,000", desc:"淺草多老舖，天丼、鰻重值得一試。"},
+    {name:"東京車站・拉麵街／甜點", price:"¥1,000–2,500", desc:"返程前在一番街解決一餐並掃伴手禮。"}
+  ],
+
+  /* ===== 待定／候選比較（住宿還在討論，定案後清空此區即變正式版）===== */
+  pending:[
+    {
+      topic:"Day 1 ＆ Day 4 東京住宿（上野一帶）",
+      note:"多慶屋採購日與經典觀光日都靠上野最順；以下三家都在御徒町／上野站徒步圈。",
+      options:[
+        {name:"Sotetsu Fresa Inn 上野御徒町", price:"一晚雙人 ¥11,000–16,000", status:"傾向", pick:true,
+         desc:"連鎖商務型，乾淨新、服務好（評價 4.2）。",
+         pros:["御徒町站徒步 5 分","銀座線＋山手線＋京成（往機場）三線齊","多慶屋就在旁"],
+         cons:["房間偏小","週末／假日漲價"],
+         map:"Sotetsu Fresa Inn Ueno Okachimachi"},
+        {name:"Hotel Sardonyx 上野", price:"一晚雙人 ¥10,000–15,000", status:"待決定",
+         desc:"上野站旁、含簡單早餐（評價 4.2）。",
+         pros:["離上野站很近","附早餐","周邊餐廳超多"],
+         cons:["設施略舊","房間小"],
+         map:"Hotel sardonyx ueno"},
+        {name:"APA Hotel 上野廣小路", price:"一晚雙人 ¥10,000–14,000", status:"待決定",
+         desc:"上野與秋葉原之間，連鎖品質穩定（評價 4.3）。",
+         pros:["品質可預期","近地鐵兩站","樓下便利商店多"],
+         cons:["房間最小","早餐空間擠"],
+         map:"APA Hotel Ueno Hirokoji"}
+      ]
+    },
+    {
+      topic:"Day 3 花火夜住宿（灣岸／築地一帶）",
+      note:"花火散場人潮大，住勝どき或築地一帶回程最輕鬆；要省一次搬行李也可整段都住上野、當晚搭車去看花火。",
+      options:[
+        {name:"VIA INN 東銀座", price:"一晚雙人 ¥13,000–19,000", status:"傾向", pick:true,
+         desc:"築地旁、現代乾淨、隔音佳（評價 4.1）。",
+         pros:["近築地站、往勝どき會場方便","房間較新","樓下便利商店"],
+         cons:["離最近站要走一下","花火日要早訂"],
+         map:"VIA INN Higashi Ginza"},
+        {name:"Ginza Creston", price:"一晚雙人 ¥18,000–28,000", status:"待決定",
+         desc:"高樓層景觀好、房間寬敞、日式早餐獲好評（評價 4.1）。",
+         pros:["房間大、視野佳","築地站徒步 6–8 分","早餐評價高"],
+         cons:["價位偏高","設計略舊"],
+         map:"Ginza Creston"},
+        {name:"（替代）整段都住上野", price:"省一次搬行李", status:"待決定",
+         desc:"不換飯店，花火當晚從上野搭大江戸線去勝どき。",
+         pros:["完全不用搬行李","只訂一間飯店省事"],
+         cons:["花火散場回上野人潮中要轉乘","拉長當晚通勤"],
+         map:"上野駅"}
+      ]
+    }
+  ]
+};
+
+/* ============ 以下為渲染程式，一般不用改 ============ */
+const badgeClass={move:"b-move",spot:"b-spot",food:"b-food",shop:"b-shop",hotel:"b-hotel"};
+const gmap=q=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+
+/* —— 封面 / 頁尾 / 總覽底部（讀 TRIP.meta）—— */
+const M=TRIP.meta;
+document.title=`${M.titleMain}${M.titleAccent}${M.titleTail}`;
+document.getElementById("cvVLabel").textContent=M.vlabel||"";
+document.getElementById("cvStamp").textContent=M.stamp||"";
+document.getElementById("cvTitle").innerHTML=`${M.titleMain}<br><span class="accent">${M.titleAccent}</span>${M.titleTail}`;
+document.getElementById("cvSub").textContent=M.sub||"";
+document.getElementById("cvMeta").innerHTML=(M.chips||[]).map(c=>`<span class="chip">${c}</span>`).join("");
+document.getElementById("ovFoot").innerHTML=(M.footStats||[]).map(s=>`<div><span>${s.label}</span><b>${s.value}</b></div>`).join("");
+document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M.titleTail}　·　${M.footer||""}`;
+
+/* —— 基本設定：人數切換器（自動換算包車與住宿分攤）—— */
+(function(){
+  const S=TRIP.setup; if(!S){return;}
+  const toggle=document.getElementById("pplToggle");
+  const grid=document.getElementById("setupGrid");
+  const nf=n=>"NT$"+n.toLocaleString("en-US");
+  let cur=S.default||S.options[0].people;
+  function render(){
+    const o=S.options.find(x=>x.people===cur)||S.options[0];
+    const charterEach=Math.round(o.charterTotal/o.people);
+    toggle.innerHTML=S.options.map(x=>
+      `<button class="${x.people===cur?"on":""}" data-p="${x.people}">${x.label}</button>`).join("");
+    toggle.querySelectorAll("button").forEach(b=>b.onclick=()=>{cur=+b.dataset.p;render();});
+    grid.innerHTML=`
+      <div class="su-card"><div class="su-label">👥 人數</div>
+        <div class="su-val">${o.people} 人</div>
+        <div class="su-sub">${o.luggage}</div></div>
+      <div class="su-card hl"><div class="su-label">🚗 包車（兩日全程）</div>
+        <div class="su-val">${nf(charterEach)}<small>／人</small></div>
+        <div class="su-sub">總價 ${nf(o.charterTotal)} ÷ ${o.people}　·　${o.car}<br>${o.carNote}</div></div>
+      <div class="su-card"><div class="su-label">🏨 住宿方向</div>
+        <div class="su-val">${nf(o.roomEach)}<small>／人</small></div>
+        <div class="su-sub">${o.room}　·　${o.roomNote}</div></div>
+      <div class="su-card"><div class="su-label">🧳 行李 × 車型</div>
+        <div class="su-val" style="font-size:15px;line-height:1.5">${o.car}</div>
+        <div class="su-sub">${o.luggage}　→　${o.people>=4?"務必指定大車":"標準車廂即可"}</div></div>`;
+  }
+  render();
+})();
+
+const navBar=document.getElementById("navBar");
+const daysEl=document.getElementById("days");
+
+/* 總覽分頁按鈕（index 0） */
+const ovBtn=document.createElement("button");
+ovBtn.textContent="🏠 總覽";
+ovBtn.className="extra active";
+ovBtn.onclick=()=>show(0);
+navBar.appendChild(ovBtn);
+
+TRIP.days.forEach((d,i)=>{
+  const btn=document.createElement("button");
+  btn.textContent=d.tab;
+  btn.onclick=()=>show(i+1);          // 總覽佔 0，各日往後移一位
+  navBar.appendChild(btn);
+
+  const sec=document.createElement("section");
+  sec.className="day";
+  sec.id="day"+i;
+  let html=`<div class="day-head">
+      <div class="num">${d.num}</div>
+      <h2 class="serif">${d.title}</h2>
+      <div class="date">📅 ${d.date}</div>
+      <div class="theme">${d.theme}</div>
+    </div>
+    <div class="day-summary">
+      <div class="ds-item"><span>📍 主要區域</span><b>${d.area||"—"}</b></div>
+      <div class="ds-item"><span>💰 當日預估</span><b>${d.cost||"—"}</b></div>
+      <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
+      ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
+    </div>
+    <div class="tl">`;
+  d.items.forEach(it=>{
+    const meta=[];
+    if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
+    if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
+    html+=`<div class="item">
+      <div class="time-col"><div class="time">${it.time}</div></div>
+      <div class="card">
+        <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
+        <h3>${it.title}</h3>
+        ${it.desc?`<div class="desc">${it.desc}</div>`:""}
+        ${meta.length?`<div class="metaline">${meta.join("")}</div>`:""}
+        ${it.transit?`<div class="transit">🚇 ${it.transit}</div>`:""}
+        ${it.note?`<div class="note">${it.note}</div>`:""}
+        <div class="btns">
+          ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
+          ${it.link?`<a class="btn-link" target="_blank" rel="noopener" href="${it.link}">🔗 介紹</a>`:""}
+        </div>
+      </div></div>`;
+  });
+  html+=`</div>`;
+  sec.innerHTML=html;
+  daysEl.appendChild(sec);
+});
+
+/* 追加分頁：預算、美食（對應已存在的 #budget / #food，DOM 順序接在各 day 之後） */
+const divider=document.createElement("div");
+divider.className="divider";
+navBar.appendChild(divider);
+const extraTabs=[{label:"💰 預算"},{label:"🍴 美食"}];
+const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
+if(hasPending)extraTabs.push({label:"🤔 待定"});
+extraTabs.forEach((p,k)=>{
+  const idx=TRIP.days.length+1+k;
+  const btn=document.createElement("button");
+  btn.textContent=p.label;
+  btn.className="extra";
+  btn.onclick=()=>show(idx);
+  navBar.appendChild(btn);
+});
+if(!hasPending){const pe=document.getElementById("pending");if(pe)pe.remove();}
+
+/* 建立總覽卡片 */
+const ovGrid=document.getElementById("ovGrid");
+TRIP.days.forEach((d,i)=>{
+  const card=document.createElement("div");
+  card.className="ov-card";
+  card.onclick=()=>show(i+1);
+  card.innerHTML=`
+    <div class="ov-day">${d.tab} <span>${d.date}</span></div>
+    <div class="ov-title">${d.title}</div>
+    <div class="ov-theme">${d.theme}</div>
+    <div class="ov-tags">
+      <span>📍 ${d.area||"—"}</span>
+      <span>💰 ${d.cost||"—"}</span>
+    </div>`;
+  ovGrid.appendChild(card);
+});
+
+function show(i){
+  document.querySelectorAll(".day").forEach((d,j)=>d.classList.toggle("show",j===i));
+  document.querySelectorAll(".nav button").forEach((b,j)=>b.classList.toggle("active",j===i));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+const foodGrid=document.getElementById("foodGrid");
+TRIP.food.forEach(f=>{
+  const el=document.createElement("div");
+  el.className="food";
+  el.innerHTML=`<h4>${f.name}</h4><span class="price">${f.price}</span><p>${f.desc}</p>
+    <a target="_blank" rel="noopener" href="${gmap(f.name)}">📍 在地圖查看 →</a>`;
+  foodGrid.appendChild(el);
+});
+
+/* —— 待定／候選比較 —— */
+if(hasPending){
+  const pw=document.getElementById("pendingWrap");
+  const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
+  TRIP.pending.forEach(group=>{
+    const block=document.createElement("div");
+    block.className="pgroup";
+    let h=`<div class="pgroup-head">
+        <h3>${group.topic}</h3>
+        ${group.note?`<p>${group.note}</p>`:""}
+      </div>
+      <div class="cand-grid">`;
+    group.options.forEach(o=>{
+      const stCls=statusClass[o.status]||"st-open";
+      h+=`<div class="cand ${o.pick?"cand-pick":""}">
+        ${o.status?`<span class="cand-status ${stCls}">${o.pick?"✔ ":""}${o.status}</span>`:""}
+        <h4>${o.name}</h4>
+        ${o.price?`<div class="cand-price">${o.price}</div>`:""}
+        ${o.desc?`<p class="cand-desc">${o.desc}</p>`:""}
+        ${(o.pros||[]).length?`<ul class="cand-pros">${o.pros.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
+        ${(o.cons||[]).length?`<ul class="cand-cons">${o.cons.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
+        ${o.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(o.map)}">📍 地圖</a>`:""}
+        ${o.link?`<a class="btn-link" target="_blank" rel="noopener" href="${o.link}">🔗 介紹</a>`:""}
+      </div>`;
+    });
+    h+=`</div>`;
+    block.innerHTML=h;
+    pw.appendChild(block);
+  });
+}
+</script>
+</body>
+</html>
