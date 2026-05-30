@@ -103,6 +103,7 @@ body{
 .st-draft{background:#f5e3de;color:var(--vermilion-d)}
 .st-final{background:#e9efe0;color:var(--matcha)}
 .st-idea{background:#e7eef5;color:var(--indigo)}
+.st-done{background:#e3ddd0;color:#8a7d68}
 .book h2{font-family:var(--f-serif);font-size:20px;font-weight:700;line-height:1.35;margin-bottom:4px}
 .book .dates{font-size:12.5px;color:var(--ink-soft);letter-spacing:.04em}
 .book .desc{font-size:13px;color:var(--ink-soft);margin-top:9px;line-height:1.65}
@@ -161,7 +162,8 @@ const BOOKS = [
     desc:"紅葉散策、草津泡湯、東京灣花火一次收。含包車與人數分攤試算。",
     tags:["🍁 紅葉","♨️ 溫泉","🎆 花火"],
     status:"草稿",
-    url:"tokyo-2026/",
+    url:"tokyo-202610/",
+    sortKey:202610,                // YYYYMM，用來排序（最新在上）
     c1:"#2E4A6B", c2:"#1d3047"
   },
   {
@@ -171,7 +173,8 @@ const BOOKS = [
     desc:"柯南、吉伊卡哇、庫洛魔法使聯名，宇治抹茶與京都名所。",
     tags:["🎀 角色","🍵 抹茶","🛍️ 採購"],
     status:"定版",
-    url:"",                       // ← 上傳到 tripsbook/osaka/ 後，把這裡改成 "osaka/"
+    url:"",                       // ← 上傳到 tripsbook/osaka-25XX/ 後，把這裡改成對應資料夾
+    sortKey:202504,
     c1:"#9E2F1E", c2:"#7a2417"
   },
   {
@@ -182,16 +185,20 @@ const BOOKS = [
     tags:[],
     status:"構想中",
     url:"",
+    sortKey:0,                     // 0 = 永遠排最後（占位卡）
     soon:true
   }
 ];
 
 /* ============ 渲染（一般不用改）============ */
-const statusClass={"草稿":"st-draft","定版":"st-final","構想中":"st-idea"};
+const statusClass={"草稿":"st-draft","定版":"st-final","構想中":"st-idea","已成行":"st-done"};
 const grid=document.getElementById("grid");
 let live=0;
 
-BOOKS.forEach((b,i)=>{
+/* 依 sortKey 由大到小排序（最新在上）；占位卡 sortKey:0 自動沉底 */
+const ordered=[...BOOKS].sort((a,b)=>(b.sortKey||0)-(a.sortKey||0));
+
+ordered.forEach((b,i)=>{
   const linked=b.url && !b.soon;
   if(linked)live++;
   const el=document.createElement(linked?"a":"div");
