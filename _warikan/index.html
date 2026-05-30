@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅遊分帳</title>
+<style>
+:root{
+  --paper:#F2EBDD;--paper2:#EAE0CC;--card:#FBF7EE;--ink:#2A241E;--ink-soft:#5C5247;
+  --vermilion:#C2402A;--vermilion-d:#9E2F1E;--indigo:#2E4A6B;--matcha:#6E8049;--gold:#B08D3C;
+  --line:#D8CDB6;--shadow:0 8px 28px -12px rgba(42,36,30,.35);
+  --f-sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans",-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Songti TC","Noto Serif TC","Yu Mincho","MS Mincho","Source Han Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f-sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 14%,rgba(176,141,60,.06),transparent 42%),radial-gradient(circle at 88% 80%,rgba(46,74,107,.06),transparent 42%);padding-bottom:40px}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px}
+.serif{font-family:var(--f-serif)}
+.masthead{text-align:center;padding:40px 18px 16px}
+.seal{width:64px;height:64px;border:2.5px solid var(--vermilion);border-radius:14px;color:var(--vermilion);
+  display:flex;align-items:center;justify-content:center;font-family:var(--f-serif);font-weight:900;font-size:20px;
+  margin:0 auto 14px;transform:rotate(-6deg);box-shadow:inset 0 0 0 4px rgba(194,64,42,.12)}
+.masthead h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(26px,6vw,38px)}
+.masthead .sub{margin-top:8px;font-size:13px;color:var(--ink-soft);letter-spacing:.14em}
+.back{display:inline-block;margin-top:14px;font-size:13px;color:var(--indigo);text-decoration:none;border:1.5px solid var(--indigo);padding:6px 16px;border-radius:30px;transition:.18s}
+.back:hover{background:var(--indigo);color:#fff}
+
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px;box-shadow:var(--shadow)}
+.sec h2{font-family:var(--f-serif);font-size:17px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:9px}
+.sec h2::before{content:"";width:18px;height:3px;background:var(--vermilion);border-radius:2px}
+
+/* 成員 */
+.members{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.member-tag{display:inline-flex;align-items:center;gap:6px;background:var(--paper2);border-radius:30px;padding:6px 8px 6px 14px;font-size:14px;font-weight:500}
+.member-tag button{cursor:pointer;border:none;background:none;color:var(--ink-soft);font-size:16px;line-height:1;padding:0 2px}
+.member-tag button:hover{color:var(--vermilion)}
+.member-add{display:flex;gap:8px}
+.member-add input{flex:1;font-family:var(--f-sans);font-size:14px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.member-add input:focus{outline:none;border-color:var(--vermilion)}
+.member-add button{cursor:pointer;border:none;background:var(--ink);color:#fff;font-weight:700;font-size:14px;padding:9px 16px;border-radius:10px}
+
+/* 輸入 */
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:4px}
+.field input,.field select{width:100%;font-family:var(--f-sans);font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--vermilion)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.split-who{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px}
+.chk{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1.5px solid var(--line);border-radius:30px;padding:6px 13px;font-size:13.5px;cursor:pointer;transition:.15s;user-select:none}
+.chk.on{background:var(--matcha);color:#fff;border-color:var(--matcha)}
+.split-all{font-size:12px;color:var(--indigo);cursor:pointer;margin-top:7px;display:inline-block;text-decoration:underline}
+.add-btn{width:100%;font-family:var(--f-sans);font-size:15px;font-weight:700;cursor:pointer;border:none;background:var(--vermilion);color:#fff;padding:13px;border-radius:11px;margin-top:8px;transition:.18s}
+.add-btn:hover{background:var(--vermilion-d)}
+.cur-note{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:8px}
+.sync-dot{font-size:11.5px;color:var(--ink-soft);padding:3px 10px;border-radius:20px;background:var(--paper2)}
+.sync-dot.s-send{background:#e7eef5;color:var(--indigo)}
+.sync-dot.s-ok{background:#e9efe0;color:var(--matcha)}
+.sync-dot.s-fail{background:#faece8;color:var(--vermilion-d)}
+
+/* 結算 */
+.settle{background:var(--ink);color:var(--paper);border-radius:16px;padding:20px;margin-bottom:18px}
+.settle h2{font-family:var(--f-serif);font-size:18px;font-weight:700;margin-bottom:6px;color:#fff}
+.settle .tot{font-size:12.5px;color:#cfc6b6;margin-bottom:14px}
+.balrow{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.balrow .pos{color:#9fcf7e;font-weight:700}
+.balrow .neg{color:#f0a48c;font-weight:700}
+.transfers{margin-top:14px}
+.tr{background:rgba(255,255,255,.08);border-radius:10px;padding:11px 13px;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:8px}
+.tr b{color:#fff}
+.tr .arrow{color:var(--gold);font-weight:700}
+.tr .amt{margin-left:auto;font-family:var(--f-serif);font-weight:700;color:#fff;white-space:nowrap}
+.settle .clean{font-size:13.5px;color:#9fcf7e;text-align:center;padding:8px 0}
+
+/* 清單 */
+.list-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.list-head h2{font-family:var(--f-serif);font-size:18px;font-weight:700;display:flex;align-items:center;gap:9px}
+.list-head h2::before{content:"";width:20px;height:3px;background:var(--vermilion);border-radius:2px}
+.tools button{font-family:var(--f-sans);cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);padding:6px 12px;border-radius:8px;margin-left:6px;transition:.18s}
+.tools button:hover{border-color:var(--vermilion);color:var(--vermilion)}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.rec .cat{font-size:20px;width:26px;text-align:center}
+.rec .info{flex:1;min-width:0}
+.rec .info .nm{font-weight:500;font-size:14.5px}
+.rec .info .meta{font-size:11.5px;color:var(--ink-soft);margin-top:1px}
+.rec .amt{font-family:var(--f-serif);font-weight:700;font-size:15px;color:var(--vermilion);white-space:nowrap}
+.rec .del{cursor:pointer;color:var(--ink-soft);font-size:18px;line-height:1;padding:2px 4px;border:none;background:none}
+.rec .del:hover{color:var(--vermilion)}
+.empty{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:26px 0}
+.editnote{background:#f7efdf;border:1px dashed var(--gold);border-radius:12px;padding:13px 15px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:20px}
+.editnote b{color:var(--ink)}
+footer{text-align:center;padding:28px 18px;color:var(--ink-soft);font-size:12px}
+@media(max-width:600px){.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="seal">分</div>
+  <h1 class="serif">旅遊分帳</h1>
+  <div class="sub">SPLIT · WHO OWES WHO</div>
+  <br>
+  <a class="back" href="../">← 回書架</a>
+</header>
+
+<main class="wrap">
+
+  <div class="editnote">
+    <b>📝 用法：</b>由一人（出納）在這支手機記全團的帳。每筆標「誰付的、分攤給誰」，下方自動算出<b>誰該補誰多少</b>。資料存本機、不上傳，回程前記得「匯出」備份。
+  </div>
+
+  <!-- 成員 -->
+  <div class="sec">
+    <h2>同行成員</h2>
+    <div class="members" id="members"></div>
+    <div class="member-add">
+      <input type="text" id="mName" placeholder="輸入成員名字（例：我、阿姨、小明）">
+      <button id="mAdd">＋ 加入</button>
+    </div>
+  </div>
+
+  <!-- 結算 -->
+  <div class="settle">
+    <h2>💰 結算建議</h2>
+    <div class="tot" id="settleTot"></div>
+    <div id="balances"></div>
+    <div class="transfers" id="transfers"></div>
+  </div>
+
+  <!-- 記一筆 -->
+  <div class="sec">
+    <h2>記一筆</h2>
+    <div class="field">
+      <label>項目</label>
+      <input type="text" id="fName" placeholder="例：晚餐・燒肉 / 計程車 / 門票">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>金額（¥）</label>
+        <input type="number" id="fAmt" inputmode="numeric" placeholder="0">
+      </div>
+      <div class="field">
+        <label>分類</label>
+        <select id="fCat"></select>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>誰付的</label>
+        <select id="fPayer"></select>
+      </div>
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="fDate">
+      </div>
+    </div>
+    <div class="field">
+      <label>分攤給誰（點選參與分攤的人）</label>
+      <div class="split-who" id="splitWho"></div>
+      <span class="split-all" id="splitAll">全選 / 全不選</span>
+    </div>
+    <button class="add-btn" id="addBtn">＋ 加入這筆</button>
+    <div class="cur-note">金額以日幣記，台幣換算約 × 0.21</div>
+  </div>
+
+  <!-- 明細 -->
+  <div class="list-head">
+    <h2>明細</h2>
+    <div class="tools">
+      <span class="sync-dot" id="syncDot"></span>
+      <button id="exportBtn">匯出</button>
+      <button id="clearBtn">清空帳目</button>
+    </div>
+  </div>
+  <div id="list"></div>
+
+</main>
+
+<footer>旅遊分帳　·　一人記帳、自動結算，資料存本機記得匯出 🧾</footer>
+
+<script>
+/* ============================================================
+   旅遊分帳：一人記帳 + 自動結算（localStorage、單機、不上傳）
+   換一趟旅程改 KEY，帳本才分開
+   ============================================================ */
+const KEY="tripsbook_split_tokyo202610";
+/* ★ 要同步到 Google 試算表：填成你的 Apps Script 網址（見說明檔）。留空 = 只存本機。 */
+const SHEET_API="";
+const TRIP_NAME="東京202610";
+const CATS=[["🍴","餐飲"],["🚇","交通"],["🛍️","購物"],["🎟️","門票"],["🏨","住宿"],["💴","其他"]];
+
+let data=load();   // {members:[], records:[]}
+let splitSel=new Set();
+
+function load(){
+  try{const d=JSON.parse(localStorage.getItem(KEY));if(d&&d.members)return d;}catch(e){}
+  return {members:[],records:[]};
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){alert("儲存失敗，可能是隱私模式")}}
+
+/* —— 同步到 Google 試算表（本機仍是主儲存）—— */
+function syncToSheet(rec,action){
+  if(!SHEET_API)return;
+  const body=JSON.stringify({
+    action:action, trip:TRIP_NAME, id:rec.id, date:rec.date, cat:rec.cat,
+    name:rec.name, amt:rec.amt, payer:rec.payer||"", split:(rec.split||[]).join("、")
+  });
+  setSync("sending");
+  fetch(SHEET_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body})
+    .then(()=>setSync("ok")).catch(()=>setSync("fail"));
+}
+function setSync(state){
+  const el=$("syncDot"); if(!el)return;
+  const map={idle:["","同步：待命"],sending:["s-send","同步中…"],ok:["s-ok","已同步 ✓"],fail:["s-fail","同步失敗（已存本機）"]};
+  const [cls,txt]=map[state]||map.idle;
+  el.className="sync-dot "+cls; el.textContent=txt;
+}
+
+const $=id=>document.getElementById(id);
+const yen=n=>"¥"+Math.round(n).toLocaleString("en-US");
+
+/* ---- 成員 ---- */
+$("mAdd").onclick=()=>{
+  const n=$("mName").value.trim();
+  if(!n)return;
+  if(data.members.includes(n)){alert("已有同名成員");return;}
+  data.members.push(n);$("mName").value="";save();renderAll();
+};
+$("mName").addEventListener("keydown",e=>{if(e.key==="Enter")$("mAdd").click();});
+
+function removeMember(n){
+  const used=data.records.some(r=>r.payer===n||r.split.includes(n));
+  if(used){alert("這位成員已有帳目，無法刪除（可先刪相關帳目）");return;}
+  data.members=data.members.filter(m=>m!==n);save();renderAll();
+}
+function renderMembers(){
+  $("members").innerHTML=data.members.length
+    ? data.members.map(m=>`<span class="member-tag">${m}<button onclick="removeMember('${m.replace(/'/g,"\\'")}')">×</button></span>`).join("")
+    : `<span style="font-size:13px;color:var(--ink-soft)">先加入同行成員，才能記帳</span>`;
+}
+
+/* ---- 表單下拉 / 分攤勾選 ---- */
+function fillForm(){
+  $("fCat").innerHTML=CATS.map(c=>`<option value="${c[0]}">${c[0]} ${c[1]}</option>`).join("");
+  $("fPayer").innerHTML=data.members.map(m=>`<option value="${m}">${m}</option>`).join("");
+  // 預設分攤＝全員
+  if(splitSel.size===0)data.members.forEach(m=>splitSel.add(m));
+  // 移除已不存在的成員
+  [...splitSel].forEach(m=>{if(!data.members.includes(m))splitSel.delete(m);});
+  $("splitWho").innerHTML=data.members.map(m=>
+    `<span class="chk ${splitSel.has(m)?"on":""}" data-m="${m}">${m}</span>`).join("");
+  $("splitWho").querySelectorAll(".chk").forEach(c=>c.onclick=()=>{
+    const m=c.dataset.m;splitSel.has(m)?splitSel.delete(m):splitSel.add(m);
+    c.classList.toggle("on");
+  });
+}
+$("splitAll").onclick=()=>{
+  if(splitSel.size===data.members.length)splitSel.clear();
+  else data.members.forEach(m=>splitSel.add(m));
+  fillForm();
+};
+
+$("fDate").value=new Date().toISOString().slice(0,10);
+
+/* ---- 新增帳目 ---- */
+$("addBtn").onclick=()=>{
+  if(data.members.length<2){alert("請先加入至少 2 位成員");return;}
+  const name=$("fName").value.trim();
+  const amt=parseFloat($("fAmt").value);
+  const payer=$("fPayer").value;
+  const split=[...splitSel];
+  if(!name){alert("請填項目");return;}
+  if(!amt||amt<=0){alert("請填正確金額");return;}
+  if(!split.length){alert("請至少選一位分攤者");return;}
+  data.records.push({id:Date.now(),name,amt,cat:$("fCat").value,payer,split,date:$("fDate").value});
+  save();
+  syncToSheet(data.records[data.records.length-1],"add");
+  $("fName").value="";$("fAmt").value="";
+  renderAll();
+};
+
+function del(id){
+  if(!confirm("刪除這筆？"))return;
+  const rec=data.records.find(r=>r.id===id);
+  data.records=data.records.filter(r=>r.id!==id);save();
+  if(rec)syncToSheet(rec,"delete");
+  renderAll();
+}
+
+/* ---- 結算演算法 ---- */
+function settle(){
+  const net={};                       // 每人淨額：付出 - 應分攤
+  data.members.forEach(m=>net[m]=0);
+  data.records.forEach(r=>{
+    if(net[r.payer]===undefined)return;
+    net[r.payer]+=r.amt;              // 付的人 +
+    const share=r.amt/r.split.length;
+    r.split.forEach(m=>{if(net[m]!==undefined)net[m]-=share;});  // 分攤者 -
+  });
+  // 產生最少筆數的清償建議
+  const creditors=[],debtors=[];
+  Object.keys(net).forEach(m=>{
+    const v=Math.round(net[m]);
+    if(v>0)creditors.push({m,v});
+    else if(v<0)debtors.push({m,v:-v});
+  });
+  creditors.sort((a,b)=>b.v-a.v);debtors.sort((a,b)=>b.v-a.v);
+  const transfers=[];
+  let i=0,j=0;
+  while(i<debtors.length&&j<creditors.length){
+    const pay=Math.min(debtors[i].v,creditors[j].v);
+    if(pay>0)transfers.push({from:debtors[i].m,to:creditors[j].m,amt:pay});
+    debtors[i].v-=pay;creditors[j].v-=pay;
+    if(debtors[i].v<=0)i++;
+    if(creditors[j].v<=0)j++;
+  }
+  return {net,transfers};
+}
+
+/* ---- 渲染 ---- */
+function renderSettle(){
+  const total=data.records.reduce((s,r)=>s+r.amt,0);
+  $("settleTot").textContent=data.records.length
+    ? `總支出 ${yen(total)}　·　共 ${data.records.length} 筆`
+    : "還沒有帳目";
+  if(data.members.length<2||!data.records.length){
+    $("balances").innerHTML="";$("transfers").innerHTML="";return;
+  }
+  const {net,transfers}=settle();
+  $("balances").innerHTML=data.members.map(m=>{
+    const v=Math.round(net[m]);
+    const cls=v>0?"pos":(v<0?"neg":"");
+    const txt=v>0?`應收回 ${yen(v)}`:(v<0?`應付出 ${yen(-v)}`:"剛好打平");
+    return `<div class="balrow"><span>${m}</span><span class="${cls}">${txt}</span></div>`;
+  }).join("");
+  $("transfers").innerHTML=transfers.length
+    ? transfers.map(t=>`<div class="tr"><b>${t.from}</b><span class="arrow">→</span><b>${t.to}</b><span class="amt">${yen(t.amt)}</span></div>`).join("")
+    : `<div class="clean">✓ 帳目已平，無需轉帳</div>`;
+}
+
+function renderList(){
+  const list=$("list");
+  if(!data.records.length){list.innerHTML=`<div class="empty">還沒有帳目，從上面記第一筆吧 🧾</div>`;return;}
+  list.innerHTML=[...data.records].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(r=>{
+    const allMembers=r.split.length===data.members.length;
+    const who=allMembers?"全員均分":("分："+r.split.join("、"));
+    return `<div class="rec">
+      <div class="cat">${r.cat}</div>
+      <div class="info"><div class="nm">${r.name}</div>
+        <div class="meta">${r.date}　·　${r.payer} 付　·　${who}</div></div>
+      <div class="amt">${yen(r.amt)}</div>
+      <button class="del" onclick="del(${r.id})">×</button>
+    </div>`;
+  }).join("");
+}
+
+function renderAll(){renderMembers();fillForm();renderSettle();renderList();}
+setSync(SHEET_API?"idle":"");
+if(!SHEET_API){const sd=$("syncDot");if(sd)sd.style.display="none";}
+
+/* ---- 匯出 / 清空 ---- */
+$("exportBtn").onclick=()=>{
+  if(!data.records.length){alert("還沒有資料");return;}
+  let csv="日期,分類,項目,金額(¥),付款人,分攤者\n";
+  [...data.records].sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
+    csv+=`${r.date},${r.cat},"${r.name}",${r.amt},${r.payer},"${r.split.join("、")}"\n`;
+  });
+  const {net,transfers}=data.members.length>=2?settle():{net:{},transfers:[]};
+  csv+="\n結算建議\n";
+  transfers.forEach(t=>{csv+=`${t.from} → ${t.to},${t.amt}\n`;});
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="旅遊分帳.csv";a.click();
+};
+$("clearBtn").onclick=()=>{
+  if(!data.records.length)return;
+  if(confirm("清空所有帳目？（成員保留，建議先匯出）")){data.records=[];save();renderAll();}
+};
+
+renderAll();
+</script>
+</body>
+</html>

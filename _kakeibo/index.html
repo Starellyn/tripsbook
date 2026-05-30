@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅遊記帳</title>
+<style>
+:root{
+  --paper:#F2EBDD;--paper2:#EAE0CC;--card:#FBF7EE;--ink:#2A241E;--ink-soft:#5C5247;
+  --vermilion:#C2402A;--vermilion-d:#9E2F1E;--indigo:#2E4A6B;--matcha:#6E8049;--gold:#B08D3C;
+  --line:#D8CDB6;--shadow:0 8px 28px -12px rgba(42,36,30,.35);
+  --f-sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans",-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Songti TC","Noto Serif TC","Yu Mincho","MS Mincho","Source Han Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f-sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 14%,rgba(176,141,60,.06),transparent 42%),radial-gradient(circle at 88% 80%,rgba(46,74,107,.06),transparent 42%);padding-bottom:40px}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px}
+.serif{font-family:var(--f-serif)}
+.masthead{text-align:center;padding:40px 18px 18px}
+.seal{width:64px;height:64px;border:2.5px solid var(--vermilion);border-radius:14px;color:var(--vermilion);
+  display:flex;align-items:center;justify-content:center;font-family:var(--f-serif);font-weight:900;font-size:20px;
+  margin:0 auto 14px;transform:rotate(-6deg);box-shadow:inset 0 0 0 4px rgba(194,64,42,.12)}
+.masthead h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(26px,6vw,38px)}
+.masthead .sub{margin-top:8px;font-size:13px;color:var(--ink-soft);letter-spacing:.14em}
+.back{display:inline-block;margin-top:14px;font-size:13px;color:var(--indigo);text-decoration:none;border:1.5px solid var(--indigo);padding:6px 16px;border-radius:30px;transition:.18s}
+.back:hover{background:var(--indigo);color:#fff}
+
+/* 結餘總覽 */
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.sum-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 12px;text-align:center;box-shadow:var(--shadow)}
+.sum-card .lbl{font-size:12px;color:var(--ink-soft);margin-bottom:5px}
+.sum-card .val{font-family:var(--f-serif);font-weight:900;font-size:22px}
+.sum-card.income .val{color:var(--matcha)}
+.sum-card.expense .val{color:var(--vermilion)}
+.sum-card.balance .val{color:var(--indigo)}
+.sum-card .val small{font-family:var(--f-sans);font-weight:400;font-size:12px;color:var(--ink-soft)}
+
+/* 輸入卡 */
+.entry{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:20px;box-shadow:var(--shadow)}
+.entry h2{font-family:var(--f-serif);font-size:17px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:9px}
+.entry h2::before{content:"";width:18px;height:3px;background:var(--vermilion);border-radius:2px}
+.io-toggle{display:inline-flex;background:var(--paper2);border-radius:30px;padding:4px;gap:4px;margin-bottom:14px}
+.io-toggle button{font-family:var(--f-sans);cursor:pointer;border:none;background:transparent;color:var(--ink-soft);font-size:13.5px;font-weight:700;padding:7px 20px;border-radius:30px;transition:.18s}
+.io-toggle button.on-exp{background:var(--vermilion);color:#fff}
+.io-toggle button.on-inc{background:var(--matcha);color:#fff}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:4px}
+.field input,.field select{width:100%;font-family:var(--f-sans);font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--vermilion)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.add-btn{width:100%;font-family:var(--f-sans);font-size:15px;font-weight:700;cursor:pointer;border:none;
+  background:var(--vermilion);color:#fff;padding:13px;border-radius:11px;margin-top:6px;transition:.18s}
+.add-btn:hover{background:var(--vermilion-d)}
+
+/* 清單 */
+.list-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.list-head h2{font-family:var(--f-serif);font-size:18px;font-weight:700;display:flex;align-items:center;gap:9px}
+.list-head h2::before{content:"";width:20px;height:3px;background:var(--vermilion);border-radius:2px}
+.tools button{font-family:var(--f-sans);cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);padding:6px 12px;border-radius:8px;margin-left:6px;transition:.18s}
+.tools button:hover{border-color:var(--vermilion);color:var(--vermilion)}
+.day-group{margin-bottom:16px}
+.day-label{font-size:12.5px;color:var(--ink-soft);font-weight:700;margin:8px 0;padding-left:2px}
+.rec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.rec .cat{font-size:20px;width:26px;text-align:center}
+.rec .info{flex:1;min-width:0}
+.rec .info .nm{font-weight:500;font-size:14.5px}
+.rec .info .meta{font-size:11.5px;color:var(--ink-soft)}
+.rec .amt{font-family:var(--f-serif);font-weight:700;font-size:15px;white-space:nowrap}
+.rec .amt.exp{color:var(--vermilion)}
+.rec .amt.inc{color:var(--matcha)}
+.rec .del{cursor:pointer;color:var(--ink-soft);font-size:18px;line-height:1;padding:2px 4px;border:none;background:none;transition:.18s}
+.rec .del:hover{color:var(--vermilion)}
+.empty{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:30px 0}
+.cur-note{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:8px}
+.sync-dot{font-size:11.5px;color:var(--ink-soft);padding:3px 10px;border-radius:20px;background:var(--paper2)}
+.sync-dot.s-send{background:#e7eef5;color:var(--indigo)}
+.sync-dot.s-ok{background:#e9efe0;color:var(--matcha)}
+.sync-dot.s-fail{background:#faece8;color:var(--vermilion-d)}
+footer{text-align:center;padding:30px 18px;color:var(--ink-soft);font-size:12px}
+.editnote{background:#f7efdf;border:1px dashed var(--gold);border-radius:12px;padding:13px 15px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:20px}
+.editnote b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="seal">帳</div>
+  <h1 class="serif">旅遊記帳</h1>
+  <div class="sub">TRAVEL · EXPENSE LOG</div>
+  <br>
+  <a class="back" href="../">← 回書架</a>
+</header>
+
+<main class="wrap">
+
+  <div class="editnote">
+    <b>📝 說明：</b>記錄存在這支手機的瀏覽器裡（離線也能記）。若已設定 Google 同步，每筆會<b>另存一份到你的 Google 試算表</b>（永久保存、可多人查看）；未設定時則只存本機，回程前記得「匯出」備份。
+  </div>
+
+  <!-- 總覽 -->
+  <div class="summary">
+    <div class="sum-card income"><div class="lbl">收入</div><div class="val" id="sumIn">0</div></div>
+    <div class="sum-card expense"><div class="lbl">支出</div><div class="val" id="sumOut">0</div></div>
+    <div class="sum-card balance"><div class="lbl">結餘</div><div class="val" id="sumBal">0</div></div>
+  </div>
+
+  <!-- 輸入 -->
+  <div class="entry">
+    <h2>記一筆</h2>
+    <div class="io-toggle" id="ioToggle">
+      <button data-io="exp" class="on-exp">支出</button>
+      <button data-io="inc">收入</button>
+    </div>
+    <div class="field">
+      <label>項目</label>
+      <input type="text" id="fName" placeholder="例：午餐・拉麵 / 地鐵 / 伴手禮">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>金額（¥）</label>
+        <input type="number" id="fAmt" inputmode="numeric" placeholder="0">
+      </div>
+      <div class="field">
+        <label>分類</label>
+        <select id="fCat"></select>
+      </div>
+    </div>
+    <div class="field">
+      <label>日期</label>
+      <input type="date" id="fDate">
+    </div>
+    <button class="add-btn" id="addBtn">＋ 加入這筆</button>
+    <div class="cur-note">金額以日幣記，台幣換算約 × 0.21</div>
+  </div>
+
+  <!-- 清單 -->
+  <div class="list-head">
+    <h2>明細</h2>
+    <div class="tools">
+      <span class="sync-dot" id="syncDot"></span>
+      <button id="exportBtn">匯出</button>
+      <button id="clearBtn">清空</button>
+    </div>
+  </div>
+  <div id="list"></div>
+
+</main>
+
+<footer>旅遊記帳　·　資料存在本機瀏覽器，記得匯出備份 🧾</footer>
+
+<script>
+/* ============================================================
+   旅遊記帳：資料存 localStorage（單機、離線可用、不上傳）
+   ============================================================ */
+const KEY="tripsbook_expense_tokyo202610";   // 換一趟就改這個 key，帳本才分開
+/* ★ 要同步到 Google 試算表：把下面填成你的 Apps Script 網址（見說明檔）。
+   留空字串 "" = 只存本機、不同步（功能照常）。 */
+const SHEET_API="";
+const TRIP_NAME="東京202610";                // 寫進試算表的「帳本」欄，多趟共用一表時可區分
+
+const CATS={
+  exp:[["🍴","餐飲"],["🚇","交通"],["🛍️","購物"],["🎟️","門票"],["🏨","住宿"],["💴","其他"]],
+  inc:[["💰","領現"],["💳","儲值"],["↩️","退款"],["💴","其他"]]
+};
+
+let records=load();
+let io="exp";
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(records))}catch(e){alert("儲存失敗，可能是瀏覽器隱私模式")}}
+
+/* —— 同步到 Google 試算表（本機仍是主儲存，這是額外備份）——
+   用 no-cors 送出；瀏覽器讀不到回應，但寫入會成功。失敗不影響本機紀錄。 */
+function syncToSheet(rec,action){
+  if(!SHEET_API)return;                       // 沒設網址就跳過
+  const body=JSON.stringify({
+    action:action, trip:TRIP_NAME,
+    id:rec.id, date:rec.date, io:rec.io, cat:rec.cat, name:rec.name, amt:rec.amt
+  });
+  setSync("sending");
+  fetch(SHEET_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body})
+    .then(()=>setSync("ok"))
+    .catch(()=>setSync("fail"));
+}
+function setSync(state){
+  const el=$("syncDot"); if(!el)return;
+  const map={idle:["","同步：待命"],sending:["s-send","同步中…"],ok:["s-ok","已同步 ✓"],fail:["s-fail","同步失敗（已存本機）"]};
+  const [cls,txt]=map[state]||map.idle;
+  el.className="sync-dot "+cls; el.textContent=txt;
+}
+
+const $=id=>document.getElementById(id);
+const yen=n=>"¥"+Number(n).toLocaleString("en-US");
+
+/* 分類選單依收/支切換 */
+function fillCats(){
+  $("fCat").innerHTML=CATS[io].map(c=>`<option value="${c[0]}">${c[0]} ${c[1]}</option>`).join("");
+}
+/* 收支切換 */
+$("ioToggle").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{
+    io=b.dataset.io;
+    $("ioToggle").querySelectorAll("button").forEach(x=>x.className="");
+    b.className=io==="exp"?"on-exp":"on-inc";
+    fillCats();
+  };
+});
+
+/* 預設日期＝今天 */
+$("fDate").value=new Date().toISOString().slice(0,10);
+fillCats();
+
+/* 新增 */
+$("addBtn").onclick=()=>{
+  const name=$("fName").value.trim();
+  const amt=parseFloat($("fAmt").value);
+  if(!name){alert("請填項目");return;}
+  if(!amt||amt<=0){alert("請填正確金額");return;}
+  const rec={id:Date.now(),io,name,amt,cat:$("fCat").value,date:$("fDate").value};
+  records.push(rec);
+  save();
+  syncToSheet(rec,"add");
+  $("fName").value="";$("fAmt").value="";
+  render();
+};
+
+/* 刪除 */
+function del(id){
+  if(!confirm("刪除這筆？"))return;
+  const rec=records.find(r=>r.id===id);
+  records=records.filter(r=>r.id!==id);save();
+  if(rec)syncToSheet(rec,"delete");
+  render();
+}
+
+/* 匯出 CSV */
+$("exportBtn").onclick=()=>{
+  if(!records.length){alert("還沒有資料");return;}
+  let csv="日期,收支,分類,項目,金額(¥)\n";
+  [...records].sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
+    csv+=`${r.date},${r.io==="exp"?"支出":"收入"},${r.cat},"${r.name}",${r.amt}\n`;
+  });
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="旅遊記帳.csv";a.click();
+};
+
+/* 清空 */
+$("clearBtn").onclick=()=>{
+  if(!records.length)return;
+  if(confirm("確定清空全部紀錄？此動作無法復原（建議先匯出）")){records=[];save();render();}
+};
+
+/* 渲染 */
+function render(){
+  let totIn=0,totOut=0;
+  records.forEach(r=>{r.io==="inc"?totIn+=r.amt:totOut+=r.amt;});
+  $("sumIn").innerHTML=yen(totIn);
+  $("sumOut").innerHTML=yen(totOut);
+  const bal=totIn-totOut;
+  $("sumBal").innerHTML=yen(bal)+`<small><br>≈ NT$${Math.round(bal*0.21).toLocaleString("en-US")}</small>`;
+
+  const list=$("list");
+  if(!records.length){list.innerHTML=`<div class="empty">還沒有紀錄，從上面記第一筆吧 🧾</div>`;return;}
+
+  /* 依日期分組（新到舊） */
+  const groups={};
+  records.forEach(r=>{(groups[r.date]=groups[r.date]||[]).push(r);});
+  const dates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+  list.innerHTML=dates.map(d=>{
+    const dayOut=groups[d].filter(r=>r.io==="exp").reduce((s,r)=>s+r.amt,0);
+    const rows=groups[d].sort((a,b)=>b.id-a.id).map(r=>`
+      <div class="rec">
+        <div class="cat">${r.cat}</div>
+        <div class="info"><div class="nm">${r.name}</div>
+          <div class="meta">${r.io==="exp"?"支出":"收入"}</div></div>
+        <div class="amt ${r.io==="exp"?"exp":"inc"}">${r.io==="exp"?"−":"+"}${yen(r.amt)}</div>
+        <button class="del" onclick="del(${r.id})">×</button>
+      </div>`).join("");
+    return `<div class="day-group"><div class="day-label">${d}　·　當日支出 ${yen(dayOut)}</div>${rows}</div>`;
+  }).join("");
+}
+setSync(SHEET_API?"idle":"");
+if(!SHEET_API){const sd=$("syncDot");if(sd)sd.style.display="none";}
+render();
+</script>
+</body>
+</html>

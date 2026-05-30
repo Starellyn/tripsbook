@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅途日記</title>
+<style>
+:root{
+  --paper:#F2EBDD;--paper2:#EAE0CC;--card:#FBF7EE;--ink:#2A241E;--ink-soft:#5C5247;
+  --vermilion:#C2402A;--vermilion-d:#9E2F1E;--indigo:#2E4A6B;--matcha:#6E8049;--gold:#B08D3C;
+  --line:#D8CDB6;--shadow:0 8px 28px -12px rgba(42,36,30,.35);
+  --f-sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans",-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Songti TC","Noto Serif TC","Yu Mincho","MS Mincho","Source Han Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f-sans);background:var(--paper);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 14%,rgba(176,141,60,.06),transparent 42%),radial-gradient(circle at 88% 80%,rgba(46,74,107,.06),transparent 42%);padding-bottom:40px}
+.wrap{max-width:680px;margin:0 auto;padding:0 18px}
+.serif{font-family:var(--f-serif)}
+.masthead{text-align:center;padding:40px 18px 16px}
+.seal{width:64px;height:64px;border:2.5px solid var(--vermilion);border-radius:14px;color:var(--vermilion);
+  display:flex;align-items:center;justify-content:center;font-family:var(--f-serif);font-weight:900;font-size:20px;
+  margin:0 auto 14px;transform:rotate(-6deg);box-shadow:inset 0 0 0 4px rgba(194,64,42,.12)}
+.masthead h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(26px,6vw,38px)}
+.masthead .sub{margin-top:8px;font-size:13px;color:var(--ink-soft);letter-spacing:.14em}
+.back{display:inline-block;margin-top:14px;font-size:13px;color:var(--indigo);text-decoration:none;border:1.5px solid var(--indigo);padding:6px 16px;border-radius:30px;transition:.18s}
+.back:hover{background:var(--indigo);color:#fff}
+
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:18px;box-shadow:var(--shadow)}
+.sec h2{font-family:var(--f-serif);font-size:17px;font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:9px}
+.sec h2::before{content:"";width:18px;height:3px;background:var(--vermilion);border-radius:2px}
+
+/* 與計劃關係切換 */
+.kind-toggle{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.kind-toggle button{font-family:var(--f-sans);cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);
+  font-size:13px;font-weight:600;padding:7px 13px;border-radius:30px;transition:.15s}
+.kind-toggle button.on{color:#fff;border-color:transparent}
+.kind-toggle button.on[data-k="plan"]{background:var(--matcha)}
+.kind-toggle button.on[data-k="change"]{background:var(--vermilion)}
+.kind-toggle button.on[data-k="extra"]{background:var(--indigo)}
+.kind-toggle button.on[data-k="skip"]{background:var(--ink-soft)}
+
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;font-family:var(--f-sans);font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.field textarea{resize:vertical;min-height:62px;line-height:1.6}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--vermilion)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.rating{display:flex;gap:6px;font-size:24px;cursor:pointer}
+.rating span{filter:grayscale(1);opacity:.4;transition:.12s}
+.rating span.on{filter:none;opacity:1}
+.add-btn{width:100%;font-family:var(--f-sans);font-size:15px;font-weight:700;cursor:pointer;border:none;background:var(--vermilion);color:#fff;padding:13px;border-radius:11px;margin-top:6px;transition:.18s}
+.add-btn:hover{background:var(--vermilion-d)}
+
+.list-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.list-head h2{font-family:var(--f-serif);font-size:18px;font-weight:700;display:flex;align-items:center;gap:9px}
+.list-head h2::before{content:"";width:20px;height:3px;background:var(--vermilion);border-radius:2px}
+.tools button{font-family:var(--f-sans);cursor:pointer;font-size:12px;font-weight:600;border:1.5px solid var(--line);background:transparent;color:var(--ink-soft);padding:6px 12px;border-radius:8px;margin-left:6px;transition:.18s}
+.tools button:hover{border-color:var(--vermilion);color:var(--vermilion)}
+.sync-dot{font-size:11.5px;color:var(--ink-soft);padding:3px 10px;border-radius:20px;background:var(--paper2)}
+.sync-dot.s-send{background:#e7eef5;color:var(--indigo)}
+.sync-dot.s-ok{background:#e9efe0;color:var(--matcha)}
+.sync-dot.s-fail{background:#faece8;color:var(--vermilion-d)}
+
+.day-label{font-size:12.5px;color:var(--ink-soft);font-weight:700;margin:14px 0 8px;padding-left:2px}
+.entry{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);position:relative;border-left:4px solid var(--line)}
+.entry.k-plan{border-left-color:var(--matcha)}
+.entry.k-change{border-left-color:var(--vermilion)}
+.entry.k-extra{border-left-color:var(--indigo)}
+.entry.k-skip{border-left-color:var(--ink-soft);opacity:.72}
+.entry .top{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.entry .kind{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
+.kb-plan{background:#e9efe0;color:var(--matcha)}
+.kb-change{background:#f5e3de;color:var(--vermilion-d)}
+.kb-extra{background:#e7eef5;color:var(--indigo)}
+.kb-skip{background:#e3ddd0;color:var(--ink-soft)}
+.entry .place{font-weight:700;font-size:15.5px;flex:1;min-width:0}
+.entry .rate{font-size:13px;white-space:nowrap}
+.entry .vs{font-size:12px;color:var(--ink-soft);margin-top:2px}
+.entry .vs del{color:var(--ink-soft)}
+.entry .memo{font-size:13.5px;color:var(--ink);margin-top:7px;line-height:1.6;white-space:pre-wrap}
+.entry .links{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.entry .links a{font-size:12px;font-weight:600;text-decoration:none;color:var(--indigo);border:1.5px solid var(--indigo);padding:4px 11px;border-radius:8px}
+.entry .del{position:absolute;top:12px;right:12px;cursor:pointer;color:var(--ink-soft);font-size:18px;line-height:1;border:none;background:none}
+.entry .del:hover{color:var(--vermilion)}
+.empty{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:26px 0}
+.cur-note{font-size:12px;color:var(--ink-soft);text-align:center;margin-top:8px}
+.editnote{background:#f7efdf;border:1px dashed var(--gold);border-radius:12px;padding:13px 15px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:20px}
+.editnote b{color:var(--ink)}
+footer{text-align:center;padding:28px 18px;color:var(--ink-soft);font-size:12px}
+@media(max-width:600px){.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="seal">記</div>
+  <h1 class="serif">旅途日記</h1>
+  <div class="sub">WHAT ACTUALLY HAPPENED</div>
+  <br>
+  <a class="back" href="../">← 回書架</a>
+</header>
+
+<main class="wrap">
+
+  <div class="editnote">
+    <b>📝 用法：</b>旅途中到了某地點，一鍵記下<b>實際去了哪</b>、和原計劃的關係（照計劃／改去別處／臨時加碼／跳過）、心得與評分。回顧時這頁就是「真的去了哪」。資料存本機，可選同步 Google。
+  </div>
+
+  <!-- 記一筆 -->
+  <div class="sec">
+    <h2>記一站</h2>
+    <div class="kind-toggle" id="kindToggle">
+      <button data-k="plan" class="on">✅ 照計劃</button>
+      <button data-k="change">🔄 改去別處</button>
+      <button data-k="extra">➕ 臨時加碼</button>
+      <button data-k="skip">⏭️ 跳過了</button>
+    </div>
+    <div class="field">
+      <label>實際地點 / 這站做了什麼</label>
+      <input type="text" id="fPlace" placeholder="例：去了二寺谷咖啡 / 改吃一蘭拉麵">
+    </div>
+    <div class="field" id="origWrap" style="display:none">
+      <label>原本計劃是（改去別處 / 跳過時填）</label>
+      <input type="text" id="fOrig" placeholder="例：原本要去金閣寺">
+    </div>
+    <div class="row2">
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="fDate">
+      </div>
+      <div class="field">
+        <label>評分</label>
+        <div class="rating" id="rating">
+          <span data-v="1">⭐</span><span data-v="2">⭐</span><span data-v="3">⭐</span><span data-v="4">⭐</span><span data-v="5">⭐</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>心得 / 備註</label>
+      <textarea id="fMemo" placeholder="當下的感想、值不值得、給未來的提醒…"></textarea>
+    </div>
+    <div class="field">
+      <label>照片或地圖連結（選填，貼網址）</label>
+      <input type="text" id="fLink" placeholder="貼相簿連結或 Google Maps 網址">
+    </div>
+    <button class="add-btn" id="addBtn">＋ 記下這一站</button>
+    <div class="cur-note">旅途中隨手記，回家就是完整回顧</div>
+  </div>
+
+  <!-- 清單 -->
+  <div class="list-head">
+    <h2>旅程實錄</h2>
+    <div class="tools">
+      <span class="sync-dot" id="syncDot"></span>
+      <button id="exportBtn">匯出</button>
+      <button id="clearBtn">清空</button>
+    </div>
+  </div>
+  <div id="list"></div>
+
+</main>
+
+<footer>旅途日記　·　記下真的去了哪，回顧才完整 📔</footer>
+
+<script>
+/* ============================================================
+   旅途日記：記實際行程（localStorage + 可選 Google 同步）
+   換一趟改 KEY 與 TRIP_NAME
+   ============================================================ */
+const KEY="tripsbook_journal_tokyo202610";
+/* ★ 要同步到 Google 試算表：填 Apps Script 網址（見 Google同步_設定說明.md）。留空 = 只存本機。 */
+const SHEET_API="";
+const TRIP_NAME="東京202610";
+
+const KINDS={
+  plan:["✅","照計劃","kb-plan","k-plan"],
+  change:["🔄","改去別處","kb-change","k-change"],
+  extra:["➕","臨時加碼","kb-extra","k-extra"],
+  skip:["⏭️","跳過了","kb-skip","k-skip"]
+};
+
+let records=load();
+let kind="plan";
+let rating=0;
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(records))}catch(e){alert("儲存失敗，可能是隱私模式")}}
+
+/* —— Google 同步（本機仍是主儲存）—— */
+function syncToSheet(rec,action){
+  if(!SHEET_API)return;
+  const body=JSON.stringify({
+    action:action, trip:TRIP_NAME, id:rec.id, date:rec.date,
+    kind:rec.kind, place:rec.place, orig:rec.orig||"", rating:rec.rating||"", memo:rec.memo||"", link:rec.link||""
+  });
+  setSync("sending");
+  fetch(SHEET_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body})
+    .then(()=>setSync("ok")).catch(()=>setSync("fail"));
+}
+function setSync(state){
+  const el=$("syncDot"); if(!el)return;
+  const map={idle:["","同步：待命"],sending:["s-send","同步中…"],ok:["s-ok","已同步 ✓"],fail:["s-fail","同步失敗（已存本機）"]};
+  const [cls,txt]=map[state]||map.idle;
+  el.className="sync-dot "+cls; el.textContent=txt;
+}
+
+const $=id=>document.getElementById(id);
+
+/* 關係切換 */
+$("kindToggle").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{
+    kind=b.dataset.k;
+    $("kindToggle").querySelectorAll("button").forEach(x=>x.className="");
+    b.className="on";
+    // 改去別處 / 跳過 → 顯示「原本計劃」欄
+    $("origWrap").style.display=(kind==="change"||kind==="skip")?"block":"none";
+  };
+});
+
+/* 評分 */
+$("rating").querySelectorAll("span").forEach(s=>{
+  s.onclick=()=>{
+    rating=(+s.dataset.v===rating)?0:+s.dataset.v;  // 再點一次同顆＝取消
+    $("rating").querySelectorAll("span").forEach(x=>x.classList.toggle("on",+x.dataset.v<=rating));
+  };
+});
+
+$("fDate").value=new Date().toISOString().slice(0,10);
+
+/* 新增 */
+$("addBtn").onclick=()=>{
+  const place=$("fPlace").value.trim();
+  if(!place){alert("請填實際地點");return;}
+  const rec={
+    id:Date.now(), kind, place,
+    orig:$("fOrig").value.trim(), rating,
+    memo:$("fMemo").value.trim(), link:$("fLink").value.trim(),
+    date:$("fDate").value
+  };
+  records.push(rec);
+  save();
+  syncToSheet(rec,"add");
+  // 清空輸入
+  $("fPlace").value="";$("fOrig").value="";$("fMemo").value="";$("fLink").value="";
+  rating=0;$("rating").querySelectorAll("span").forEach(x=>x.classList.remove("on"));
+  render();
+};
+
+function del(id){
+  if(!confirm("刪除這一站？"))return;
+  const rec=records.find(r=>r.id===id);
+  records=records.filter(r=>r.id!==id);save();
+  if(rec)syncToSheet(rec,"delete");
+  render();
+}
+
+/* 匯出 */
+$("exportBtn").onclick=()=>{
+  if(!records.length){alert("還沒有紀錄");return;}
+  let csv="日期,關係,實際地點,原計劃,評分,心得,連結\n";
+  [...records].sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id).forEach(r=>{
+    csv+=`${r.date},${KINDS[r.kind][1]},"${r.place}","${r.orig||""}",${r.rating||""},"${(r.memo||"").replace(/"/g,'""')}","${r.link||""}"\n`;
+  });
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="旅途日記.csv";a.click();
+};
+$("clearBtn").onclick=()=>{
+  if(!records.length)return;
+  if(confirm("清空全部紀錄？（建議先匯出）")){records=[];save();render();}
+};
+
+/* 渲染 */
+function render(){
+  const list=$("list");
+  if(!records.length){list.innerHTML=`<div class="empty">還沒有紀錄，到了第一站就記下吧 📔</div>`;return;}
+  const groups={};
+  records.forEach(r=>{(groups[r.date]=groups[r.date]||[]).push(r);});
+  const dates=Object.keys(groups).sort((a,b)=>a.localeCompare(b));  // 舊到新，回顧照順序
+  list.innerHTML=dates.map(d=>{
+    const rows=groups[d].sort((a,b)=>a.id-b.id).map(r=>{
+      const K=KINDS[r.kind]||KINDS.plan;
+      const stars=r.rating?"⭐".repeat(r.rating):"";
+      const vs=(r.orig)?`<div class="vs">原計劃：<del>${r.orig}</del></div>`:"";
+      const memo=r.memo?`<div class="memo">${r.memo}</div>`:"";
+      let links="";
+      if(r.link){
+        links=`<div class="links"><a href="${r.link}" target="_blank" rel="noopener">🔗 連結</a></div>`;
+      }
+      return `<div class="entry ${K[3]}">
+        <button class="del" onclick="del(${r.id})">×</button>
+        <div class="top">
+          <span class="kind ${K[2]}">${K[0]} ${K[1]}</span>
+          <span class="place">${r.place}</span>
+        </div>
+        ${stars?`<div class="rate">${stars}</div>`:""}
+        ${vs}${memo}${links}
+      </div>`;
+    }).join("");
+    return `<div class="day-label">${d}</div>${rows}`;
+  }).join("");
+}
+setSync(SHEET_API?"idle":"");
+if(!SHEET_API){const sd=$("syncDot");if(sd)sd.style.display="none";}
+render();
+</script>
+</body>
+</html>
