@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅遊計劃書・書架</title>
+<style>
+/* ============================================================
+   ★ 設計：和風旅遊誌・書架（與各旅遊書同一視覺語言）
+   配色：生成り紙底 / 墨黑 / 朱紅 / 藍 / 抹茶
+   字型：系統內建堆疊（離線可用）
+   ============================================================ */
+:root{
+  --paper:#F2EBDD;
+  --paper2:#EAE0CC;
+  --card:#FBF7EE;
+  --ink:#2A241E;
+  --ink-soft:#5C5247;
+  --vermilion:#C2402A;
+  --vermilion-d:#9E2F1E;
+  --indigo:#2E4A6B;
+  --matcha:#6E8049;
+  --gold:#B08D3C;
+  --line:#D8CDB6;
+  --shadow:0 8px 28px -12px rgba(42,36,30,.35);
+  --f-sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans",-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Songti TC","Noto Serif TC","Yu Mincho","MS Mincho","Source Han Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:var(--f-sans);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+  background-image:
+    radial-gradient(circle at 12% 14%, rgba(176,141,60,.06), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(46,74,107,.06), transparent 42%);
+}
+.serif{font-family:var(--f-serif)}
+.wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+/* ---------- 封面標頭 ---------- */
+.masthead{position:relative;text-align:center;padding:62px 22px 30px;overflow:hidden}
+.masthead .vlabel{
+  position:absolute;top:22px;right:24px;writing-mode:vertical-rl;
+  letter-spacing:.4em;font-family:var(--f-serif);font-size:13px;color:var(--ink-soft);
+}
+.seal{
+  width:78px;height:78px;border:2.5px solid var(--vermilion);border-radius:14px;
+  color:var(--vermilion);display:flex;align-items:center;justify-content:center;
+  font-family:var(--f-serif);font-weight:900;font-size:26px;line-height:1.1;text-align:center;
+  margin:0 auto 20px;transform:rotate(-6deg);
+  box-shadow:inset 0 0 0 4px rgba(194,64,42,.12);
+  animation:sealin .7s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes sealin{from{opacity:0;transform:rotate(-6deg) scale(1.5)}to{opacity:1;transform:rotate(-6deg) scale(1)}}
+.masthead h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(32px,6.5vw,50px);letter-spacing:.02em}
+.masthead h1 .accent{color:var(--vermilion)}
+.masthead .sub{margin-top:12px;font-size:14px;color:var(--ink-soft);letter-spacing:.18em}
+.masthead .rule{width:58px;height:3px;background:var(--vermilion);margin:24px auto 0;border-radius:2px}
+
+/* ---------- 書架 ---------- */
+.shelf-label{
+  display:flex;align-items:center;gap:12px;max-width:960px;margin:14px auto 18px;padding:0 22px;
+  font-family:var(--f-serif);font-weight:700;font-size:18px;color:var(--ink);
+}
+.shelf-label::before{content:"";width:24px;height:3px;background:var(--vermilion);border-radius:2px}
+.shelf-label span{font-family:var(--f-sans);font-weight:400;font-size:13px;color:var(--ink-soft)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;padding-bottom:20px}
+
+/* 書卡 */
+.book{
+  display:block;text-decoration:none;color:inherit;position:relative;
+  background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  animation:rise .5s ease both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.book:hover{transform:translateY(-5px);box-shadow:0 20px 42px -16px rgba(42,36,30,.45);border-color:var(--vermilion)}
+.book .spine{
+  height:96px;position:relative;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, var(--c1,#2E4A6B), var(--c2,#1d3047));
+  overflow:hidden;
+}
+.book .spine::after{
+  content:"";position:absolute;inset:0;
+  background-image:repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 14px);
+}
+.book .spine .bseal{
+  font-family:var(--f-serif);font-weight:900;font-size:30px;color:#fff;
+  width:60px;height:60px;border:2px solid rgba(255,255,255,.7);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px);
+  text-align:center;line-height:1.05;z-index:1;
+}
+.book .body{padding:17px 18px 18px}
+.book .status{
+  position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;
+  padding:3px 11px;border-radius:20px;z-index:2;
+}
+.st-draft{background:#f5e3de;color:var(--vermilion-d)}
+.st-final{background:#e9efe0;color:var(--matcha)}
+.st-idea{background:#e7eef5;color:var(--indigo)}
+.book h2{font-family:var(--f-serif);font-size:20px;font-weight:700;line-height:1.35;margin-bottom:4px}
+.book .dates{font-size:12.5px;color:var(--ink-soft);letter-spacing:.04em}
+.book .desc{font-size:13px;color:var(--ink-soft);margin-top:9px;line-height:1.65}
+.book .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.book .tags span{background:var(--paper2);border-radius:20px;padding:3px 11px;font-size:11.5px;color:var(--ink-soft)}
+.book .go{
+  margin-top:14px;font-size:13px;font-weight:700;color:var(--vermilion);
+  display:inline-flex;align-items:center;gap:4px;transition:gap .18s ease;
+}
+.book:hover .go{gap:9px}
+
+/* 即將推出的占位卡 */
+.book.soon{cursor:default;border-style:dashed;background:transparent;box-shadow:none}
+.book.soon:hover{transform:none;box-shadow:none;border-color:var(--line)}
+.book.soon .spine{background:repeating-linear-gradient(45deg,var(--paper2) 0 10px,var(--paper) 10px 20px)}
+.book.soon .spine .bseal{color:var(--ink-soft);border-color:var(--line);font-size:22px}
+.book.soon h2{color:var(--ink-soft)}
+
+footer{text-align:center;padding:34px 22px 54px;color:var(--ink-soft);font-size:12px;border-top:1px solid var(--line);margin-top:24px}
+
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="vlabel">旅の記録</div>
+  <div class="seal">旅</div>
+  <h1>旅遊計劃書・<span class="accent">書架</span></h1>
+  <div class="sub">TRAVEL · ITINERARY · COLLECTION</div>
+  <div class="rule"></div>
+</header>
+
+<div class="shelf-label">收藏的旅程 <span id="count"></span></div>
+
+<main class="wrap">
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer id="foot"></footer>
+
+<script>
+/* ============================================================
+   ★★★ 書架資料：要加一本旅遊書，就在 BOOKS 加一張卡 ★★★
+   · url    ：該書資料夾（相對路徑，結尾加 /）；尚未完成填 ""
+   · status ：草稿 / 定版 / 構想中
+   · c1,c2  ：書脊漸層色（兩個色碼，營造不同書本封面感）
+   ============================================================ */
+const BOOKS = [
+  {
+    seal:"東京",
+    title:"東京・輕井澤・草津",
+    dates:"2026 / 10・四晚五天",
+    desc:"紅葉散策、草津泡湯、東京灣花火一次收。含包車與人數分攤試算。",
+    tags:["🍁 紅葉","♨️ 溫泉","🎆 花火"],
+    status:"草稿",
+    url:"tokyo-2026/",
+    c1:"#2E4A6B", c2:"#1d3047"
+  },
+  {
+    seal:"大阪",
+    title:"大阪・關西六日",
+    dates:"主題角色・文化混合行程",
+    desc:"柯南、吉伊卡哇、庫洛魔法使聯名，宇治抹茶與京都名所。",
+    tags:["🎀 角色","🍵 抹茶","🛍️ 採購"],
+    status:"定版",
+    url:"",                       // ← 上傳到 tripsbook/osaka/ 後，把這裡改成 "osaka/"
+    c1:"#9E2F1E", c2:"#7a2417"
+  },
+  {
+    seal:"未定",
+    title:"下一趟旅程",
+    dates:"待規劃",
+    desc:"複製模版、開新資料夾，這裡就會多一本。",
+    tags:[],
+    status:"構想中",
+    url:"",
+    soon:true
+  }
+];
+
+/* ============ 渲染（一般不用改）============ */
+const statusClass={"草稿":"st-draft","定版":"st-final","構想中":"st-idea"};
+const grid=document.getElementById("grid");
+let live=0;
+
+BOOKS.forEach((b,i)=>{
+  const linked=b.url && !b.soon;
+  if(linked)live++;
+  const el=document.createElement(linked?"a":"div");
+  el.className="book"+(b.soon?" soon":"");
+  if(linked)el.href=b.url;
+  el.style.animationDelay=(i*0.07)+"s";
+  el.style.setProperty("--c1",b.c1||"#2E4A6B");
+  el.style.setProperty("--c2",b.c2||"#1d3047");
+  const stCls=statusClass[b.status]||"st-idea";
+  el.innerHTML=`
+    ${b.status?`<span class="status ${stCls}">${b.status}</span>`:""}
+    <div class="spine"><div class="bseal">${b.seal||"旅"}</div></div>
+    <div class="body">
+      <h2>${b.title}</h2>
+      <div class="dates">${b.dates||""}</div>
+      ${b.desc?`<div class="desc">${b.desc}</div>`:""}
+      ${(b.tags||[]).length?`<div class="tags">${b.tags.map(t=>`<span>${t}</span>`).join("")}</div>`:""}
+      ${linked?`<div class="go">翻開這本 →</div>`
+        :(b.soon?"":`<div class="go" style="color:var(--ink-soft)">尚未上線</div>`)}
+    </div>`;
+  grid.appendChild(el);
+});
+
+document.getElementById("count").textContent="共 "+live+" 本已上線";
+document.getElementById("foot").innerHTML="旅遊計劃書・書架　·　以和風旅誌風格收藏每一段旅程 🧳";
+</script>
+</body>
+</html>
