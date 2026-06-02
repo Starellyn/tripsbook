@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>東京・輕井澤・草津 五日旅遊行程書</title>
+<title>上野・草津・輕井澤 四日旅遊行程書</title>
 <style>
 /* ============================================================
    ★ 設計：和風旅遊誌 (washi paper editorial)
@@ -46,6 +46,46 @@ body{
   position:relative;text-align:center;
   padding:64px 20px 40px;overflow:hidden;
 }
+.cover .back-shelf{
+  position:absolute;top:22px;left:22px;z-index:5;
+  font-family:var(--f-sans);font-size:13px;font-weight:600;
+  color:var(--ink-soft);text-decoration:none;
+  border:1.5px solid var(--line);border-radius:30px;padding:6px 14px;
+  background:var(--card);transition:.18s;
+}
+.cover .back-shelf:hover{border-color:var(--vermilion);color:var(--vermilion)}
+
+/* 倒數計時 */
+.countdown{margin-top:14px;font-family:var(--f-serif);font-size:15px;color:var(--vermilion-d);font-weight:700}
+.countdown .num{font-size:22px}
+.story{max-width:560px;margin:18px auto 0;font-size:14px;line-height:1.95;color:var(--ink-soft);text-align:left;border-left:3px solid var(--matcha);padding:4px 0 4px 16px;font-family:var(--f-serif)}
+.share-btn{margin-top:18px;font-family:var(--f-sans);cursor:pointer;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;font-weight:600;padding:8px 18px;border-radius:30px;transition:.18s}
+.share-btn:hover{border-color:var(--vermilion);color:var(--vermilion)}
+.share-btn.done{border-color:var(--matcha);color:var(--matcha)}
+.day-progress{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+.day-progress .bar{flex:1;height:6px;background:var(--paper2);border-radius:6px;overflow:hidden}
+.day-progress .bar i{display:block;height:100%;background:var(--matcha);border-radius:6px;transition:width .3s}
+.day-progress .txt{font-size:12px;color:var(--ink-soft);font-weight:700;white-space:nowrap}
+.arrived{cursor:pointer;user-select:none;width:22px;height:22px;border:2px solid var(--line);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:transparent;flex-shrink:0;transition:.15s}
+.arrived.on{background:var(--matcha);border-color:var(--matcha);color:#fff}
+.packing{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-top:18px;box-shadow:var(--shadow)}
+.packing h3{font-family:var(--f-serif);font-size:17px;font-weight:700;margin-bottom:12px}
+.packing h3 small{font-family:var(--f-sans);font-size:12px;font-weight:400;color:var(--ink-soft)}
+.pack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 14px;margin-bottom:12px}
+.pack-item{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer;padding:3px 0}
+.pack-item .box{width:18px;height:18px;border:1.5px solid var(--line);border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:transparent;flex-shrink:0;transition:.15s}
+.pack-item.on .box{background:var(--matcha);border-color:var(--matcha);color:#fff}
+.pack-item.on span{color:var(--ink-soft);text-decoration:line-through}
+.pack-item .del{margin-left:auto;color:var(--line);cursor:pointer;font-size:15px}
+.pack-item .del:hover{color:var(--vermilion)}
+.pack-add{display:flex;gap:8px}
+.pack-add input{flex:1;font-family:var(--f-sans);font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+.pack-add input:focus{outline:none;border-color:var(--vermilion)}
+.pack-add button{cursor:pointer;border:none;background:var(--ink);color:#fff;font-weight:700;font-size:16px;width:40px;border-radius:9px}
+.pack-note{font-size:12px;color:var(--ink-soft);margin-top:10px}
+.to-top{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border:none;border-radius:50%;background:var(--ink);color:#fff;font-size:20px;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+.to-top.show{opacity:.9;pointer-events:auto}
+.to-top:hover{opacity:1}
 .cover .vlabel{
   position:absolute;top:24px;right:26px;
   writing-mode:vertical-rl;letter-spacing:.4em;
@@ -103,7 +143,7 @@ body{
 .nav .divider{flex:0 0 auto;width:1px;background:var(--line);margin:2px 4px}
 
 /* ---------- 每日區塊 ---------- */
-.day{display:none;animation:fade .4s ease both}
+.day{display:none;animation:fade .3s ease both;will-change:opacity,transform}
 .day.show{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .day-head{
@@ -183,8 +223,10 @@ body{
 }
 .btn-map{background:var(--vermilion);color:#fff}
 .btn-map:hover{background:var(--vermilion-d)}
-.btn-link{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
-.btn-link:hover{background:var(--indigo);color:#fff}
+.btn-search{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn-search:hover{background:var(--indigo);color:#fff}
+.btn-official{background:transparent;color:var(--matcha);border:1.5px solid var(--matcha)}
+.btn-official:hover{background:var(--matcha);color:#fff}
 
 /* ---------- 區段標題 ---------- */
 .section-title{
@@ -293,6 +335,10 @@ body{
   text-decoration:none;font-weight:700;padding:11px 22px;border-radius:10px;margin-top:14px;font-size:14px;transition:.18s;
 }
 .tools .big-btn:hover{background:var(--vermilion-d)}
+.tools .big-btn.locked{opacity:.45;cursor:not-allowed;position:relative;filter:grayscale(.4)}
+.tools .big-btn.locked:hover{filter:grayscale(.4)}
+.tools .big-btn.locked::after{content:"🔒 定案後開放";position:absolute;top:-9px;right:-6px;background:var(--ink);color:#fff;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.phase-hint{font-size:12.5px;color:var(--ink-soft);margin-top:12px;background:rgba(255,255,255,.06);border-radius:8px;padding:9px 12px;line-height:1.6}
 .hotel-box{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
 .hotel-box .hb{background:rgba(255,255,255,.08);border-radius:10px;padding:10px 14px;font-size:12.5px}
 .hotel-box .hb b{color:#fff}
@@ -314,11 +360,15 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <!-- ============ 封面（內容由資料區 TRIP.meta 帶入） ============ -->
 <header class="cover">
+  <a class="back-shelf" href="../">← 書架</a>
   <div class="vlabel" id="cvVLabel"></div>
   <div class="stamp" id="cvStamp"></div>
   <h1 id="cvTitle"></h1>
   <div class="sub" id="cvSub"></div>
+  <div class="countdown" id="cvCountdown"></div>
   <div class="meta" id="cvMeta"></div>
+  <p class="story" id="cvStory"></p>
+  <button class="share-btn" id="shareBtn">🔗 複製連結分享</button>
   <div class="rule"></div>
 </header>
 
@@ -330,9 +380,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 <!-- ============ 總覽（首頁分頁） ============ -->
 <section class="wrap day show" id="overview" style="padding-top:30px">
   <h2 class="section-title">行程總覽</h2>
-  <p class="section-sub">五天一眼看完　·　點任一張卡片跳到當天細節</p>
+  <p class="section-sub">一眼看完整趟　·　點任一張卡片跳到當天細節</p>
 
-  <!-- ★ 基本設定：人數／行李 → 自動換算包車與住宿分攤 -->
+  <!-- ★ 基本設定：人數／行李 → 自動換算包車與住宿分攤（不需要就刪掉這塊，並刪 TRIP.setup） -->
   <div class="setup">
     <div class="setup-head">
       <h3>👥 基本設定</h3>
@@ -351,63 +401,83 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 <!-- ============ 預算（分頁） ============ -->
 <section class="wrap day" id="budget" style="padding-top:30px">
   <h2 class="section-title">旅費預算</h2>
-  <p class="section-sub">以每人計　·　匯率約 ¥1 ≈ NT$0.21　·　包車與住宿分攤請見總覽頁「基本設定」的人數切換</p>
+  <p class="section-sub">以每人計　·　匯率約 ¥1 ≈ NT$0.21　·　4 人同行版本（含包車機場接送分攤）</p>
 
   <!-- ① 固定支出（整趟一次性） -->
   <div class="bud-sub">① 固定支出　<small>整趟一次性、不隨天數變動</small></div>
   <table class="btable">
-    <thead><tr><th>項目</th><th>說明</th><th>每人估算</th></tr></thead>
+    <thead><tr><th>項目</th><th>說明</th><th>每人估算（4人均攤）</th></tr></thead>
     <tbody>
-      <tr><td>✈️ 機票</td><td>台北 ⇄ 東京（成田／羽田），10 月下旬來回</td><td>NT$11,000–18,000</td></tr>
-      <tr><td>🏨 住宿</td><td>上野／市區 3 晚 ＋ 草津旅館（一泊二食）1 晚，雙人分攤</td><td>NT$11,000–18,000</td></tr>
-      <tr><td>🚗 包車</td><td>東京⇄輕井澤⇄草津 兩日，全程約 ¥130,000–170,000／車，2 人分攤</td><td>NT$13,000–18,000</td></tr>
-      <tr><td>🎆 花火</td><td>東京灣大華火祭（免費觀覽區；付費席另計）</td><td>NT$0–2,000</td></tr>
-      <tr><td>🚇 市區交通</td><td>東京市區 IC 卡 ＋ 機場往返</td><td>NT$1,200–1,600</td></tr>
-      <tr class="total"><td colspan="2">固定支出小計</td><td>NT$36,200–57,600</td></tr>
+      <tr><td>✈️ 機票</td><td>台北 ⇄ 東京（成田／羽田），10 月下旬來回，經濟艙</td><td>NT$11,000–18,000</td></tr>
+      <tr><td>🏨 住宿</td><td>上野・御徒町 3 晚（10/24・10/26 同飯店）＋ 草津旅館一泊二食 1 晚；4 人分 4 人房或 2 間雙人房</td><td>NT$8,400–14,000</td></tr>
+      <tr><td>🚌 高速巴士</td><td>上野 → 草津：JR 巴士關東 ¥3,200–3,600／人</td><td>NT$672–756</td></tr>
+      <tr><td>🚄 新幹線</td><td>輕井澤 → 上野：北陸新幹線指定席 ¥6,130／人</td><td>NT$1,287</td></tr>
+      <tr><td>🚗 包車機場接送</td><td>10/27 上野 → 成田：Jumbo Taxi 全車 ¥25,000–35,000，4 人均攤</td><td>NT$1,313–1,838</td></tr>
+      <tr><td>🎆 花火</td><td>東京灣大華火祭（免費觀覽區）；付費席另計 ¥2,000–5,000</td><td>NT$0–1,050</td></tr>
+      <tr><td>🚇 東京市區 IC 卡</td><td>上野⇄晴海、地鐵雜費，4 天估算</td><td>NT$630–840</td></tr>
+      <tr><td>🎟️ 草津體驗門票</td><td>西之河原露天風呂 ¥600 ＋ 熱の湯 ¥600</td><td>NT$252</td></tr>
+      <tr class="total"><td colspan="2">固定支出小計</td><td>NT$23,500–37,000</td></tr>
     </tbody>
   </table>
 
   <!-- ② 每日浮動（三版本只差在這裡） -->
-  <div class="bud-sub" style="margin-top:30px">② 每日浮動　<small>餐飲＋購物＋零用，三種版本只差在這裡</small></div>
+  <div class="bud-sub" style="margin-top:30px">② 每日浮動　<small>餐飲＋購物＋零用，三種版本只差在這裡（草津旅館餐已含於住宿，Day 2 浮動較低）</small></div>
   <div class="budget-grid">
     <div class="tier">
       <div class="t-name">省錢</div>
-      <div class="t-num">NT$1,300</div><div class="t-unit">／ 每日</div>
-      <div class="t-desc">超商早餐・平價定食・立飲居酒屋・購物克制<br><b style="color:var(--ink)">× 5 天 ≈ NT$6,500</b></div>
+      <div class="t-num">NT$1,200</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">超商早餐・牛丼定食・多慶屋克制・不買付費席<br><b style="color:var(--ink)">× 4 天 ≈ NT$4,800</b></div>
     </div>
     <div class="tier mid">
       <div class="t-name">舒適</div>
-      <div class="t-num">NT$2,400</div><div class="t-unit">／ 每日</div>
-      <div class="t-desc">一餐吃好的・多慶屋適度採購・伴手禮<br><b style="color:var(--ink)">× 5 天 ≈ NT$12,000</b></div>
+      <div class="t-num">NT$2,500</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">一餐吃好・多慶屋適度掃・伴手禮・花火付費席<br><b style="color:var(--ink)">× 4 天 ≈ NT$10,000</b></div>
     </div>
     <div class="tier">
       <div class="t-name">享受</div>
-      <div class="t-num">NT$3,800</div><div class="t-unit">／ 每日</div>
-      <div class="t-desc">壽司天婦羅名店・花火付費席・大方掃貨<br><b style="color:var(--ink)">× 5 天 ≈ NT$19,000</b></div>
+      <div class="t-num">NT$4,200</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">好食廳每天一家・大方掃多慶屋・輕井澤名牌 Outlet<br><b style="color:var(--ink)">× 4 天 ≈ NT$16,800</b></div>
     </div>
   </div>
 
   <!-- ③ 全程總計 = 固定 ＋ 每日 × 天數 -->
-  <div class="bud-sub" style="margin-top:30px">③ 全程總計　<small>固定支出 ＋ 每日浮動 × 5 天（2 人分攤版）</small></div>
+  <div class="bud-sub" style="margin-top:30px">③ 全程總計　<small>固定支出 ＋ 每日浮動 × 4 天（每人，4人同行版）</small></div>
   <div class="total-strip">
-    <div><span>省錢版</span><b>NT$43,000–58,000</b></div>
-    <div class="hot"><span>舒適版</span><b>NT$48,000–62,000</b></div>
-    <div><span>享受版</span><b>NT$55,000–77,000</b></div>
+    <div><span>省錢版</span><b>NT$28,000–42,000</b></div>
+    <div class="hot"><span>舒適版</span><b>NT$33,500–47,000</b></div>
+    <div><span>享受版</span><b>NT$40,000–54,000</b></div>
   </div>
 
   <div class="note" style="margin-top:22px">
-    <b style="color:var(--vermilion-d)">最容易超支：</b>① 包車——2 人分攤每人偏高，若湊到 4 人每人立刻省一半。② 多慶屋／阿美橫丁太好買。<br>
-    <b style="color:var(--vermilion-d)">省錢替代：</b>包車湊滿 4 人最划算；若只有 2 人，輕井澤⇄草津也可改新幹線到輕井澤＋JR巴士到草津（但要自己拉行李轉乘）。多慶屋先設預算上限。
+    <b style="color:var(--vermilion-d)">最容易超支：</b>① 多慶屋——「反正有退稅」心理容易失控，建議出發前設定上限預算。② 輕井澤 Outlet——名牌折扣誘人，尤其是 Coach、Gucci 幾乎比台灣便宜 40%，很容易超買。③ 草津旅館如有升房也會加不少。<br>
+    <b style="color:var(--vermilion-d)">省錢替代：</b>花火付費席可跳過（免費區也很精彩）；輕井澤 Outlet 提前列出想買清單，不清單不入手；機場接送若只有 2 人改搭 Skyliner（¥2,570）省一大截。
   </div>
 
   <div class="tools" style="margin-top:24px">
     <h3>📍 我的地圖 ＆ 飯店</h3>
     <p>討論定案後，把所有景點存進 Google「我的地圖」，現場找路最方便。把分享連結貼到下方按鈕的 href。</p>
     <a class="big-btn" href="https://www.google.com/maps/d/" target="_blank" rel="noopener">🗺️ 開啟我的地圖（替換成你的連結）</a>
+    <a class="big-btn tool-locked" data-href="../_kakeibo/" style="margin-left:8px;background:var(--matcha)">🧾 旅遊記帳</a>
+    <a class="big-btn tool-locked" data-href="../_warikan/" style="margin-left:8px;background:var(--indigo)">👥 多人分帳</a>
+    <a class="big-btn tool-locked" data-href="../_nikki/" style="margin-left:8px;background:var(--gold)">📔 旅途日記</a>
+    <div class="phase-hint" id="phaseHint"></div>
     <div class="hotel-box">
-      <div class="hb">🏨 草津住宿<br><b>湯畑徒步圈旅館</b>（泡湯核心、一泊二食）</div>
-      <div class="hb">🏨 東京住宿<br><b>上野／灣岸一帶</b>，往機場・新幹線・花火皆便利</div>
+      <div class="hb">🏨 上野住宿（10/24 & 10/26）<br><b>御徒町駅徒步圈</b>（多慶屋旁・往機場便利）</div>
+      <div class="hb">♨️ 草津住宿（10/25）<br><b>湯畑徒步 5 分以內旅館</b>（一泊二食含）</div>
+      <div class="hb">🚌 上野→草津<br><b>JR 巴士關東・上州ゆめぐり号</b>｜07:25 出發 / ¥3,200–3,600</div>
+      <div class="hb">🚄 輕井澤→上野<br><b>北陸新幹線 あさま／はくたか</b>｜約 60 分 / ¥6,130+</div>
     </div>
+  </div>
+
+  <!-- 打包清單（可勾選，存本機） -->
+  <div class="packing">
+    <h3>🧳 打包清單 <small id="packCount"></small></h3>
+    <div class="pack-grid" id="packGrid"></div>
+    <div class="pack-add">
+      <input type="text" id="packInput" placeholder="新增項目（例：暖暖包、溫泉毛巾）">
+      <button id="packAddBtn">＋</button>
+    </div>
+    <div class="pack-note">勾選狀態存在這支裝置的瀏覽器，出發前逐項打勾。</div>
   </div>
 </section>
 
@@ -427,6 +497,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <footer id="pageFoot"></footer>
 
+<!-- 回頂部 -->
+<button class="to-top" id="toTop" title="回頂部">↑</button>
+
 <script>
 /* ============================================================
    ★★★ 資料區：要改行程，改這裡就好 ★★★
@@ -435,229 +508,334 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 const TRIP = {
   /* ===== 旅程基本資料 ===== */
   meta:{
-    stamp:"東京",
+    stamp:"上野",
+    phase:"draft",
     vlabel:"紅葉・温泉・花火の旅",
-    titleMain:"東京・輕井澤・草津", titleAccent:"五日",
+    titleMain:"上野・草津・輕井澤", titleAccent:"四日",
     titleTail:"旅遊行程書",
-    sub:"TOKYO · KARUIZAWA · KUSATSU · AUTUMN 2026",
-    chips:["📅 10/22 (三) – 10/26 (一)","🌙 4 晚 5 天","🎆 東京灣花火 10/24","♨️ 草津溫泉 1 晚"],
+    sub:"UENO · KUSATSU · KARUIZAWA · AUTUMN 2026",
+    departDate:"2026-10-24",
+    story:"從上野的人情市場出發，帶著滿袋多慶屋戰利品，搭上高速巴士穿越關東山嶽直奔草津。在硫磺白煙裡泡到指尖發皺，隔日走進輕井澤金黃落葉松林道，再逛 Outlet 掃最後一波。最後夜幕落下前，搭新幹線趕回上野，迎接 11 年難得一見的東京灣大華火祭——滿足感三倍加。",
+    chips:["📅 10/24 (六) – 10/27 (二)","🌙 3 晚 4 天","🎆 東京灣大華火祭 10/24","♨️ 草津溫泉 1 晚","🍂 輕井澤紅葉 10/26"],
     footStats:[
-      {label:"全程", value:"4 晚 5 天"},
-      {label:"亮點", value:"紅葉・溫泉・花火一次收"},
-      {label:"舒適版總預算", value:"約 NT$48,000–62,000"}
+      {label:"全程", value:"3 晚 4 天"},
+      {label:"亮點", value:"花火・溫泉・紅葉・購物一次收"},
+      {label:"舒適版總預算", value:"約 NT$45,000–60,000"}
     ],
-    footer:"紅葉配硫磺泉，秋日東京剛剛好 🍁"
+    footer:"硫磺泉配楓紅，秋日上野剛剛好 🍁"
   },
 
-  /* ===== 人數／行李設定（總覽頁切換器讀這裡，自動換算分攤）=====
-     · charterTotal：包車兩日全程一口價（一台車總價，台幣）
-     · 各人數情境下的車型、房型、每人住宿，可直接改文字                       */
+  /* ===== 人數設定 ===== */
   setup:{
-    default:4,                         // 預設以幾人顯示
+    default:4,
     options:[
-      {
-        people:2, label:"2 人",
-        charterTotal:150000,           // 2 人用一般車／Alphard，全程約 ¥130k–170k → 取中估台幣
-        car:"一般車／Alphard", carNote:"2 人＋2 大行李箱，標準車廂可容",
-        luggage:"約 2 件大行李",
-        room:"1 間雙人房", roomEach:13000, // 每人住宿（全程 4 晚分攤後）
-        roomNote:"一間房分攤，最單純"
-      },
-      {
-        people:4, label:"4 人",
-        charterTotal:185000,           // 4 人＋4 行李需 Jumbo/Hiace，報價較高
-        car:"Jumbo／Hiace 大型車", carNote:"4 人＋4 大行李箱，需指定大車（可載約 10 箱）",
-        luggage:"約 4 件大行李",
-        room:"2 間雙人房", roomEach:13000,
-        roomNote:"兩間雙人房，或找四人房更省"
-      }
+      {people:4, label:"4 人",
+       charterTotal:10000,
+       car:"包車到機場（最終日）", carNote:"4 人＋行李，指定大車較舒適",
+       luggage:"約 4 件大行李",
+       room:"1 間四人房（¥6,000–8,000）或 2 間雙人房（¥3,000–4,000／間）", roomEach:8400,
+       roomNote:"上野 3 晚（含 10/24 & 10/26 同一飯店），草津 1 晚"},
+      {people:2, label:"2 人",
+       charterTotal:0,
+       car:"機場接送包車（最終日）", carNote:"2 人可用一般 Taxi 或 Uber 代替",
+       luggage:"約 2 件大行李",
+       room:"2 間雙人房（¥3,000–4,000／間）或 1 間四人房（¥6,000–8,000）", roomEach:10500,
+       roomNote:"上野 3 晚（含花火日），草津 1 晚；依房型選擇"}
     ]
   },
 
   days:[
+    /* ── Day 1：10/24 上野採購日 ＋ 花火 ── */
     {
-      tab:"Day 1", num:"DAY ONE", title:"抵達・上野・多慶屋採購日",
-      date:"10/22 (三)", theme:"成田／羽田 → 上野 → 御徒町（多慶屋）→ 阿美橫丁",
-      area:"上野・御徒町", cost:"NT$1,500–3,000", walk:"輕鬆・以上野一帶為主",
+      tab:"Day 1", num:"DAY ONE", title:"上野採購日・東京灣大華火祭 🎆",
+      date:"10/24 (六)",
+      theme:"飯店 → 多慶屋掃貨 → 阿美橫丁 → 晴海 花火",
+      area:"上野・御徒町 → 晴海", cost:"NT$2,000–4,500", walk:"先逛後走，花火會場步行多",
       dayMap:"多慶屋 御徒町",
       items:[
-        {time:"午後", type:"move", badge:"交通", title:"抵達機場 → 上野",
-         desc:"成田走京成 Skyliner、羽田走京急＋JR，都到上野很快。先寄行李或入住。",
-         transit:"成田 → 上野｜京成 Skyliner 約 45 分／羽田 → 上野｜約 45 分",
+        {time:"10:00", type:"hotel", badge:"入住", title:"上野・御徒町一帶飯店 Check-in",
+         desc:"先辦理入住或寄存行李。建議選御徒町站徒步 5 分鐘以內飯店，多慶屋採購最順。周六記得提早確認是否能早 Check-in。",
+         note:"顧問提醒：10 月底週六是花火前夕旺季，同區房源提早被訂光，不確定房源請盡快敲定！詳見「待定」分頁。",
+         map:"御徒町駅"},
+
+        {time:"10:30", type:"shop", badge:"購物", title:"多慶屋（TAKEYA）御徒町本店",
+         desc:"上野御徒町地標折扣百貨，紫色外觀好認。藥妝、食品、雜貨、家電各棟分開——建議先整棟巡一圈比價，再集中下手。退稅統一在各棟服務台辦，記得帶護照。<br>📦 必掃：護膚藥妝（HABA、DHC）、零食（嬰兒星球、白色戀人）、廚房雜貨、玩具。",
+         duration:"2.5–3 小時", best:"平日傍晚最不擠，週六早上相對好逛",
+         note:"顧問提醒：多慶屋分本館・アネックス・スポーツ等多棟，建議從食品館逛起；退稅滿 ¥5,500 起，記得護照一起帶。",
+         link:"https://www.google.com/search?q=多慶屋+御徒町+攻略+2026&hl=zh-TW",
+         official:"https://stores.takeya.co.jp/",
+         map:"多慶屋 御徒町"},
+
+        {time:"13:00", type:"food", badge:"午餐", title:"上野・松屋 或 吉野家（御徒町周邊）",
+         desc:"掃貨中場休息，御徒町周邊牛丼、拉麵選擇多，¥500–900 快速補血。若想吃好一點可走進阿美橫丁找海鮮丼定食，約 ¥1,200–1,800。",
+         duration:"30–45 分", map:"御徒町駅 周辺"},
+
+        {time:"14:00", type:"shop", badge:"商店街", title:"阿美橫丁（アメ横）",
+         desc:"從御徒町到上野站之間的戶外市場街，藥妝、乾貨零食、生鮮、平價服飾。邊走邊吃最對味，生牡蠣、海老仙貝攤販必試。比多慶屋更有市場氣息。",
+         duration:"60–90 分", best:"傍晚人氣最旺，週末熱鬧",
+         link:"https://www.google.com/search?q=阿美橫丁+上野+必吃+攻略+2026&hl=zh-TW",
+         map:"アメヤ横丁"},
+
+        {time:"15:30", type:"hotel", badge:"行李", title:"回飯店換衣 ＆ 整理戰利品",
+         desc:"花火現場人多又溫差大（10 月晚間東京約 14–18°C），建議把採購品放回飯店、換上保暖外套再出發。手機記得充飽電、帶行動電源。",
+         duration:"45 分", map:"御徒町駅"},
+
+        {time:"16:30", type:"move", badge:"交通", title:"出發前往晴海・花火會場",
+         desc:"花火 19:00 開始，但人潮從下午就湧入，16:30–17:00 出發最穩。大江戸線「勝どき」是最近站，步行會場約 15 分。",
+         transit:"上野 →（東京Metro日比谷線）→ 築地 →（徒步）→ 勝どき站｜或 上野→ 月島（大江戸線）約 25 分",
+         note:"顧問提醒：花火當天大江戸線「勝どき」會極度壅塞，建議提早 2–3 小時入場，先吃飯再進場，並事先查好免費觀覽區位置。荒天中止不順延。",
+         map:"勝どき駅"},
+
+        {time:"17:30", type:"food", badge:"晚餐", title:"晴海周邊 or 月島 文字燒",
+         desc:"月島是東京最有名的もんじゃ焼（文字燒）發源地，就在勝どき隔壁站，可先吃飽再走去會場。¥2,000–3,000／人含一杯飲料。",
+         duration:"60 分",
+         link:"https://www.google.com/search?q=月島文字燒+推薦店+攻略+2026&hl=zh-TW",
+         map:"月島 もんじゃストリート"},
+
+        {time:"19:00", type:"spot", badge:"花火", title:"東京灣大華火祭（晴海會場）🎆",
+         desc:"睽違 11 年復辦，10/24（六）在晴海舉行。約 1.2 萬發，以彩虹橋與東京塔為背景，秋夜空氣清晰，煙火視覺絕佳。免費觀覽區在晴海ふ頭公園周邊，付費席需提前購買。",
+         duration:"觀賞約 60–75 分 ＋ 散場 30 分", best:"提早入場卡位",
+         note:"顧問提醒：官方網站確認最新施放時間與付費席資訊，近年付費席秒殺，免費區仍可看到精彩全景。散場人潮極大，建議原地等 30 分等人潮散退再移動。",
+         link:"https://www.google.com/search?q=東京灣大華火祭+2026+觀賞攻略&hl=zh-TW",
+         official:"https://toyosu.tokyo/event/tokyowandaihanabisai-2026-info/",
+         map:"晴海ふ頭公園"},
+
+        {time:"21:00", type:"move", badge:"交通", title:"返回上野飯店",
+         desc:"花火散場後大江戸線勝どき方向人潮超多，建議往豊洲方向步行後轉有樂町線，或等 20–30 分後人少再進站。",
+         transit:"勝どき → 月島 → 飯田橋 →（JR）→ 上野　或等人潮散後搭大江戸線",
          map:"上野駅"},
-        {time:"15:00", type:"shop", badge:"購物", title:"多慶屋（TAKEYA）御徒町本店",
-         desc:"上野御徒町的綜合折扣百貨，藥妝、雜貨、家電、伴手禮一站買齊，紫色外觀好認。整天行李都丟得進來這天最適合掃貨。",
-         duration:"2.5–3 小時", best:"傍晚較不擠",
-         note:"顧問提醒：多慶屋分多棟，藥妝與食品在不同館；先逛一輪比價再下手。退稅櫃台集中辦理，記得帶護照。",
-         link:"https://stores.takeya.co.jp/", map:"多慶屋 御徒町"},
-        {time:"18:00", type:"spot", badge:"商店街", title:"阿美橫丁（アメ横）",
-         desc:"上野車站旁的熱鬧市場街，海鮮、零食、藥妝、平價美食，邊走邊吃最對味。",
-         duration:"60–90 分", best:"傍晚最熱鬧", map:"アメヤ横丁"},
-        {time:"19:30", type:"food", badge:"晚餐", title:"上野・大統領（立飲居酒屋）",
-         desc:"阿美橫丁老字號串燒立飲，氣氛濃、價格實惠，馬肉串與煮込有名。",
-         duration:"60 分", map:"大統領 上野"},
-        {time:"住宿", type:"hotel", badge:"住宿", title:"上野一帶飯店",
-         desc:"上野交通樞紐，往機場、輕井澤新幹線、市區都方便。", map:"上野駅"}
+
+        {time:"住宿", type:"hotel", badge:"住宿", title:"上野・御徒町飯店（10/26 退房同一間）",
+         desc:"10/24 住宿，10/26 回來後繼續住同一間，不必搬行李，超省事。", map:"御徒町駅"}
       ]
     },
 
+    /* ── Day 2：10/25 高速巴士→草津 ── */
     {
-      tab:"Day 2", num:"DAY TWO", title:"包車・輕井澤紅葉 → 草津溫泉",
-      date:"10/23 (四)", theme:"東京 →【包車】輕井澤雲場池紅葉 → 白絲瀑布 → 草津溫泉",
-      area:"輕井澤 → 草津", cost:"NT$2,500–4,500", walk:"散策為主・包車代步",
+      tab:"Day 2", num:"DAY TWO", title:"高速巴士・草津溫泉・賞楓 ♨️",
+      date:"10/25 (日)",
+      theme:"上野 →【高速巴士 4.5h】→ 草津溫泉・湯畑 → 西之河原・旅館",
+      area:"草津温泉", cost:"NT$3,500–6,000（含一泊二食旅館）", walk:"溫泉街散策・緩步為主",
+      dayMap:"草津温泉 湯畑",
+      items:[
+        {time:"07:00", type:"hotel", badge:"退房", title:"飯店 Check-out・寄存行李",
+         desc:"帶基本換洗衣物即可，大件行李存放飯店（多數允許退房後寄放到當晚回來前）。確認 10/26 回來能 Check-in 同一房間。",
+         map:"御徒町駅"},
+
+        {time:"07:25", type:"move", badge:"高速巴士", title:"上野駅入谷口 → 草津溫泉BT 出發",
+         desc:"JR巴士關東「上州ゆめぐり号」從上野駅入谷口出發，直達草津溫泉巴士總站。車內附 Wi-Fi＋電源，4.5 小時可追劇補眠。建議提前在官網預約。",
+         transit:"上野駅入谷口 07:25 出發 → 草津温泉BT 約 12:02 抵達｜¥3,200–3,600／人",
+         note:"顧問提醒：週日旺季易滿席，建議至少兩週前在 JR 巴士關東官網訂位。乘車地點：JR 上野駅入谷口（地下鉄「上野」站 2 號出口旁）。",
+         link:"https://www.google.com/search?q=上野到草津溫泉+高速巴士+攻略+2026&hl=zh-TW",
+         official:"http://time.jrbuskanto.co.jp/bk03010.html",
+         map:"上野駅入谷口"},
+
+        {time:"12:00", type:"food", badge:"午餐", title:"草津溫泉街・草津市場食堂 或 湯畑周邊",
+         desc:"抵達後先填肚子，湯畑周邊有多家定食、烏龍麵、蕎麥麵，¥900–1,500。推薦「草津温泉食堂」或「きむら」的溫泉湯豆腐定食，在地感十足。",
+         duration:"45 分", map:"草津温泉 湯畑周辺"},
+
+        {time:"13:00", type:"spot", badge:"溫泉街", title:"湯畑（ゆばたけ）散策",
+         desc:"草津溫泉的心臟，滾燙硫磺泉從天然溫泉井湧出，水蒸氣裊裊，被石板街圍繞。傍晚點燈後氛圍最美，但白天的湯煙霧氣配上石造背景也別有風味。湯畑周邊有足湯免費泡、溫泉饅頭現蒸可買。",
+         duration:"45–60 分", best:"傍晚點燈後最美，白天拍照也好",
+         link:"https://www.google.com/search?q=草津溫泉湯畑+散策+攻略+2026&hl=zh-TW",
+         note:"顧問提醒：草津泉質極強酸（pH 約 2），泡前先沖身、勿泡超過 3 分鐘（初泡），初次建議體驗「熱の湯」的湯もみ表演或公共澡堂。",
+         map:"草津温泉 湯畑"},
+
+        {time:"14:00", type:"spot", badge:"賞楓", title:"西之河原公園（西の河原公園）",
+         desc:"從湯畑沿溪步行約 10 分即達。楓樹與白樺沿溪兩岸，10 月下旬是草津最佳賞楓期，紅黃交織。公園深處是西之河原露天溫泉，可購票入浴。散步 + 泡湯合計 1.5–2 小時最愉快。",
+         duration:"60–90 分（含泡湯）", best:"午後陽光側射楓紅透亮",
+         note:"顧問提醒：西之河原露天溫泉入場費約 ¥600，開放式大浴場配楓葉，超值。記得帶毛巾（也可現場租）。",
+         link:"https://www.google.com/search?q=西之河原公園+草津溫泉+紅葉+2026&hl=zh-TW",
+         official:"https://www.kusatsu-onsen.ne.jp/",
+         map:"西の河原公園 草津温泉"},
+
+        {time:"15:30", type:"spot", badge:"體驗", title:"熱の湯 湯もみ表演",
+         desc:"每日定時演出草津傳統「湯もみ」，用長板攪拌高溫泉水降溫並讓礦物質均勻，配合民謠表演，是草津最具代表性的文化體驗，約 20 分鐘。",
+         duration:"20 分（含入場）", best:"下午場次 15:30 or 16:30",
+         link:"https://www.google.com/search?q=草津熱の湯+湯もみ+表演時間+2026&hl=zh-TW",
+         official:"https://www.kusatsu-onsen.ne.jp/netsunoyu/",
+         note:"顧問提醒：入場費約 ¥600，建議現場購票，週末可能客滿，提早入場。旺季加開場次，現場確認時刻。",
+         map:"草津 熱の湯"},
+
+        {time:"16:00", type:"shop", badge:"土産", title:"溫泉街土產掃貨",
+         desc:"草津名物：湯花石鹼（硫磺溫泉萃取）¥500–800、溫泉饅頭（10 顆盒裝約 ¥600–800）、草津茶、上州牛肉乾。以湯畑為中心向周邊走，土產店集中好逛。",
+         duration:"30–45 分", map:"草津温泉 湯畑周辺"},
+
+        {time:"18:00", type:"food", badge:"晚餐", title:"草津旅館・會席料理（一泊二食）",
+         desc:"入住溫泉旅館後享用晚餐。草津旅館多以上州豚、信州牛、高原野菜為主食材，懷石或會席形式呈現，搭配溫泉豆腐和山菜。晚餐後再泡一次溫泉，隔早退房前再泡一次，才划算。",
+         duration:"90 分", map:"草津温泉"},
+
+        {time:"住宿", type:"hotel", badge:"住宿", title:"草津溫泉旅館（湯畑徒步圈）",
+         desc:"強烈建議選湯畑徒步 5 分鐘內的旅館，夜裡隨時可出去再泡一次。一泊二食約 ¥12,000–18,000／人。詳見「待定」分頁。",
+         map:"草津温泉 湯畑"}
+      ]
+    },
+
+    /* ── Day 3：10/26 輕井澤 ＋ 新幹線回上野 ── */
+    {
+      tab:"Day 3", num:"DAY THREE", title:"輕井澤紅葉・Outlet → 新幹線回上野 🍂",
+      date:"10/26 (一)",
+      theme:"草津 →【草軽バス 85分】→ 輕井澤（雲場池・白絲瀑・Outlet）→【新幹線 60分】→ 上野",
+      area:"輕井澤 → 上野", cost:"NT$3,000–6,000", walk:"散策 ＋ 購物，移動多",
       dayMap:"雲場池 軽井沢",
       items:[
-        {time:"08:00", type:"move", badge:"包車", title:"包車出發：東京 → 輕井澤",
-         desc:"司機到飯店接，直奔輕井澤。包車省去新幹線轉巴士的拉行李之苦，紅葉景點之間也機動。",
-         transit:"東京 → 輕井澤｜高速約 2.5–3 小時",
-         note:"顧問提醒：跨縣市包車建議前一週確認車型與全程報價（含過路費、停車），通常全程一口價 ¥60,000–90,000／車。",
-         map:"軽井沢"},
-        {time:"11:00", type:"spot", badge:"紅葉", title:"雲場池（Swan Lake）",
-         desc:"輕井澤代表紅葉名所，環池步道一圈約 20 分，水面倒映楓紅與落葉松金黃。10 月下旬正逢最佳賞楓期。",
-         duration:"45–60 分", best:"上午光線順、人較少",
-         link:"https://karuizawa-kankokyokai.jp/", map:"雲場池 軽井沢"},
-        {time:"12:30", type:"food", badge:"午餐", title:"輕井澤・川上庵（蕎麥麵）",
-         desc:"舊輕井澤人氣手打蕎麥麵，秋天配天婦羅與在地啤酒舒服。",
-         duration:"60 分", map:"川上庵 軽井沢"},
-        {time:"14:00", type:"spot", badge:"景點", title:"白絲瀑布（白糸の滝）",
-         desc:"寬幅絲線狀水簾，被紅葉環繞時最美，停留拍照很快。往草津路上順遊。",
-         duration:"30–40 分", best:"午後",
+        {time:"07:00", type:"spot", badge:"晨湯", title:"草津・清晨最後一泡",
+         desc:"退房前再泡一次。西之河原露天溫泉清晨 7 點開放，晨霧中泡湯是草津最難忘的體驗。若住旅館可直接用館內大浴場。",
+         duration:"45–60 分", best:"清晨 7–8 點人極少",
+         map:"西の河原露天風呂 草津"},
+
+        {time:"09:00", type:"hotel", badge:"退房", title:"草津旅館 Check-out",
+         desc:"辦理退房，確認行李存放（旅館通常可存到下午，但今天要移動建議帶走）。",
+         map:"草津温泉"},
+
+        {time:"09:50", type:"move", badge:"草軽巴士", title:"草津溫泉BT → 輕井澤駅",
+         desc:"草軽交通路線巴士，從草津溫泉出發穿越淺間山麓高原道路，窗外落葉松林道一路金黃，本身就是一段值得回味的景色。班次約 30 分一班，不需預約。",
+         transit:"草津温泉 09:50 出發 → 軽井沢駅 11:15 抵達｜約 85 分｜¥2,240／人",
+         note:"顧問提醒：行李若多建議放在草津旅館或大件宅配到東京飯店，輕裝搭巴士更舒適。宅配可在旅館前台辦理（ヤマト宅急便）。",
+         link:"https://www.google.com/search?q=草軽交通巴士+草津到輕井澤+時刻表+2026&hl=zh-TW",
+         official:"https://www.kkkg.co.jp/bus/rosen-bus.html",
+         map:"草津温泉バスターミナル"},
+
+        {time:"11:15", type:"spot", badge:"紅葉", title:"雲場池（Swan Lake）",
+         desc:"輕井澤最具代表性的紅葉名所，離車站步行約 20 分。環湖步道一圈約 600 公尺，水面倒映楓紅與落葉松，10 月下旬正值最佳賞楓期。早上光線順、人較少，拍倒影選無風時刻。",
+         duration:"45–60 分", best:"上午光線好、倒影清晰",
+         note:"顧問提醒：週末人潮極多，10 月下旬平日稍好。建議下巴士後直接走過去，比先逛 Outlet 後去人少很多。",
+         link:"https://www.google.com/search?q=雲場池+輕井澤+紅葉+2026&hl=zh-TW",
+         official:"https://karuizawa-kankokyokai.jp/",
+         map:"雲場池 軽井沢"},
+
+        {time:"12:30", type:"food", badge:"午餐", title:"輕井澤・川上庵（手打蕎麥麵）",
+         desc:"輕井澤人氣老牌蕎麥麵店，坐落日式老宅建築。手打冷蕎麥配天婦羅是招牌，秋季限定蕎麥香最濃。價位 ¥1,200–2,500，週末建議 11:30 前或 13:30 後入場避開排隊。",
+         duration:"60 分",
+         link:"https://www.google.com/search?q=川上庵+輕井澤+蕎麥麵+評價+2026&hl=zh-TW",
+         note:"顧問提醒：川上庵週末排隊常見，附近還有「草笛」（輕井澤老店）可作備案，兩家都很好吃。",
+         map:"川上庵 軽井沢"},
+
+        {time:"14:00", type:"spot", badge:"賞楓", title:"白絲瀑布（白糸の滝）",
+         desc:"寬 70 公尺的幕狀瀑布，地下水從岩壁細縫滲出，形成如白絲的涓流，秋天被紅黃楓葉環繞時最美。距輕井澤站搭巴士約 20 分，或可騎自行車前往。停留不需太久，但非常值得繞路。",
+         duration:"30–40 分", best:"午後順光",
+         link:"https://www.google.com/search?q=白絲瀑布+輕井澤+交通+2026&hl=zh-TW",
+         note:"顧問提醒：若時間有限可跳過白絲瀑布，直接延長 Outlet 時間；但若有租自行車可順路不浪費。",
          map:"白糸の滝 軽井沢"},
-        {time:"16:30", type:"spot", badge:"溫泉街", title:"抵達草津・湯畑",
-         desc:"草津溫泉的心臟，硫磺湯煙裊裊，傍晚點燈後氛圍最好。湯畑周邊湯本館、足湯、土產一次逛。",
-         duration:"自由", best:"傍晚點燈後",
-         note:"顧問提醒：草津泉質強酸，泡前先沖身、別泡太久；首泡建議體驗「湯もみ」文化的熱乃湯或大型公共湯。",
-         map:"草津温泉 湯畑"},
-        {time:"18:30", type:"food", badge:"晚餐", title:"溫泉旅館會席料理",
-         desc:"草津旅館多含一泊二食，當地高原蔬菜與信州牛、上州豚為主。",
-         duration:"90 分", map:"草津温泉"},
-        {time:"住宿", type:"hotel", badge:"住宿", title:"草津溫泉旅館（核心：泡湯）",
-         desc:"住湯畑徒步圈內最方便，夜裡可再泡一次、隔早再泡一次。", map:"草津温泉 湯畑"}
+
+        {time:"15:00", type:"shop", badge:"購物", title:"輕井澤王子購物廣場（Outlet）",
+         desc:"就在輕井澤駅南口，出站 1 分鐘即達。200+ 品牌，Gucci、Coach、Adidas、無印良品、北臉全有，季中折扣約 30–50%。湖畔草地環境絕美，逛累可在草地休息。最後班新幹線前留 45 分餘裕。",
+         duration:"2–2.5 小時", best:"平日人少，週末建議 15 點後人潮稍退",
+         note:"顧問提醒：營業 10:00–19:00（美食街至 22:00）。10 月下旬楓紅期是旺季，行前看官方 App 確認當日特賣資訊，可提前領折價券。",
+         link:"https://www.google.com/search?q=輕井澤王子購物廣場+Outlet+攻略+2026&hl=zh-TW",
+         official:"https://www.princehotels.co.jp/shoppingplaza/karuizawa/",
+         map:"軽井沢プリンスショッピングプラザ"},
+
+        {time:"17:30", type:"move", badge:"新幹線", title:"輕井澤駅 → 上野駅（北陸新幹線）",
+         desc:"搭「あさま」或「はくたか」新幹線直達上野，約 60 分。輕井澤站在 Outlet 南口旁，逛完直接走過去。建議在 JR 官網或 EX 服務提前訂位（旺季指定席易滿）。",
+         transit:"輕井澤 17:30 出發 → 上野 約 18:35 抵達｜自由席 ¥5,590、指定席 ¥6,130 以上",
+         link:"https://www.google.com/search?q=輕井澤到上野新幹線+票價+購票+2026&hl=zh-TW",
+         official:"https://www.eki-net.com/top/",
+         note:"顧問提醒：北陸新幹線輕井澤→上野「はくたか」60 分、「あさま」75 分，「かがやき」不停輕井澤。提前在 えきねっと 訂位可優惠，早 14 天訂約省 ¥800–1,000。",
+         map:"軽井沢駅"},
+
+        {time:"19:30", type:"food", badge:"晚餐", title:"上野・阿美橫丁 or 大統領（串燒立飲）",
+         desc:"回上野後放行李，再出來吃一頓。阿美橫丁夜晚也熱鬧，大統領立飲居酒屋是老字號，馬肉串、煮込み豆腐聞名，兩人 ¥3,000–4,000 含啤酒。",
+         duration:"60–75 分", map:"大統領 上野"},
+
+        {time:"住宿", type:"hotel", badge:"住宿", title:"上野・御徒町飯店（與 Day 1 同間）",
+         desc:"回到出發前的飯店，行李一直在這裡，最省力。今晚好好休息，明天逛街 ＋ 機場。",
+         map:"御徒町駅"}
       ]
     },
 
+    /* ── Day 4：10/27 逛街 ＋ 包車到機場 ── */
     {
-      tab:"Day 3", num:"DAY THREE", title:"草津泡湯 → 回東京 → 灣岸花火",
-      date:"10/24 (五)", theme:"草津晨湯 →【包車】回東京 → 晴海・東京灣大華火祭 🎆",
-      area:"草津 → 東京灣岸", cost:"NT$2,000–4,000", walk:"花火會場步行多",
-      dayMap:"東京湾大華火祭 晴海",
+      tab:"Day 4", num:"DAY FOUR", title:"上野最後逛街・包車返機場 ✈️",
+      date:"10/27 (二)",
+      theme:"退房寄行李 → 補貨採購 → 包車 → 機場",
+      area:"上野・御徒町 → 成田／羽田", cost:"NT$1,500–3,500", walk:"輕裝半日",
+      dayMap:"上野駅",
       items:[
-        {time:"07:00", type:"spot", badge:"晨湯", title:"草津晨間泡湯・西の河原",
-         desc:"退房前再泡一次。西之河原露天風呂腹地大，被林木與溪流環繞，晨間舒爽。",
-         duration:"60–90 分", best:"清晨人少",
-         link:"https://www.kusatsu-onsen.ne.jp/", map:"西の河原露天風呂 草津"},
-        {time:"10:00", type:"move", badge:"包車", title:"包車回東京",
-         desc:"上午退房出發，午後回到東京、入住灣岸或市區飯店，傍晚輕裝前往花火會場。",
-         transit:"草津 → 東京｜高速約 3.5 小時",
-         note:"顧問提醒：花火當天灣岸地鐵會極度壅塞，務必提早 2–3 小時抵達、先吃晚餐再進場。",
-         map:"東京"},
-        {time:"16:30", type:"spot", badge:"花火", title:"東京灣大華火祭（晴海會場）",
-         desc:"11 年來首度復活、移到 10 月的灣岸花火，約 1.2 萬發，背景是彩虹大橋與東京鐵塔。秋夜空氣清，煙火更鮮明。",
-         duration:"提早卡位 + 觀賞約 3–4 小時", best:"提早入場避人潮",
-         note:"顧問提醒：最近站都營大江戸線「勝どき」徒步約 15 分；荒天中止不順延，出發前查官方公告。具體施放時間官方近期才公布，請再確認。",
-         link:"https://toyosu.tokyo/event/tokyowandaihanabisai-2026-info/", map:"勝どき駅"},
-        {time:"住宿", type:"hotel", badge:"住宿", title:"東京（灣岸或市區）",
-         desc:"花火散場人潮大，住灣岸或大江戸線沿線回程較輕鬆。", map:"勝どき駅"}
-      ]
-    },
+        {time:"09:00", type:"hotel", badge:"退房", title:"退房・寄存行李",
+         desc:"先退房，大件行李寄回飯店或帶去車站置物櫃，輕裝逛最後半天。若包車司機能到飯店接，可在退房前確認接車時間。",
+         map:"御徒町駅"},
 
-    {
-      tab:"Day 4", num:"DAY FOUR", title:"東京經典觀光日",
-      date:"10/25 (六)", theme:"淺草 → 晴空塔 → 上野公園 →（夜）澀谷或銀座",
-      area:"淺草・押上・上野", cost:"NT$2,000–3,800", walk:"步行多・移動順",
-      dayMap:"浅草寺",
-      items:[
-        {time:"09:00", type:"spot", badge:"景點", title:"淺草・雷門・仲見世",
-         desc:"東京最具代表的老街，雷門、仲見世商店街、淺草寺一次走完，早上人較少好拍。",
-         duration:"90 分", best:"開門後越早越好", map:"浅草寺"},
-        {time:"11:00", type:"spot", badge:"地標", title:"東京晴空塔（Skytree）",
-         desc:"從淺草步行或一站電車即達。展望台看關東平原，底下 Solamachi 商場可逛可吃。",
-         duration:"2 小時", best:"晴天視野佳",
-         link:"https://www.tokyo-skytree.jp/", map:"東京スカイツリー"},
-        {time:"14:00", type:"spot", badge:"公園", title:"上野公園・博物館群",
-         desc:"秋天銀杏轉黃的上野公園，可選國立博物館或西洋美術館深入一間。離多慶屋也近，可補買。",
-         duration:"2–2.5 小時", best:"午後", map:"上野公園"},
-        {time:"18:30", type:"spot", badge:"夜逛", title:"澀谷 或 銀座（二選一）",
-         desc:"想熱鬧潮流選澀谷 SKY＋十字路口；想優雅選銀座逛街。",
-         duration:"2–3 小時", map:"渋谷スクランブル交差点"},
-        {time:"20:00", type:"food", badge:"晚餐", title:"市區壽司或天婦羅",
-         desc:"依所在區挑一家好評店收尾，建議先訂位。",
-         duration:"75 分", map:"東京 寿司"},
-        {time:"住宿", type:"hotel", badge:"住宿", title:"東京市區飯店",
-         desc:"市區任一交通便利處。", map:"東京駅"}
-      ]
-    },
+        {time:"09:30", type:"shop", badge:"補貨", title:"多慶屋 最後補漏 or 阿美橫丁",
+         desc:"昨天忘買的東西這時補。多慶屋週二早開門已有人潮但還算舒適。或去上野公園附近的阿美橫丁買乾貨、海苔、昆布等重型伴手禮。",
+         duration:"60–90 分", best:"平日早上最輕鬆", map:"多慶屋 御徒町"},
 
-    {
-      tab:"Day 5", num:"DAY FIVE", title:"採購收尾・返程",
-      date:"10/26 (日)", theme:"市區補貨 / 車站伴手禮 → 機場 → 返台",
-      area:"市區・機場", cost:"NT$1,000–2,500", walk:"輕裝半日",
-      dayMap:"東京駅",
-      items:[
-        {time:"09:00", type:"hotel", badge:"退房", title:"退房・寄行李",
-         desc:"行李寄飯店或車站置物櫃，輕裝跑最後半天。", map:"東京駅"},
-        {time:"10:00", type:"shop", badge:"購物", title:"最後採購（依航班時間）",
-         desc:"時間多就回上野多慶屋補漏網；時間緊就在東京車站一番街、大丸採伴手禮。",
-         duration:"2 小時", map:"東京駅一番街"},
-        {time:"13:00", type:"move", badge:"返程", title:"前往機場 → 搭機返台 ✈️",
-         desc:"預留充足時間到機場辦理登機與退稅。",
-         transit:"上野／東京 → 成田 Skyliner／N'EX 約 45–60 分",
+        {time:"11:00", type:"food", badge:"午餐", title:"上野駅周邊・最後一餐",
+         desc:"推薦選一家好一點的終點站飯：①三平食堂（上野老洋食店，蛋包飯/漢堡排）；②上野精養軒（老牌西餐）；③若時間緊就去吉祥寺旁的 Denny's 快解決。",
+         duration:"45–60 分", map:"三平食堂 上野"},
+
+        {time:"13:00", type:"move", badge:"包車", title:"包車接送 → 成田 or 羽田機場",
+         desc:"從上野到成田車程約 80–100 分，到羽田約 40–60 分。4 人含行李包車建議預訂 Jumbo Taxi（¥25,000–35,000 上野→成田），每人分攤比搭 Skyliner 貴一點但省去拖行李轉車的痛苦。",
+         transit:"上野 → 成田機場｜包車約 90 分｜¥25,000–35,000 全車（4人均分≈¥7,500）；若 2 人改搭 Skyliner 約 ¥2,570 更省",
+         note:"顧問提醒：4 人含大件行李強烈建議包車，比 Skyliner 貴約 1.5–2 倍，但完全省去拉行李轉站的體力消耗，抵達機場後心情更好。Uber Black也可比較。",
+         map:"成田国際空港"},
+
+        {time:"15:00", type:"spot", badge:"機場", title:"機場辦理退稅 ＆ Check-in",
+         desc:"成田機場辦理退稅最方便在 3F 出境後免稅區，羽田在各航站大廳退稅窗口。預留機場退稅時間 30–45 分（旺季排隊長），建議出發前整理好所有收據一袋。",
+         duration:"45–60 分", map:"成田国際空港"},
+
+        {time:"17:00", type:"move", badge:"返程", title:"搭機返台 ✈️",
+         desc:"結束充實的 4 天——花火、溫泉、紅葉、多慶屋，全部入袋。",
          map:"成田国際空港"}
       ]
     }
   ],
 
   food:[
-    {name:"大統領（上野・阿美橫丁）", price:"¥2,000–3,000", desc:"老字號串燒立飲，馬肉串與煮込，氣氛濃。"},
-    {name:"川上庵（輕井澤）", price:"¥1,500–2,500", desc:"舊輕井澤人氣手打蕎麥麵，配天婦羅與在地啤酒。"},
-    {name:"草津・溫泉旅館會席", price:"一泊二食含", desc:"高原蔬菜＋信州牛／上州豚，泡湯後的犒賞晚餐。"},
-    {name:"草津・湯畑周邊溫泉饅頭", price:"¥100–500", desc:"現蒸溫泉饅頭與草津名物，散步邊吃。"},
-    {name:"淺草・老牌天婦羅／鰻魚", price:"¥3,000–6,000", desc:"淺草多老舖，天丼、鰻重值得一試。"},
-    {name:"東京車站・拉麵街／甜點", price:"¥1,000–2,500", desc:"返程前在一番街解決一餐並掃伴手禮。"}
+    {name:"大統領（上野・阿美橫丁）", price:"¥2,000–3,500", desc:"老字號串燒立飲居酒屋，馬肉串、煮込み豆腐必點，日本人下班聖地。"},
+    {name:"阿美橫丁・海鮮市場攤位", price:"¥800–1,500", desc:"現切海膽、生蠔、鮭魚卵握壽司，站著吃、邊走邊吃，最有市場感。"},
+    {name:"月島 もんじゃ焼（文字燒）", price:"¥1,500–2,500", desc:"東京文字燒發源地，就在花火會場旁，先吃飽再去看煙火最完美。"},
+    {name:"草津温泉街・溫泉豆腐定食", price:"¥900–1,500", desc:"高原嫩豆腐以溫泉水料理，口感極細嫩，佐山菜配飯，草津在地感滿分。"},
+    {name:"草津旅館・一泊二食會席料理", price:"含住宿一泊二食", desc:"上州豚、信州牛、高原蔬菜懷石，泡完湯後最享受的一餐。"},
+    {name:"草津・溫泉饅頭（各店）", price:"¥100–120／個", desc:"現蒸熱騰騰，白豆沙最正統，在湯畑旁就能買到，散步邊吃。"},
+    {name:"輕井澤・川上庵（手打蕎麥麵）", price:"¥1,200–2,500", desc:"老宅建築裡吃手打冷蕎麥，天婦羅套餐是首選，秋日蕎麥香氣最濃。"},
+    {name:"輕井澤・澤屋 or 塩沢通りカフェ", price:"¥600–1,200", desc:"輕井澤最有名果醬品牌澤屋，附設咖啡可搭配烤土司試吃，吃完再買最準。"},
+    {name:"上野・三平食堂", price:"¥900–1,500", desc:"昭和 36 年老洋食堂，蛋包飯與漢堡排是招牌，性價比極高，最後一天收尾最適合。"}
   ],
 
-  /* ===== 待定／候選比較（住宿還在討論，定案後清空此區即變正式版）===== */
   pending:[
     {
-      topic:"Day 1 ＆ Day 4 東京住宿（上野一帶）",
-      note:"多慶屋採購日與經典觀光日都靠上野最順；以下三家都在御徒町／上野站徒步圈。",
+      topic:"10/24 ＆ 10/26 上野・御徒町住宿（同一間飯店）",
+      note:"多慶屋採購日 ＋ 花火日都靠上野最順；10/26 輕井澤回來後繼續住同間，不搬行李。以下三家都在御徒町站徒步圈，需確認有 4 人房（24㎡+）或 2 間雙人房（16㎡+）。",
       options:[
-        {name:"Sotetsu Fresa Inn 上野御徒町", price:"一晚雙人 ¥11,000–16,000", status:"傾向", pick:true,
-         desc:"連鎖商務型，乾淨新、服務好（評價 4.2）。",
-         pros:["御徒町站徒步 5 分","銀座線＋山手線＋京成（往機場）三線齊","多慶屋就在旁"],
-         cons:["房間偏小","週末／假日漲價"],
-         map:"Sotetsu Fresa Inn Ueno Okachimachi"},
-        {name:"Hotel Sardonyx 上野", price:"一晚雙人 ¥10,000–15,000", status:"待決定",
-         desc:"上野站旁、含簡單早餐（評價 4.2）。",
-         pros:["離上野站很近","附早餐","周邊餐廳超多"],
-         cons:["設施略舊","房間小"],
-         map:"Hotel sardonyx ueno"},
-        {name:"APA Hotel 上野廣小路", price:"一晚雙人 ¥10,000–14,000", status:"待決定",
-         desc:"上野與秋葉原之間，連鎖品質穩定（評價 4.3）。",
-         pros:["品質可預期","近地鐵兩站","樓下便利商店多"],
-         cons:["房間最小","早餐空間擠"],
+        {name:"Sotetsu Fresa Inn 上野御徒町", price:"4人房一晚 ¥25,000–35,000 / 雙人房一晚 ¥11,000–16,000", status:"傾向", pick:true,
+         desc:"連鎖商務型，設施新、評價高（4.2）。",
+         pros:["御徒町站徒步 5 分","多慶屋旁邊","銀座線＋山手線＋京成三線"],
+         cons:["4 人房需事先確認有無","週末花火週旺季可能無房"],
+         map:"Sotetsu Fresa Inn Ueno Okachimachi",
+         link:"https://www.google.com/search?q=Sotetsu+Fresa+Inn+上野御徒町+評價+2026&hl=zh-TW",
+         official:"https://www.sotetsu-hotels.com/fresa-inn/ueno-okachimachi/"},
+        {name:"Dormy Inn 上野御徒町", price:"4人房一晚 ¥28,000–38,000 / 雙人房一晚 ¥12,000–18,000", status:"待決定",
+         desc:"連鎖品質穩定，有大浴場（晚泡澡很舒服），御徒町站徒步圈（評價 4.3）。",
+         pros:["有大浴場（免費泡）","評價穩定","離多慶屋近"],
+         cons:["花火週末同樣搶手","早餐另計"],
+         map:"ドーミーイン上野御徒町"},
+        {name:"APA Hotel 上野廣小路", price:"雙人房一晚 ¥10,000–15,000（無 4 人房）", status:"待決定",
+         desc:"若找不到合適 4 人房，訂 2 間雙人房的備選方案，評價 4.3，房間偏小但乾淨。",
+         pros:["價格最實惠","品質可預期","離地鐵近"],
+         cons:["無 4 人房，需訂 2 間","房間最小"],
          map:"APA Hotel Ueno Hirokoji"}
       ]
     },
     {
-      topic:"Day 3 花火夜住宿（灣岸／築地一帶）",
-      note:"花火散場人潮大，住勝どき或築地一帶回程最輕鬆；要省一次搬行李也可整段都住上野、當晚搭車去看花火。",
+      topic:"10/25 草津溫泉旅館選擇",
+      note:"建議選湯畑徒步 5 分鐘內，含一泊二食。人數 4 人需確認有 4 人間或相鄰 2 間。",
       options:[
-        {name:"VIA INN 東銀座", price:"一晚雙人 ¥13,000–19,000", status:"傾向", pick:true,
-         desc:"築地旁、現代乾淨、隔音佳（評價 4.1）。",
-         pros:["近築地站、往勝どき會場方便","房間較新","樓下便利商店"],
-         cons:["離最近站要走一下","花火日要早訂"],
-         map:"VIA INN Higashi Ginza"},
-        {name:"Ginza Creston", price:"一晚雙人 ¥18,000–28,000", status:"待決定",
-         desc:"高樓層景觀好、房間寬敞、日式早餐獲好評（評價 4.1）。",
-         pros:["房間大、視野佳","築地站徒步 6–8 分","早餐評價高"],
-         cons:["價位偏高","設計略舊"],
-         map:"Ginza Creston"},
-        {name:"（替代）整段都住上野", price:"省一次搬行李", status:"待決定",
-         desc:"不換飯店，花火當晚從上野搭大江戸線去勝どき。",
-         pros:["完全不用搬行李","只訂一間飯店省事"],
-         cons:["花火散場回上野人潮中要轉乘","拉長當晚通勤"],
-         map:"上野駅"}
+        {name:"ホテル一井（Ichii）", price:"一泊二食 ¥13,000–18,000／人", status:"傾向", pick:true,
+         desc:"湯畑徒步 3 分，大浴場開放時間長，評價高、性價比佳。",
+         pros:["湯畑最近","大浴場寬敞","晚餐和食美味"],
+         cons:["網路爆滿時需早訂","無私人露天溫泉"],
+         map:"ホテル一井 草津温泉"},
+        {name:"草津温泉 ホテルKirishima（桐島）", price:"一泊二食 ¥11,000–15,000／人", status:"待決定",
+         desc:"湯畑徒步 5 分，性價比高，溫泉泉質直接引入，評價 4.0 以上。",
+         pros:["價格親切","溫泉直引","家族對應良好"],
+         cons:["晚餐豐盛度稍遜一等","部分房間較舊"],
+         map:"草津温泉 桐島旅館"},
+        {name:"草津 みやこや（都屋旅館）", price:"一泊二食 ¥10,000–13,000／人", status:"待決定",
+         desc:"老字號旅館，湯畑步行 2 分，泉質強勁，家族客好評，價格平實。",
+         pros:["湯畑最近","泉質強","傳統旅館體驗"],
+         cons:["設施略舊","房間偏小"],
+         map:"草津温泉 都屋旅館"}
       ]
     }
   ]
@@ -667,8 +845,13 @@ const TRIP = {
 const badgeClass={move:"b-move",spot:"b-spot",food:"b-food",shop:"b-shop",hotel:"b-hotel"};
 const gmap=q=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
+/* —— 初始化：確保非 overview 的 .day 一開始就隱藏，防止載入閃爍 —— */
+document.querySelectorAll(".day:not(#overview)").forEach(d=>{ d.style.display="none"; d.classList.remove("show"); });
+
 /* —— 封面 / 頁尾 / 總覽底部（讀 TRIP.meta）—— */
 const M=TRIP.meta;
+const ARRIVE_ON=(M.phase==="travelling");
+const LS_PREFIX="tripsbook_ueno202610_";
 document.title=`${M.titleMain}${M.titleAccent}${M.titleTail}`;
 document.getElementById("cvVLabel").textContent=M.vlabel||"";
 document.getElementById("cvStamp").textContent=M.stamp||"";
@@ -678,16 +861,35 @@ document.getElementById("cvMeta").innerHTML=(M.chips||[]).map(c=>`<span class="c
 document.getElementById("ovFoot").innerHTML=(M.footStats||[]).map(s=>`<div><span>${s.label}</span><b>${s.value}</b></div>`).join("");
 document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M.titleTail}　·　${M.footer||""}`;
 
+/* —— 旅程階段：依 phase 解鎖工具按鈕 —— */
+(function(){
+  const phase=M.phase||"final";
+  const locked=(phase==="draft");
+  const hint=document.getElementById("phaseHint");
+  document.querySelectorAll(".tool-locked").forEach(btn=>{
+    if(locked){btn.classList.add("locked");btn.removeAttribute("href");btn.onclick=e=>e.preventDefault();}
+    else{btn.href=btn.dataset.href;btn.target="_blank";btn.rel="noopener";}
+  });
+  if(hint){
+    const msg={
+      draft:"📝 目前是<b>草稿階段</b>：先把行程與住宿討論定案。記帳、分帳、旅途日記會在<b>定案後</b>開放。",
+      final:"✅ 已<b>定案</b>：工具已開放。出發後可用記帳、分帳；到各站用旅途日記記實際足跡。",
+      travelling:"🧳 <b>旅途中</b>：盡情用記帳、分帳、旅途日記，回家就是完整回顧。"
+    };
+    hint.innerHTML=msg[phase]||msg.final;
+  }
+})();
+
 /* —— 基本設定：人數切換器（自動換算包車與住宿分攤）—— */
 (function(){
-  const S=TRIP.setup; if(!S){return;}
+  const S=TRIP.setup; if(!S){const se=document.querySelector(".setup");if(se)se.remove();return;}
   const toggle=document.getElementById("pplToggle");
   const grid=document.getElementById("setupGrid");
   const nf=n=>"NT$"+n.toLocaleString("en-US");
   let cur=S.default||S.options[0].people;
   function render(){
     const o=S.options.find(x=>x.people===cur)||S.options[0];
-    const charterEach=Math.round(o.charterTotal/o.people);
+    const charterEach=o.charterTotal?Math.round(o.charterTotal/o.people):0;
     toggle.innerHTML=S.options.map(x=>
       `<button class="${x.people===cur?"on":""}" data-p="${x.people}">${x.label}</button>`).join("");
     toggle.querySelectorAll("button").forEach(b=>b.onclick=()=>{cur=+b.dataset.p;render();});
@@ -695,7 +897,7 @@ document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M
       <div class="su-card"><div class="su-label">👥 人數</div>
         <div class="su-val">${o.people} 人</div>
         <div class="su-sub">${o.luggage}</div></div>
-      <div class="su-card hl"><div class="su-label">🚗 包車（兩日全程）</div>
+      <div class="su-card hl"><div class="su-label">🚗 包車（全程）</div>
         <div class="su-val">${nf(charterEach)}<small>／人</small></div>
         <div class="su-sub">總價 ${nf(o.charterTotal)} ÷ ${o.people}　·　${o.car}<br>${o.carNote}</div></div>
       <div class="su-card"><div class="su-label">🏨 住宿方向</div>
@@ -739,13 +941,15 @@ TRIP.days.forEach((d,i)=>{
       <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
       ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
     </div>
+    ${ARRIVE_ON?`<div class="day-progress" data-day="${i}"><div class="bar"><i style="width:0%"></i></div><div class="txt">0/${d.items.length}</div></div>`:""}
     <div class="tl">`;
-  d.items.forEach(it=>{
+  d.items.forEach((it,j)=>{
     const meta=[];
     if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
     if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
+    const aKey=i+"-"+j;
     html+=`<div class="item">
-      <div class="time-col"><div class="time">${it.time}</div></div>
+      <div class="time-col"><div class="time">${it.time}</div>${ARRIVE_ON?`<div class="arrived" data-arrive="${aKey}" data-day="${i}">✓</div>`:""}</div>
       <div class="card">
         <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
         <h3>${it.title}</h3>
@@ -755,7 +959,8 @@ TRIP.days.forEach((d,i)=>{
         ${it.note?`<div class="note">${it.note}</div>`:""}
         <div class="btns">
           ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
-          ${it.link?`<a class="btn-link" target="_blank" rel="noopener" href="${it.link}">🔗 介紹</a>`:""}
+          ${it.link?`<a class="btn-search" target="_blank" rel="noopener" href="${it.link}">🔍 最新資訊</a>`:""}
+          ${it.official?`<a class="btn-official" target="_blank" rel="noopener" href="${it.official}">🏛️ 官網</a>`:""}
         </div>
       </div></div>`;
   });
@@ -769,16 +974,18 @@ const divider=document.createElement("div");
 divider.className="divider";
 navBar.appendChild(divider);
 const extraTabs=[{label:"💰 預算"},{label:"🍴 美食"}];
+/* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁 */
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
 if(hasPending)extraTabs.push({label:"🤔 待定"});
 extraTabs.forEach((p,k)=>{
-  const idx=TRIP.days.length+1+k;
+  const idx=TRIP.days.length+1+k;     // 總覽0 + N天 → 預算/美食/待定 依序接在後面
   const btn=document.createElement("button");
   btn.textContent=p.label;
   btn.className="extra";
   btn.onclick=()=>show(idx);
   navBar.appendChild(btn);
 });
+/* 沒有待定內容時，把該分頁從 DOM 移除，避免索引錯位 */
 if(!hasPending){const pe=document.getElementById("pending");if(pe)pe.remove();}
 
 /* 建立總覽卡片 */
@@ -798,10 +1005,39 @@ TRIP.days.forEach((d,i)=>{
   ovGrid.appendChild(card);
 });
 
-function show(i){
-  document.querySelectorAll(".day").forEach((d,j)=>d.classList.toggle("show",j===i));
-  document.querySelectorAll(".nav button").forEach((b,j)=>b.classList.toggle("active",j===i));
-  window.scrollTo({top:0,behavior:"smooth"});
+let _curTab=0;
+function show(i,jumpToFirstCard=false){
+  /* 點同一個分頁不做任何事 */
+  if(i===_curTab)return;
+  _curTab=i;
+
+  /* 先把所有 day 隱藏，再顯示目標，避免 layout 抖動造成閃爍 */
+  const days=document.querySelectorAll(".day");
+  const btns=document.querySelectorAll(".nav button");
+  days.forEach((d,j)=>{
+    d.classList.remove("show");
+    d.style.display=(j===i)?"block":"none";
+  });
+  /* 延一幀再加 show，讓 CSS fade-in 動畫正常觸發 */
+  requestAnimationFrame(()=>{ if(days[i])days[i].classList.add("show"); });
+  btns.forEach((b,j)=>b.classList.toggle("active",j===i));
+
+  /* 取導覽列尺寸（sticky nav 高度，作為捲動偏移基準） */
+  const nav=document.querySelector(".nav");
+  const navH=nav?nav.getBoundingClientRect().height:56;
+  const navBottom=nav?nav.getBoundingClientRect().bottom+window.scrollY:0;
+
+  if(jumpToFirstCard){
+    /* 從總覽點某天 → 跳到第一個 .card，跳過 DAY ONE 大標區 */
+    const firstCard=days[i]&&days[i].querySelector(".card");
+    if(firstCard){
+      const top=firstCard.getBoundingClientRect().top+window.scrollY-navH-10;
+      window.scrollTo({top,behavior:"smooth"});
+      return;
+    }
+  }
+  /* 一般分頁切換 → 捲到導覽列正下方，不回頁面頂端 */
+  window.scrollTo({top:navBottom,behavior:"smooth"});
 }
 
 const foodGrid=document.getElementById("foodGrid");
@@ -835,7 +1071,8 @@ if(hasPending){
         ${(o.pros||[]).length?`<ul class="cand-pros">${o.pros.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
         ${(o.cons||[]).length?`<ul class="cand-cons">${o.cons.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
         ${o.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(o.map)}">📍 地圖</a>`:""}
-        ${o.link?`<a class="btn-link" target="_blank" rel="noopener" href="${o.link}">🔗 介紹</a>`:""}
+        ${o.link?`<a class="btn-search" target="_blank" rel="noopener" href="${o.link}">🔍 最新資訊</a>`:""}
+        ${o.official?`<a class="btn-official" target="_blank" rel="noopener" href="${o.official}">🏛️ 官網</a>`:""}
       </div>`;
     });
     h+=`</div>`;
@@ -843,6 +1080,65 @@ if(hasPending){
     pw.appendChild(block);
   });
 }
+
+/* ===== 新功能：倒數、故事、分享、打包、抵達打勾、進度、回頂部 ===== */
+(function(){
+  const el=document.getElementById("cvCountdown");
+  if(!el||!M.departDate){if(el)el.remove();return;}
+  const dep=new Date(M.departDate+"T00:00:00");const today=new Date();today.setHours(0,0,0,0);
+  const diff=Math.round((dep-today)/86400000);
+  if(diff>0)el.innerHTML=`距離出發還有 <span class="num">${diff}</span> 天`;
+  else if(diff===0)el.innerHTML=`<span class="num">今天出發</span> ✈️`;
+  else el.innerHTML=`旅程已於 ${-diff} 天前展開`;
+})();
+(function(){const el=document.getElementById("cvStory");if(!el)return;if(M.story)el.textContent=M.story;else el.remove();})();
+(function(){
+  const btn=document.getElementById("shareBtn");if(!btn)return;
+  btn.onclick=async()=>{try{await navigator.clipboard.writeText(location.href);const o=btn.textContent;btn.textContent="✓ 已複製連結";btn.classList.add("done");setTimeout(()=>{btn.textContent=o;btn.classList.remove("done");},2000);}catch(e){prompt("複製這個連結分享：",location.href);}};
+})();
+(function(){
+  const KEY=LS_PREFIX+"packing";
+  const DEFAULT=["護照","現金","信用卡","手機＋充電線","行動電源","轉接頭","常備藥","盥洗","換洗衣物","外套","雨具","環保袋"];
+  let items;try{items=JSON.parse(localStorage.getItem(KEY));}catch(e){}
+  if(!Array.isArray(items))items=DEFAULT.map(t=>({t,done:false}));
+  const grid=document.getElementById("packGrid"),input=document.getElementById("packInput"),cnt=document.getElementById("packCount");
+  if(!grid)return;
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(items));}catch(e){}}
+  function render(){
+    const done=items.filter(x=>x.done).length;cnt.textContent=`（${done}/${items.length}）`;
+    grid.innerHTML=items.map((x,i)=>`<label class="pack-item ${x.done?"on":""}"><span class="box">✓</span><span>${x.t}</span><span class="del" data-i="${i}">×</span></label>`).join("");
+    grid.querySelectorAll(".pack-item").forEach((el,i)=>{
+      el.querySelector(".box").onclick=e=>{e.preventDefault();items[i].done=!items[i].done;save();render();};
+      el.querySelector("span:nth-child(2)").onclick=e=>{e.preventDefault();items[i].done=!items[i].done;save();render();};
+    });
+    grid.querySelectorAll(".del").forEach(d=>d.onclick=e=>{e.preventDefault();e.stopPropagation();items.splice(+d.dataset.i,1);save();render();});
+  }
+  document.getElementById("packAddBtn").onclick=()=>{const v=input.value.trim();if(!v)return;items.push({t:v,done:false});input.value="";save();render();};
+  input.addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("packAddBtn").click();});
+  render();
+})();
+(function(){
+  if(!ARRIVE_ON)return;
+  const KEY=LS_PREFIX+"arrived";let set;
+  try{set=new Set(JSON.parse(localStorage.getItem(KEY))||[]);}catch(e){set=new Set();}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify([...set]));}catch(e){}}
+  function updateDay(day){
+    const total=document.querySelectorAll(`.arrived[data-day="${day}"]`).length;
+    const done=document.querySelectorAll(`.arrived[data-day="${day}"].on`).length;
+    const pg=document.querySelector(`.day-progress[data-day="${day}"]`);
+    if(pg){pg.querySelector("i").style.width=(total?done/total*100:0)+"%";pg.querySelector(".txt").textContent=`${done}/${total}`;}
+  }
+  document.querySelectorAll(".arrived").forEach(el=>{
+    const k=el.dataset.arrive;if(set.has(k))el.classList.add("on");
+    el.onclick=()=>{el.classList.toggle("on");el.classList.contains("on")?set.add(k):set.delete(k);save();updateDay(el.dataset.day);};
+  });
+  TRIP.days.forEach((d,i)=>updateDay(i));
+})();
+(function(){
+  const btn=document.getElementById("toTop");if(!btn)return;
+  window.addEventListener("scroll",()=>{btn.classList.toggle("show",window.scrollY>400);});
+  btn.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+})();
 </script>
 </body>
 </html>
