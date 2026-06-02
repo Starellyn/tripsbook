@@ -225,6 +225,10 @@ body{
 .btn-map:hover{background:var(--vermilion-d)}
 .btn-link{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
 .btn-link:hover{background:var(--indigo);color:#fff}
+.btn-search{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn-search:hover{background:var(--indigo);color:#fff}
+.btn-official{background:transparent;color:var(--matcha);border:1.5px solid var(--matcha)}
+.btn-official:hover{background:var(--matcha);color:#fff}
 
 /* ---------- 區段標題 ---------- */
 .section-title{
@@ -322,7 +326,16 @@ body{
 .cand-pros li::before{content:"＋ ";color:var(--matcha);font-weight:700}
 .cand-cons li::before{content:"－ ";color:var(--vermilion);font-weight:700}
 .cand-pros li,.cand-cons li{color:var(--ink-soft)}
-.cand .btn-map,.cand .btn-link{margin-top:10px;margin-right:6px}
+.cand .btn-map,.cand .btn-search,.cand .btn-official,.cand .btn-link{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font-size:12.5px;font-weight:500;padding:6px 12px;border-radius:8px;margin-top:10px;margin-right:6px;transition:.18s}
+.price-note{background:#eef3f8;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 14px}
+.price-note b{color:var(--ink)}
+.price-fold{margin-top:11px}
+.price-fold summary{display:inline-flex;align-items:center;gap:5px;cursor:pointer;list-style:none;font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;background:transparent;color:var(--matcha);border:1.5px solid var(--matcha);transition:.18s}
+.price-fold summary::-webkit-details-marker{display:none}
+.price-fold[open] summary,.price-fold summary:hover{background:var(--matcha);color:#fff}
+.price-compare{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.price-compare a{font-size:12px;font-weight:600;text-decoration:none;padding:5px 11px;border-radius:7px;background:#eef3f8;color:var(--indigo);transition:.18s}
+.price-compare a:hover{background:var(--indigo);color:#fff}
 
 /* ---------- 工具盒 / 頁尾 ---------- */
 .tools{background:var(--ink);color:var(--paper);border-radius:16px;padding:26px 24px;margin:10px 0 30px}
@@ -475,9 +488,16 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <!-- ============ 美食（分頁） ============ -->
 <section class="wrap day" id="food" style="padding-top:30px">
-  <h2 class="section-title">必吃・特色餐飲</h2>
-  <p class="section-sub">價位為單人概估（含飲料／甜點）</p>
+  <h2 class="section-title">美食推薦</h2>
+  <p class="section-sub">必吃・特色餐飲　·　價位為單人概估（含飲料／甜點）</p>
   <div class="food-grid" id="foodGrid"></div>
+</section>
+
+<!-- ============ 景點推薦（分頁・自動彙整每日行程中的景點） ============ -->
+<section class="wrap day" id="spots" style="padding-top:30px">
+  <h2 class="section-title">景點推薦</h2>
+  <p class="section-sub">自動彙整每日行程中的景點　·　點地圖直接導航</p>
+  <div class="food-grid" id="spotGrid"></div>
 </section>
 
 <!-- ============ 待定／候選比較（分頁。定案後刪掉資料，此分頁自動隱藏） ============ -->
@@ -603,12 +623,18 @@ const TRIP = {
   /* ===== 待定／候選比較（草稿期討論用）=====
      · 把同一個還沒決定的需求（住宿、餐廳、要不要去某景點）並列幾個選項
      · status 可填："待決定" / "傾向" / "已排除"；pick:true 會把卡片框成朱紅
-     · 全部決定後：把整個 pending:[ ] 清空（或刪掉這個欄位），「🤔 待定」分頁會自動消失
+     · 住宿類 group 加 booking:true（＋ priceChecked:"YYYY-MM-DD"）
+       → 該組顯示查價日提示，每個選項自動帶 Booking/Agoda/樂天/Jalan 一鍵比價連結
+       （非住宿候選別設 booking，才不會冒出訂房網連結）
+     · 若整個 pending 都是住宿候選，可把上方 extraTabs 的「🤔 待定」改成「🏨 飯店推薦」更好找
+     · 全部決定後：把整個 pending:[ ] 清空（或刪掉這個欄位），分頁會自動消失
        → 同一份檔案就從「草稿」變成「正式版」                                  */
   pending:[
     {
-      topic:"範例：東京住宿要住哪區",
+      topic:"範例：住宿要住哪區",
       note:"列出候選，討論時直接在這頁圈選。",
+      booking:true,                    // 住宿類設 true → 顯示查價日＋各選項加訂房網比價連結
+      priceChecked:"YYYY-MM-DD",       // 查價日；每次重查價後改這個日期
       options:[
         {name:"候選 A・地名飯店", price:"一晚 NT$X,XXX", status:"傾向", pick:true,
          desc:"一句話定位。", pros:["離車站近","生活機能好"], cons:["假日漲價"],
@@ -752,8 +778,11 @@ TRIP.days.forEach((d,i)=>{
 const divider=document.createElement("div");
 divider.className="divider";
 navBar.appendChild(divider);
-const extraTabs=[{label:"💰 預算"},{label:"🍴 美食"}];
-/* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁 */
+const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
+/* 景點推薦分頁：自動彙整各日 type:spot；沒有景點時不顯示 */
+const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
+if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
+/* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁（若整組都是住宿候選，可改成「🏨 飯店推薦」更好找） */
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
 if(hasPending)extraTabs.push({label:"🤔 待定"});
 extraTabs.forEach((p,k)=>{
@@ -764,7 +793,8 @@ extraTabs.forEach((p,k)=>{
   btn.onclick=()=>show(idx);
   navBar.appendChild(btn);
 });
-/* 沒有待定內容時，把該分頁從 DOM 移除，避免索引錯位 */
+/* 沒有對應內容時，把該分頁從 DOM 移除，避免索引錯位 */
+if(!hasSpots){const se=document.getElementById("spots");if(se)se.remove();}
 if(!hasPending){const pe=document.getElementById("pending");if(pe)pe.remove();}
 
 /* 建立總覽卡片 */
@@ -799,18 +829,46 @@ TRIP.food.forEach(f=>{
   foodGrid.appendChild(el);
 });
 
+/* —— 景點推薦：自動彙整各日 type:spot 行程點 —— */
+if(hasSpots){
+  const spotGrid=document.getElementById("spotGrid");
+  TRIP.days.forEach(d=>{
+    (d.items||[]).forEach(it=>{
+      if(it.type!=="spot")return;
+      const meta=[];
+      if(it.duration)meta.push(`⏱️ ${it.duration}`);
+      if(it.best)meta.push(`✨ ${it.best}`);
+      const el=document.createElement("div");
+      el.className="food";
+      el.innerHTML=`<span class="badge b-spot">${d.tab}${it.badge?"・"+it.badge:""}</span>
+        <h4>${it.title}</h4>
+        ${meta.length?`<p style="color:var(--ink-soft);font-size:12.5px;margin:4px 0 6px">${meta.join("　")}</p>`:""}
+        ${it.desc?`<p>${it.desc}</p>`:""}
+        <a target="_blank" rel="noopener" href="${gmap(it.map||it.title)}">📍 在地圖查看 →</a>`;
+      spotGrid.appendChild(el);
+    });
+  });
+}
+
 /* —— 待定／候選比較 —— */
 if(hasPending){
   const pw=document.getElementById("pendingWrap");
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
+  /* 訂房比價（A+B）：住宿類 group 設 booking:true（可加 priceChecked:"YYYY-MM-DD"）→
+     該組顯示查價日提示，每個選項自動帶訂房網一鍵比價（走 Google 站內導向、永不失效、離線僅不載入） */
+  const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
+  const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
   TRIP.pending.forEach(group=>{
     const block=document.createElement("div");
     block.className="pgroup";
     let h=`<div class="pgroup-head">
         <h3>${group.topic}</h3>
         ${group.note?`<p>${group.note}</p>`:""}
-      </div>
-      <div class="cand-grid">`;
+      </div>`;
+    if(group.booking){
+      h+=`<div class="price-note">💰 ${group.priceChecked?`房價查詢日：<b>${group.priceChecked}</b>　·　`:""}下列為概估，點各家「比價」看即時房價（記得選你的入住日期與人數）。重新查價後更新 priceChecked 日期即可。</div>`;
+    }
+    h+=`<div class="cand-grid">`;
     group.options.forEach(o=>{
       const stCls=statusClass[o.status]||"st-open";
       h+=`<div class="cand ${o.pick?"cand-pick":""}">
@@ -821,7 +879,9 @@ if(hasPending){
         ${(o.pros||[]).length?`<ul class="cand-pros">${o.pros.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
         ${(o.cons||[]).length?`<ul class="cand-cons">${o.cons.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
         ${o.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(o.map)}">📍 地圖</a>`:""}
-        ${o.link?`<a class="btn-link" target="_blank" rel="noopener" href="${o.link}">🔗 介紹</a>`:""}
+        ${o.link?`<a class="btn-search" target="_blank" rel="noopener" href="${o.link}">🔍 最新資訊</a>`:""}
+        ${o.official?`<a class="btn-official" target="_blank" rel="noopener" title="官網" href="${o.official}">🏛️</a>`:""}
+        ${group.booking?`<details class="price-fold"><summary>💰 查房價 ▾</summary><div class="price-compare">${BOOK_SITES.map(s=>`<a target="_blank" rel="noopener" href="${gsearch(o.name+" "+s[1])}">${s[0]}</a>`).join("")}</div></details>`:""}
       </div>`;
     });
     h+=`</div>`;

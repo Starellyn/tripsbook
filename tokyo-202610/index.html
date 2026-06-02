@@ -324,12 +324,16 @@ body{
 .cand-pros li::before{content:"＋ ";color:var(--matcha);font-weight:700}
 .cand-cons li::before{content:"－ ";color:var(--vermilion);font-weight:700}
 .cand-pros li,.cand-cons li{color:var(--ink-soft)}
-.cand .btn-map,.cand .btn-link{margin-top:10px;margin-right:6px}
-.price-note{background:#eef3f8;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:18px}
+.cand .btn-map,.cand .btn-search,.cand .btn-official,.cand .btn-link{display:inline-flex;align-items:center;gap:4px;text-decoration:none;font-size:12.5px;font-weight:500;padding:6px 12px;border-radius:8px;margin-top:10px;margin-right:6px;transition:.18s}
+.price-note{background:#eef3f8;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin:0 0 14px}
 .price-note b{color:var(--ink)}
-.price-compare{margin-top:11px;font-size:12px;color:var(--ink-soft)}
-.price-compare a{color:var(--indigo);text-decoration:none;font-weight:600}
-.price-compare a:hover{text-decoration:underline}
+.price-fold{margin-top:11px}
+.price-fold summary{display:inline-flex;align-items:center;gap:5px;cursor:pointer;list-style:none;font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;background:transparent;color:var(--matcha);border:1.5px solid var(--matcha);transition:.18s}
+.price-fold summary::-webkit-details-marker{display:none}
+.price-fold[open] summary,.price-fold summary:hover{background:var(--matcha);color:#fff}
+.price-compare{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.price-compare a{font-size:12px;font-weight:600;text-decoration:none;padding:5px 11px;border-radius:7px;background:#eef3f8;color:var(--indigo);transition:.18s}
+.price-compare a:hover{background:var(--indigo);color:#fff}
 
 /* ---------- 工具盒 / 頁尾 ---------- */
 .tools{background:var(--ink);color:var(--paper);border-radius:16px;padding:26px 24px;margin:10px 0 30px}
@@ -808,6 +812,7 @@ const TRIP = {
   pending:[
     {
       topic:"10/24 ＆ 10/26 住宿 ①：上野・御徒町（核心區・首選）",
+      booking:true, priceChecked:"2026-06-02",
       note:"多慶屋採購日 ＋ 花火日靠上野最順；10/26 輕井澤回來後繼續住同間，不搬行李。皆在御徒町／上野站徒步圈，往成田機場（京成線）也方便。需確認有 4 人房（24㎡+）或 2 間雙人房（16㎡+）。價位為 10 月下旬花火週旺季概估，務必於訂房網即時確認。",
       options:[
         {name:"Sotetsu Fresa Inn 上野御徒町", price:"4人房一晚 ¥25,000–35,000 / 雙人房一晚 ¥11,000–16,000", status:"傾向", pick:true,
@@ -862,6 +867,7 @@ const TRIP = {
     },
     {
       topic:"10/24 ＆ 10/26 住宿 ②：周邊延伸（日暮里/鶯谷・秋葉原/淺草橋）",
+      booking:true, priceChecked:"2026-06-02",
       note:"略離御徒町但各有優勢：日暮里 Skyliner 直達成田最快、秋葉原/淺草橋一帶有超大公寓房適合一家人。到多慶屋以徒步＋一段地鐵為主，必要時短程計程車約 ¥1,000–1,500。",
       options:[
         {name:"Almont Hotel 日暮里（阿爾蒙特）", price:"雙人房一晚 ¥11,000–17,000（旺季）", status:"待決定",
@@ -882,6 +888,7 @@ const TRIP = {
     },
     {
       topic:"10/24 ＆ 10/26 住宿 ③：淺草（特色備選・靠地鐵或計程車往返）",
+      booking:true, priceChecked:"2026-06-02",
       note:"你特別點名想列入的淺草——雷門、晴空塔夜景與在地氛圍最強，且淺草站可一班車直達成田／羽田。代價是離多慶屋／御徒町較遠：銀座線「淺草→上野廣小路」約 8 分，或計程車約 10–15 分 ¥1,500–2,000（當行李多時的備案）。",
       options:[
         {name:"THE GATE HOTEL 雷門 by HULIC", price:"正 4 人房（36㎡＋小客廳）一晚 ¥30,000–45,000", status:"待決定",
@@ -900,6 +907,7 @@ const TRIP = {
     },
     {
       topic:"10/25 草津溫泉旅館選擇",
+      booking:true, priceChecked:"2026-06-02",
       note:"建議選湯畑徒步 5 分鐘內、含一泊二食；4 人需確認有 4 人間或相鄰 2 間。下列依「高級老舗 → 傳統中價 → 平價 → 大型家族」鋪開，價位為旺季概估／每人，務必於官網或訂房網即時確認。",
       options:[
         {name:"ホテル一井（Ichii）", price:"一泊二食 ¥13,000–18,000／人", status:"傾向", pick:true,
@@ -1178,20 +1186,20 @@ if(hasSpots){
 if(hasPending){
   const pw=document.getElementById("pendingWrap");
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
-  /* 房價查詢日（B）：每次重新查價後，只改這一個日期 */
-  const PRICE_CHECKED="2026-06-02";
-  /* 訂房網一鍵比價（A）：走 Google 站內導向，連結永不失效、離線僅不載入 */
+  /* 訂房比價（A+B）：住宿類 group 設 booking:true（＋ priceChecked 日期）→ 顯示查價日＋各選項加比價連結 */
   const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
   const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
-  pw.innerHTML=`<div class="price-note">💰 房價查詢日：<b>${PRICE_CHECKED}</b>　·　下列價格為當時旺季概估，實際房價請點各家「比價」看即時報價（記得選 <b>10/24・10/26</b> 上野／<b>10/25</b> 草津、<b>4 人</b>）。需要我重新查一輪刷新數字，喊一聲即可。</div>`;
   TRIP.pending.forEach(group=>{
     const block=document.createElement("div");
     block.className="pgroup";
     let h=`<div class="pgroup-head">
         <h3>${group.topic}</h3>
         ${group.note?`<p>${group.note}</p>`:""}
-      </div>
-      <div class="cand-grid">`;
+      </div>`;
+    if(group.booking){
+      h+=`<div class="price-note">💰 ${group.priceChecked?`房價查詢日：<b>${group.priceChecked}</b>　·　`:""}下列為旺季概估，點各家「比價」看即時房價（記得選你的入住日期與人數）。需要我重新查一輪刷新，喊一聲即可。</div>`;
+    }
+    h+=`<div class="cand-grid">`;
     group.options.forEach(o=>{
       const stCls=statusClass[o.status]||"st-open";
       h+=`<div class="cand ${o.pick?"cand-pick":""}">
@@ -1203,8 +1211,8 @@ if(hasPending){
         ${(o.cons||[]).length?`<ul class="cand-cons">${o.cons.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}
         ${o.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(o.map)}">📍 地圖</a>`:""}
         ${o.link?`<a class="btn-search" target="_blank" rel="noopener" href="${o.link}">🔍 最新資訊</a>`:""}
-        ${o.official?`<a class="btn-official" target="_blank" rel="noopener" href="${o.official}">🏛️ 官網</a>`:""}
-        <div class="price-compare">💰 比價：${BOOK_SITES.map(s=>`<a target="_blank" rel="noopener" href="${gsearch(o.name+" "+s[1])}">${s[0]}</a>`).join("　·　")}</div>
+        ${o.official?`<a class="btn-official" target="_blank" rel="noopener" title="官網" href="${o.official}">🏛️</a>`:""}
+        ${group.booking?`<details class="price-fold"><summary>💰 查房價 ▾</summary><div class="price-compare">${BOOK_SITES.map(s=>`<a target="_blank" rel="noopener" href="${gsearch(o.name+" "+s[1])}">${s[0]}</a>`).join("")}</div></details>`:""}
       </div>`;
     });
     h+=`</div>`;
