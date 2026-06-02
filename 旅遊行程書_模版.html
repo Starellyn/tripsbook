@@ -46,6 +46,46 @@ body{
   position:relative;text-align:center;
   padding:64px 20px 40px;overflow:hidden;
 }
+.cover .back-shelf{
+  position:absolute;top:22px;left:22px;z-index:5;
+  font-family:var(--f-sans);font-size:13px;font-weight:600;
+  color:var(--ink-soft);text-decoration:none;
+  border:1.5px solid var(--line);border-radius:30px;padding:6px 14px;
+  background:var(--card);transition:.18s;
+}
+.cover .back-shelf:hover{border-color:var(--vermilion);color:var(--vermilion)}
+
+/* 倒數計時 */
+.countdown{margin-top:14px;font-family:var(--f-serif);font-size:15px;color:var(--vermilion-d);font-weight:700}
+.countdown .num{font-size:22px}
+.story{max-width:560px;margin:18px auto 0;font-size:14px;line-height:1.95;color:var(--ink-soft);text-align:left;border-left:3px solid var(--matcha);padding:4px 0 4px 16px;font-family:var(--f-serif)}
+.share-btn{margin-top:18px;font-family:var(--f-sans);cursor:pointer;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:13px;font-weight:600;padding:8px 18px;border-radius:30px;transition:.18s}
+.share-btn:hover{border-color:var(--vermilion);color:var(--vermilion)}
+.share-btn.done{border-color:var(--matcha);color:var(--matcha)}
+.day-progress{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+.day-progress .bar{flex:1;height:6px;background:var(--paper2);border-radius:6px;overflow:hidden}
+.day-progress .bar i{display:block;height:100%;background:var(--matcha);border-radius:6px;transition:width .3s}
+.day-progress .txt{font-size:12px;color:var(--ink-soft);font-weight:700;white-space:nowrap}
+.arrived{cursor:pointer;user-select:none;width:22px;height:22px;border:2px solid var(--line);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:transparent;flex-shrink:0;transition:.15s}
+.arrived.on{background:var(--matcha);border-color:var(--matcha);color:#fff}
+.packing{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-top:18px;box-shadow:var(--shadow)}
+.packing h3{font-family:var(--f-serif);font-size:17px;font-weight:700;margin-bottom:12px}
+.packing h3 small{font-family:var(--f-sans);font-size:12px;font-weight:400;color:var(--ink-soft)}
+.pack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 14px;margin-bottom:12px}
+.pack-item{display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer;padding:3px 0}
+.pack-item .box{width:18px;height:18px;border:1.5px solid var(--line);border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:transparent;flex-shrink:0;transition:.15s}
+.pack-item.on .box{background:var(--matcha);border-color:var(--matcha);color:#fff}
+.pack-item.on span{color:var(--ink-soft);text-decoration:line-through}
+.pack-item .del{margin-left:auto;color:var(--line);cursor:pointer;font-size:15px}
+.pack-item .del:hover{color:var(--vermilion)}
+.pack-add{display:flex;gap:8px}
+.pack-add input{flex:1;font-family:var(--f-sans);font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink)}
+.pack-add input:focus{outline:none;border-color:var(--vermilion)}
+.pack-add button{cursor:pointer;border:none;background:var(--ink);color:#fff;font-weight:700;font-size:16px;width:40px;border-radius:9px}
+.pack-note{font-size:12px;color:var(--ink-soft);margin-top:10px}
+.to-top{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border:none;border-radius:50%;background:var(--ink);color:#fff;font-size:20px;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s;z-index:50}
+.to-top.show{opacity:.9;pointer-events:auto}
+.to-top:hover{opacity:1}
 .cover .vlabel{
   position:absolute;top:24px;right:26px;
   writing-mode:vertical-rl;letter-spacing:.4em;
@@ -293,6 +333,10 @@ body{
   text-decoration:none;font-weight:700;padding:11px 22px;border-radius:10px;margin-top:14px;font-size:14px;transition:.18s;
 }
 .tools .big-btn:hover{background:var(--vermilion-d)}
+.tools .big-btn.locked{opacity:.45;cursor:not-allowed;position:relative;filter:grayscale(.4)}
+.tools .big-btn.locked:hover{filter:grayscale(.4)}
+.tools .big-btn.locked::after{content:"🔒 定案後開放";position:absolute;top:-9px;right:-6px;background:var(--ink);color:#fff;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;white-space:nowrap}
+.phase-hint{font-size:12.5px;color:var(--ink-soft);margin-top:12px;background:rgba(255,255,255,.06);border-radius:8px;padding:9px 12px;line-height:1.6}
 .hotel-box{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
 .hotel-box .hb{background:rgba(255,255,255,.08);border-radius:10px;padding:10px 14px;font-size:12.5px}
 .hotel-box .hb b{color:#fff}
@@ -314,11 +358,15 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <!-- ============ 封面（內容由資料區 TRIP.meta 帶入） ============ -->
 <header class="cover">
+  <a class="back-shelf" href="../">← 書架</a>
   <div class="vlabel" id="cvVLabel"></div>
   <div class="stamp" id="cvStamp"></div>
   <h1 id="cvTitle"></h1>
   <div class="sub" id="cvSub"></div>
+  <div class="countdown" id="cvCountdown"></div>
   <div class="meta" id="cvMeta"></div>
+  <p class="story" id="cvStory"></p>
+  <button class="share-btn" id="shareBtn">🔗 複製連結分享</button>
   <div class="rule"></div>
 </header>
 
@@ -403,10 +451,25 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
     <h3>📍 我的地圖 ＆ 飯店</h3>
     <p>討論定案後，把所有景點存進 Google「我的地圖」，現場找路最方便。把分享連結貼到下方按鈕的 href。</p>
     <a class="big-btn" href="https://www.google.com/maps/d/" target="_blank" rel="noopener">🗺️ 開啟我的地圖（替換成你的連結）</a>
+    <a class="big-btn tool-locked" data-href="../_kakeibo/" style="margin-left:8px;background:var(--matcha)">🧾 旅遊記帳</a>
+    <a class="big-btn tool-locked" data-href="../_warikan/" style="margin-left:8px;background:var(--indigo)">👥 多人分帳</a>
+    <a class="big-btn tool-locked" data-href="../_nikki/" style="margin-left:8px;background:var(--gold)">📔 旅途日記</a>
+    <div class="phase-hint" id="phaseHint"></div>
     <div class="hotel-box">
       <div class="hb">🏨 全程住宿<br><b>飯店名稱</b>（區域・特色）</div>
       <div class="hb">🚉 最近車站<br><b>車站名稱</b>，往各地的便利性</div>
     </div>
+  </div>
+
+  <!-- 打包清單（可勾選，存本機） -->
+  <div class="packing">
+    <h3>🧳 打包清單 <small id="packCount"></small></h3>
+    <div class="pack-grid" id="packGrid"></div>
+    <div class="pack-add">
+      <input type="text" id="packInput" placeholder="新增項目">
+      <button id="packAddBtn">＋</button>
+    </div>
+    <div class="pack-note">勾選狀態存在這支裝置的瀏覽器。</div>
   </div>
 </section>
 
@@ -426,6 +489,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <footer id="pageFoot"></footer>
 
+<!-- 回頂部 -->
+<button class="to-top" id="toTop" title="回頂部">↑</button>
+
 <script>
 /* ============================================================
    ★★★ 資料區：要改行程，改這裡就好 ★★★
@@ -435,10 +501,15 @@ const TRIP = {
   /* ===== 旅程基本資料（封面、總覽底部、頁尾都讀這裡）===== */
   meta:{
     stamp:"範例",                                    // 封面印章字（1–2 字，城市或國家）
+    /* 旅程階段：draft(草稿) / final(定案) / travelling(旅途中)
+       draft 時記帳/分帳/日記按鈕會變灰、標「定案後開放」、點不了 */
+    phase:"draft",
     vlabel:"○○の旅",                                 // 封面右側直書小標
     titleMain:"目的地名稱", titleAccent:"X 日",        // 主標：前段（黑）＋ 強調段（朱紅）
     titleTail:"旅遊行程書",                            // 主標尾
     sub:"SUBTITLE · IN · ROMAN",                     // 副標（英文／羅馬字，可留白）
+    departDate:"",                                   // 出發日 YYYY-MM-DD（倒數用，留空不顯示）
+    story:"",                                        // 「這趟的故事」一段話（留空不顯示）
     chips:["📅 M/D – M/D","🌙 X 晚 X 天","🏨 住宿名稱"], // 封面標籤（任意數量）
     footStats:[                                      // 總覽頁底部統計（任意數量）
       {label:"全程", value:"X 晚 X 天"},
@@ -559,6 +630,8 @@ const gmap=q=>`https://www.google.com/maps/search/?api=1&query=${encodeURICompon
 
 /* —— 封面 / 頁尾 / 總覽底部（讀 TRIP.meta）—— */
 const M=TRIP.meta;
+const ARRIVE_ON=(M.phase==="travelling");
+const LS_PREFIX="tripsbook_TRIPKEY_";   // ★換趟改成該趟代號，如 tripsbook_kyoto202703_
 document.title=`${M.titleMain}${M.titleAccent}${M.titleTail}`;
 document.getElementById("cvVLabel").textContent=M.vlabel||"";
 document.getElementById("cvStamp").textContent=M.stamp||"";
@@ -567,6 +640,25 @@ document.getElementById("cvSub").textContent=M.sub||"";
 document.getElementById("cvMeta").innerHTML=(M.chips||[]).map(c=>`<span class="chip">${c}</span>`).join("");
 document.getElementById("ovFoot").innerHTML=(M.footStats||[]).map(s=>`<div><span>${s.label}</span><b>${s.value}</b></div>`).join("");
 document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M.titleTail}　·　${M.footer||""}`;
+
+/* —— 旅程階段：依 phase 解鎖工具按鈕 —— */
+(function(){
+  const phase=M.phase||"final";
+  const locked=(phase==="draft");
+  const hint=document.getElementById("phaseHint");
+  document.querySelectorAll(".tool-locked").forEach(btn=>{
+    if(locked){btn.classList.add("locked");btn.removeAttribute("href");btn.onclick=e=>e.preventDefault();}
+    else{btn.href=btn.dataset.href;btn.target="_blank";btn.rel="noopener";}
+  });
+  if(hint){
+    const msg={
+      draft:"📝 目前是<b>草稿階段</b>：先把行程與住宿討論定案。記帳、分帳、旅途日記會在<b>定案後</b>開放。",
+      final:"✅ 已<b>定案</b>：工具已開放。出發後可用記帳、分帳；到各站用旅途日記記實際足跡。",
+      travelling:"🧳 <b>旅途中</b>：盡情用記帳、分帳、旅途日記，回家就是完整回顧。"
+    };
+    hint.innerHTML=msg[phase]||msg.final;
+  }
+})();
 
 /* —— 基本設定：人數切換器（自動換算包車與住宿分攤）—— */
 (function(){
@@ -629,13 +721,15 @@ TRIP.days.forEach((d,i)=>{
       <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
       ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
     </div>
+    ${ARRIVE_ON?`<div class="day-progress" data-day="${i}"><div class="bar"><i style="width:0%"></i></div><div class="txt">0/${d.items.length}</div></div>`:""}
     <div class="tl">`;
-  d.items.forEach(it=>{
+  d.items.forEach((it,j)=>{
     const meta=[];
     if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
     if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
+    const aKey=i+"-"+j;
     html+=`<div class="item">
-      <div class="time-col"><div class="time">${it.time}</div></div>
+      <div class="time-col"><div class="time">${it.time}</div>${ARRIVE_ON?`<div class="arrived" data-arrive="${aKey}" data-day="${i}">✓</div>`:""}</div>
       <div class="card">
         <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
         <h3>${it.title}</h3>
@@ -735,6 +829,65 @@ if(hasPending){
     pw.appendChild(block);
   });
 }
+
+/* ===== 新功能：倒數、故事、分享、打包、抵達打勾、進度、回頂部 ===== */
+(function(){
+  const el=document.getElementById("cvCountdown");
+  if(!el||!M.departDate){if(el)el.remove();return;}
+  const dep=new Date(M.departDate+"T00:00:00");const today=new Date();today.setHours(0,0,0,0);
+  const diff=Math.round((dep-today)/86400000);
+  if(diff>0)el.innerHTML=`距離出發還有 <span class="num">${diff}</span> 天`;
+  else if(diff===0)el.innerHTML=`<span class="num">今天出發</span> ✈️`;
+  else el.innerHTML=`旅程已於 ${-diff} 天前展開`;
+})();
+(function(){const el=document.getElementById("cvStory");if(!el)return;if(M.story)el.textContent=M.story;else el.remove();})();
+(function(){
+  const btn=document.getElementById("shareBtn");if(!btn)return;
+  btn.onclick=async()=>{try{await navigator.clipboard.writeText(location.href);const o=btn.textContent;btn.textContent="✓ 已複製連結";btn.classList.add("done");setTimeout(()=>{btn.textContent=o;btn.classList.remove("done");},2000);}catch(e){prompt("複製這個連結分享：",location.href);}};
+})();
+(function(){
+  const KEY=LS_PREFIX+"packing";
+  const DEFAULT=["護照","現金","信用卡","手機＋充電線","行動電源","轉接頭","常備藥","盥洗","換洗衣物","外套","雨具","環保袋"];
+  let items;try{items=JSON.parse(localStorage.getItem(KEY));}catch(e){}
+  if(!Array.isArray(items))items=DEFAULT.map(t=>({t,done:false}));
+  const grid=document.getElementById("packGrid"),input=document.getElementById("packInput"),cnt=document.getElementById("packCount");
+  if(!grid)return;
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(items));}catch(e){}}
+  function render(){
+    const done=items.filter(x=>x.done).length;cnt.textContent=`（${done}/${items.length}）`;
+    grid.innerHTML=items.map((x,i)=>`<label class="pack-item ${x.done?"on":""}"><span class="box">✓</span><span>${x.t}</span><span class="del" data-i="${i}">×</span></label>`).join("");
+    grid.querySelectorAll(".pack-item").forEach((el,i)=>{
+      el.querySelector(".box").onclick=e=>{e.preventDefault();items[i].done=!items[i].done;save();render();};
+      el.querySelector("span:nth-child(2)").onclick=e=>{e.preventDefault();items[i].done=!items[i].done;save();render();};
+    });
+    grid.querySelectorAll(".del").forEach(d=>d.onclick=e=>{e.preventDefault();e.stopPropagation();items.splice(+d.dataset.i,1);save();render();});
+  }
+  document.getElementById("packAddBtn").onclick=()=>{const v=input.value.trim();if(!v)return;items.push({t:v,done:false});input.value="";save();render();};
+  input.addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("packAddBtn").click();});
+  render();
+})();
+(function(){
+  if(!ARRIVE_ON)return;
+  const KEY=LS_PREFIX+"arrived";let set;
+  try{set=new Set(JSON.parse(localStorage.getItem(KEY))||[]);}catch(e){set=new Set();}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify([...set]));}catch(e){}}
+  function updateDay(day){
+    const total=document.querySelectorAll(`.arrived[data-day="${day}"]`).length;
+    const done=document.querySelectorAll(`.arrived[data-day="${day}"].on`).length;
+    const pg=document.querySelector(`.day-progress[data-day="${day}"]`);
+    if(pg){pg.querySelector("i").style.width=(total?done/total*100:0)+"%";pg.querySelector(".txt").textContent=`${done}/${total}`;}
+  }
+  document.querySelectorAll(".arrived").forEach(el=>{
+    const k=el.dataset.arrive;if(set.has(k))el.classList.add("on");
+    el.onclick=()=>{el.classList.toggle("on");el.classList.contains("on")?set.add(k):set.delete(k);save();updateDay(el.dataset.day);};
+  });
+  TRIP.days.forEach((d,i)=>updateDay(i));
+})();
+(function(){
+  const btn=document.getElementById("toTop");if(!btn)return;
+  window.addEventListener("scroll",()=>{btn.classList.toggle("show",window.scrollY>400);});
+  btn.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+})();
 </script>
 </body>
 </html>

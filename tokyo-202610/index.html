@@ -483,15 +483,22 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <!-- ============ 美食（分頁） ============ -->
 <section class="wrap day" id="food" style="padding-top:30px">
-  <h2 class="section-title">必吃・特色餐飲</h2>
-  <p class="section-sub">價位為單人概估（含飲料／甜點）</p>
+  <h2 class="section-title">美食推薦</h2>
+  <p class="section-sub">必吃・特色餐飲　·　價位為單人概估（含飲料／甜點）</p>
   <div class="food-grid" id="foodGrid"></div>
+</section>
+
+<!-- ============ 景點推薦（分頁・自動彙整每日行程中的景點） ============ -->
+<section class="wrap day" id="spots" style="padding-top:30px">
+  <h2 class="section-title">景點推薦</h2>
+  <p class="section-sub">自動彙整每日行程中的景點　·　點地圖直接導航</p>
+  <div class="food-grid" id="spotGrid"></div>
 </section>
 
 <!-- ============ 待定／候選比較（分頁。定案後刪掉資料，此分頁自動隱藏） ============ -->
 <section class="wrap day" id="pending" style="padding-top:30px">
-  <h2 class="section-title">待定・候選比較</h2>
-  <p class="section-sub">還在討論的選項並列在這裡　·　決定後把選中的搬進對應日程、其餘刪除</p>
+  <h2 class="section-title">飯店推薦</h2>
+  <p class="section-sub">各區飯店候選並列比較　·　點地圖看位置；定案後再訂房，其餘可刪</p>
   <div id="pendingWrap"></div>
 </section>
 
@@ -795,47 +802,135 @@ const TRIP = {
 
   pending:[
     {
-      topic:"10/24 ＆ 10/26 上野・御徒町住宿（同一間飯店）",
-      note:"多慶屋採購日 ＋ 花火日都靠上野最順；10/26 輕井澤回來後繼續住同間，不搬行李。以下三家都在御徒町站徒步圈，需確認有 4 人房（24㎡+）或 2 間雙人房（16㎡+）。",
+      topic:"10/24 ＆ 10/26 住宿 ①：上野・御徒町（核心區・首選）",
+      note:"多慶屋採購日 ＋ 花火日靠上野最順；10/26 輕井澤回來後繼續住同間，不搬行李。皆在御徒町／上野站徒步圈，往成田機場（京成線）也方便。需確認有 4 人房（24㎡+）或 2 間雙人房（16㎡+）。價位為 10 月下旬花火週旺季概估，務必於訂房網即時確認。",
       options:[
         {name:"Sotetsu Fresa Inn 上野御徒町", price:"4人房一晚 ¥25,000–35,000 / 雙人房一晚 ¥11,000–16,000", status:"傾向", pick:true,
-         desc:"連鎖商務型，設施新、評價高（4.2）。",
+         desc:"連鎖商務型，設施新、評價高（4.2）。位置與多慶屋的距離是本區最順的一間。",
          pros:["御徒町站徒步 5 分","多慶屋旁邊","銀座線＋山手線＋京成三線"],
          cons:["4 人房需事先確認有無","週末花火週旺季可能無房"],
          map:"Sotetsu Fresa Inn Ueno Okachimachi",
          link:"https://www.google.com/search?q=Sotetsu+Fresa+Inn+上野御徒町+評價+2026&hl=zh-TW",
          official:"https://www.sotetsu-hotels.com/fresa-inn/ueno-okachimachi/"},
+        {name:"MIMARU 東京 上野御徒町", price:"公寓式 4 人房整間一晚 ¥30,000–45,000", status:"待決定",
+         desc:"公寓式飯店，正 4 人房附廚房（電磁爐、鍋具、餐具、大冰箱、大餐桌），空間遠大於一般日系商務房——4 人同房最舒服的選擇。設有忍者／壽司吧主題房，小孩會喜歡。",
+         pros:["真正寬敞 4 人房，免訂 2 間","附廚房可煮戰利品零食／泡麵","御徒町站徒步圈、多慶屋近"],
+         cons:["整間計價，旺季單價偏高","熱門房型需提早訂"],
+         map:"ミマル東京上野御徒町",
+         link:"https://www.google.com/search?q=MIMARU+上野御徒町+評價+2026&hl=zh-TW",
+         official:"https://mimaruhotels.com/"},
         {name:"Dormy Inn 上野御徒町", price:"4人房一晚 ¥28,000–38,000 / 雙人房一晚 ¥12,000–18,000", status:"待決定",
-         desc:"連鎖品質穩定，有大浴場（晚泡澡很舒服），御徒町站徒步圈（評價 4.3）。",
+         desc:"連鎖品質穩定，有大浴場（晚泡澡很舒服）＋免費宵夜拉麵，御徒町站徒步圈（評價 4.3）。",
          pros:["有大浴場（免費泡）","評價穩定","離多慶屋近"],
          cons:["花火週末同樣搶手","早餐另計"],
          map:"ドーミーイン上野御徒町"},
+        {name:"三井花園飯店 上野（Mitsui Garden）", price:"雙人房一晚 ¥14,000–22,000", status:"待決定",
+         desc:"JR 上野站徒步 2–3 分，走得到阿美橫丁與上野動物園。有人氣熊貓主題房與晴空塔景觀房，義式自助早餐評價佳。",
+         pros:["上野站超近、機能滿分","熊貓房適合親子拍照","品牌品質穩定"],
+         cons:["4 人房少，多為雙人","熱門主題房要早搶"],
+         map:"三井ガーデンホテル上野",
+         link:"https://www.google.com/search?q=三井花園飯店+上野+評價+2026&hl=zh-TW"},
+        {name:"Super Hotel 上野御徒町", price:"連通房（2 雙人）一晚 ¥18,000–28,000 / 雙人房 ¥9,000–14,000", status:"待決定",
+         desc:"高 CP 值連鎖，御徒町站徒步 3 分、阿美橫丁 5 分。可選枕頭、附免費日式早餐；有「連通房」（兩間雙人中間一扇門互通），4 人剛好。",
+         pros:["價格實惠＋免費早餐","連通房適合 2+2","天然溫泉大浴場（部分分館）"],
+         cons:["房間偏精簡","連通房數量少需早訂"],
+         map:"スーパーホテル上野御徒町",
+         link:"https://www.google.com/search?q=Super+Hotel+上野御徒町+評價+2026&hl=zh-TW"},
+        {name:"Hotel Resol 上野", price:"雙人房一晚 ¥12,000–18,000", status:"待決定",
+         desc:"JR 上野站前，徒步 1 分到 JR、6 分到京成上野（往成田超方便），阿美橫丁 5 分。客房乾淨附浴缸，公共區有微波爐與洗脫烘。",
+         pros:["上野站正前方、生活機能極佳","往成田機場最順","房間新淨"],
+         cons:["以雙人房為主，4 人需 2 間","旺季房價會跳高"],
+         map:"ホテルリソル上野",
+         link:"https://www.google.com/search?q=Hotel+Resol+上野+評價+2026&hl=zh-TW"},
         {name:"APA Hotel 上野廣小路", price:"雙人房一晚 ¥10,000–15,000（無 4 人房）", status:"待決定",
-         desc:"若找不到合適 4 人房，訂 2 間雙人房的備選方案，評價 4.3，房間偏小但乾淨。",
+         desc:"若找不到合適 4 人房，訂 2 間雙人房的平價備選，評價 4.3，房間偏小但乾淨。",
          pros:["價格最實惠","品質可預期","離地鐵近"],
          cons:["無 4 人房，需訂 2 間","房間最小"],
-         map:"APA Hotel Ueno Hirokoji"}
+         map:"APA Hotel Ueno Hirokoji"},
+        {name:"Hotel Sardonyx 上野（寶石飯店）", price:"雙人房一晚 ¥9,000–14,000", status:"待決定",
+         desc:"JR 御徒町站約 300m，平價老牌、Agoda 高評價，提供免費早餐與免費寄行李，位置就在上野中心。",
+         pros:["價格最低區間之一","御徒町站超近","免費早餐＋寄行李"],
+         cons:["設施較舊","僅雙人房，4 人需 2 間"],
+         map:"ホテルサードニクス上野",
+         link:"https://www.google.com/search?q=Hotel+Sardonyx+上野+評價+2026&hl=zh-TW"}
+      ]
+    },
+    {
+      topic:"10/24 ＆ 10/26 住宿 ②：周邊延伸（日暮里/鶯谷・秋葉原/淺草橋）",
+      note:"略離御徒町但各有優勢：日暮里 Skyliner 直達成田最快、秋葉原/淺草橋一帶有超大公寓房適合一家人。到多慶屋以徒步＋一段地鐵為主，必要時短程計程車約 ¥1,000–1,500。",
+      options:[
+        {name:"Almont Hotel 日暮里（阿爾蒙特）", price:"雙人房一晚 ¥11,000–17,000（旺季）", status:"待決定",
+         desc:"JR 日暮里站徒步 5 分，最大亮點是大浴場＋豐盛在地食材自助早餐（Agoda 9.3、逾 1.3 萬則評價）。京成 Skyliner 直達成田僅約 40 分。",
+         pros:["大浴場可泡湯","早餐評價極高","Skyliner 直達成田最省事"],
+         cons:["離多慶屋一段（搭 JR 一站到御徒町）","以雙人房為主"],
+         map:"アルモントホテル日暮里",
+         link:"https://www.google.com/search?q=Almont+Hotel+日暮里+評價+2026&hl=zh-TW",
+         official:"https://www.almont.jp/nippori/"},
+        {name:"MIMARU 東京 上野 EAST", price:"公寓房整間一晚 ¥35,000–55,000（4–6 人）", status:"待決定",
+         desc:"少見的「連通公寓」，最大可達 80㎡，4–10 人都住得下，附完整廚房——兩個家庭或三代同堂出遊首選。位於新御徒町站（大江戶線）旁，距御徒町徒步約 10 分。",
+         pros:["空間超大、可連通","附廚房、客廳","適合多人／大行李攤開"],
+         cons:["整間計價，人少不划算","距多慶屋徒步約 10 分或一站地鐵"],
+         map:"ミマル東京上野イースト",
+         link:"https://www.google.com/search?q=MIMARU+東京+上野EAST+評價+2026&hl=zh-TW",
+         official:"https://mimaruhotels.com/"}
+      ]
+    },
+    {
+      topic:"10/24 ＆ 10/26 住宿 ③：淺草（特色備選・靠地鐵或計程車往返）",
+      note:"你特別點名想列入的淺草——雷門、晴空塔夜景與在地氛圍最強，且淺草站可一班車直達成田／羽田。代價是離多慶屋／御徒町較遠：銀座線「淺草→上野廣小路」約 8 分，或計程車約 10–15 分 ¥1,500–2,000（當行李多時的備案）。",
+      options:[
+        {name:"THE GATE HOTEL 雷門 by HULIC", price:"正 4 人房（36㎡＋小客廳）一晚 ¥30,000–45,000", status:"待決定",
+         desc:"位置王者，斜對面就是雷門大燈籠，頂樓酒吧晴空塔夜景一流。一樓有 Ozeki 超市好補貨，淺草站可免換車直達成田／羽田。有四張單人床的正 4 人房附小客廳。",
+         pros:["雷門正對面、景觀無敵","正 4 人房＋小客廳","機場直達一班車"],
+         cons:["離多慶屋最遠（需地鐵或計程車）","旺季房價偏高"],
+         map:"ザ・ゲートホテル雷門 by HULIC",
+         link:"https://www.google.com/search?q=THE+GATE+HOTEL+雷門+評價+2026&hl=zh-TW"},
+        {name:"淺草東武飯店（Asakusa Tobu Hotel）", price:"4 人房一晚 ¥20,000–32,000", status:"待決定",
+         desc:"淺草站徒步 1 分，CP 值高、有晴空塔景觀房，機場直達。房型大小與價格的綜合性價比在淺草區數一數二。",
+         pros:["淺草站超近","晴空塔景觀＋4 人房","CP 值高、機場直達"],
+         cons:["離多慶屋遠（需地鐵或計程車）","熱門景觀房要早訂"],
+         map:"浅草東武ホテル",
+         link:"https://www.google.com/search?q=淺草東武飯店+評價+2026&hl=zh-TW"}
       ]
     },
     {
       topic:"10/25 草津溫泉旅館選擇",
-      note:"建議選湯畑徒步 5 分鐘內，含一泊二食。人數 4 人需確認有 4 人間或相鄰 2 間。",
+      note:"建議選湯畑徒步 5 分鐘內、含一泊二食；4 人需確認有 4 人間或相鄰 2 間。下列依「高級老舗 → 傳統中價 → 平價 → 大型家族」鋪開，價位為旺季概估／每人，務必於官網或訂房網即時確認。",
       options:[
         {name:"ホテル一井（Ichii）", price:"一泊二食 ¥13,000–18,000／人", status:"傾向", pick:true,
-         desc:"湯畑徒步 3 分，大浴場開放時間長，評價高、性價比佳。",
+         desc:"湯畑正對面（徒步 3 分），大浴場開放時間長，評價高、性價比佳，定番穩當之選。",
          pros:["湯畑最近","大浴場寬敞","晚餐和食美味"],
          cons:["網路爆滿時需早訂","無私人露天溫泉"],
-         map:"ホテル一井 草津温泉"},
+         map:"ホテル一井 草津温泉",
+         official:"https://www.hotel-ichii.co.jp/"},
+        {name:"草津温泉 望雲（Boun）", price:"一泊二食 ¥15,000–22,000／人", status:"待決定",
+         desc:"湯畑徒步 3 分，傳統優雅，大浴場與貸切風呂可享兩種草津名湯源泉，提供免費接駁，CP 值高。",
+         pros:["兩種源泉＋貸切風呂","氛圍典雅","BT 免費接駁"],
+         cons:["人氣高需早訂","旺季價格中上"],
+         map:"草津温泉 望雲",
+         link:"https://www.google.com/search?q=草津温泉+望雲+評價+2026&hl=zh-TW"},
+        {name:"草津温泉 奈良屋（Narayaya）", price:"一泊二食 ¥20,000–30,000／人", status:"待決定",
+         desc:"溫泉街中心的老舗高級旅館，湯畑徒步 5 分，料理與服務口碑頂級，想犒賞自己的一晚首選。提供 BT 免費接駁。",
+         pros:["老舗高級體驗","料理評價最高一檔","湯畑徒步圈＋接駁"],
+         cons:["價格最高","旺季最早被訂滿"],
+         map:"草津温泉 奈良屋",
+         link:"https://www.google.com/search?q=草津温泉+奈良屋+評價+2026&hl=zh-TW"},
         {name:"草津温泉 ホテルKirishima（桐島）", price:"一泊二食 ¥11,000–15,000／人", status:"待決定",
-         desc:"湯畑徒步 5 分，性價比高，溫泉泉質直接引入，評價 4.0 以上。",
+         desc:"湯畑徒步 5 分，性價比高，溫泉泉質直接引入，家族對應佳（評價 4.0 以上）。",
          pros:["價格親切","溫泉直引","家族對應良好"],
          cons:["晚餐豐盛度稍遜一等","部分房間較舊"],
          map:"草津温泉 桐島旅館"},
         {name:"草津 みやこや（都屋旅館）", price:"一泊二食 ¥10,000–13,000／人", status:"待決定",
-         desc:"老字號旅館，湯畑步行 2 分，泉質強勁，家族客好評，價格平實。",
-         pros:["湯畑最近","泉質強","傳統旅館體驗"],
+         desc:"老字號平價旅館，湯畑步行 2 分，泉質強勁，家族客好評，預算優先的選擇。",
+         pros:["湯畑最近","泉質強、價格平實","傳統旅館體驗"],
          cons:["設施略舊","房間偏小"],
-         map:"草津温泉 都屋旅館"}
+         map:"草津温泉 都屋旅館"},
+        {name:"草津温泉 ホテル櫻井（Sakurai）", price:"一泊二食 ¥13,000–20,000／人", status:"待決定",
+         desc:"大型溫泉飯店（湯畑徒步約 9 分，有接駁），自助餐＋會席兩種餐型、露天風呂與三種源泉，每晚有湯もみ表演，最適合家族與長輩同行。",
+         pros:["大浴場＋露天＋三源泉","自助餐選擇多、長輩友善","館內有湯もみ表演"],
+         cons:["離湯畑稍遠（靠接駁）","大型旅館較不私密"],
+         map:"草津温泉 ホテル櫻井",
+         official:"https://www.hotel-sakurai.co.jp/"}
       ]
     }
   ]
@@ -973,10 +1068,13 @@ TRIP.days.forEach((d,i)=>{
 const divider=document.createElement("div");
 divider.className="divider";
 navBar.appendChild(divider);
-const extraTabs=[{label:"💰 預算"},{label:"🍴 美食"}];
-/* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁 */
+const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
+/* 景點推薦分頁：自動彙整各日 type:spot；沒有景點時不顯示 */
+const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
+if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
+/* 只有當 TRIP.pending 有內容時，才顯示「飯店推薦」分頁（草稿期候選，定案清空後自動隱藏） */
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
-if(hasPending)extraTabs.push({label:"🤔 待定"});
+if(hasPending)extraTabs.push({label:"🏨 飯店推薦"});
 extraTabs.forEach((p,k)=>{
   const idx=TRIP.days.length+1+k;     // 總覽0 + N天 → 預算/美食/待定 依序接在後面
   const btn=document.createElement("button");
@@ -985,7 +1083,8 @@ extraTabs.forEach((p,k)=>{
   btn.onclick=()=>show(idx);
   navBar.appendChild(btn);
 });
-/* 沒有待定內容時，把該分頁從 DOM 移除，避免索引錯位 */
+/* 沒有對應內容時，把該分頁從 DOM 移除，避免索引錯位 */
+if(!hasSpots){const se=document.getElementById("spots");if(se)se.remove();}
 if(!hasPending){const pe=document.getElementById("pending");if(pe)pe.remove();}
 
 /* 建立總覽卡片 */
@@ -1048,6 +1147,27 @@ TRIP.food.forEach(f=>{
     <a target="_blank" rel="noopener" href="${gmap(f.name)}">📍 在地圖查看 →</a>`;
   foodGrid.appendChild(el);
 });
+
+/* —— 景點推薦：自動彙整各日 type:spot 行程點 —— */
+if(hasSpots){
+  const spotGrid=document.getElementById("spotGrid");
+  TRIP.days.forEach(d=>{
+    (d.items||[]).forEach(it=>{
+      if(it.type!=="spot")return;
+      const meta=[];
+      if(it.duration)meta.push(`⏱️ ${it.duration}`);
+      if(it.best)meta.push(`✨ ${it.best}`);
+      const el=document.createElement("div");
+      el.className="food";
+      el.innerHTML=`<span class="badge b-spot">${d.tab}${it.badge?"・"+it.badge:""}</span>
+        <h4>${it.title}</h4>
+        ${meta.length?`<p style="color:var(--ink-soft);font-size:12.5px;margin:4px 0 6px">${meta.join("　")}</p>`:""}
+        ${it.desc?`<p>${it.desc}</p>`:""}
+        <a target="_blank" rel="noopener" href="${gmap(it.map||it.title)}">📍 在地圖查看 →</a>`;
+      spotGrid.appendChild(el);
+    });
+  });
+}
 
 /* —— 待定／候選比較 —— */
 if(hasPending){
