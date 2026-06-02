@@ -325,6 +325,11 @@ body{
 .cand-cons li::before{content:"－ ";color:var(--vermilion);font-weight:700}
 .cand-pros li,.cand-cons li{color:var(--ink-soft)}
 .cand .btn-map,.cand .btn-link{margin-top:10px;margin-right:6px}
+.price-note{background:#eef3f8;border:1px solid var(--line);border-radius:10px;padding:11px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:18px}
+.price-note b{color:var(--ink)}
+.price-compare{margin-top:11px;font-size:12px;color:var(--ink-soft)}
+.price-compare a{color:var(--indigo);text-decoration:none;font-weight:600}
+.price-compare a:hover{text-decoration:underline}
 
 /* ---------- 工具盒 / 頁尾 ---------- */
 .tools{background:var(--ink);color:var(--paper);border-radius:16px;padding:26px 24px;margin:10px 0 30px}
@@ -1173,6 +1178,12 @@ if(hasSpots){
 if(hasPending){
   const pw=document.getElementById("pendingWrap");
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
+  /* 房價查詢日（B）：每次重新查價後，只改這一個日期 */
+  const PRICE_CHECKED="2026-06-02";
+  /* 訂房網一鍵比價（A）：走 Google 站內導向，連結永不失效、離線僅不載入 */
+  const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
+  const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
+  pw.innerHTML=`<div class="price-note">💰 房價查詢日：<b>${PRICE_CHECKED}</b>　·　下列價格為當時旺季概估，實際房價請點各家「比價」看即時報價（記得選 <b>10/24・10/26</b> 上野／<b>10/25</b> 草津、<b>4 人</b>）。需要我重新查一輪刷新數字，喊一聲即可。</div>`;
   TRIP.pending.forEach(group=>{
     const block=document.createElement("div");
     block.className="pgroup";
@@ -1193,6 +1204,7 @@ if(hasPending){
         ${o.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(o.map)}">📍 地圖</a>`:""}
         ${o.link?`<a class="btn-search" target="_blank" rel="noopener" href="${o.link}">🔍 最新資訊</a>`:""}
         ${o.official?`<a class="btn-official" target="_blank" rel="noopener" href="${o.official}">🏛️ 官網</a>`:""}
+        <div class="price-compare">💰 比價：${BOOK_SITES.map(s=>`<a target="_blank" rel="noopener" href="${gsearch(o.name+" "+s[1])}">${s[0]}</a>`).join("　·　")}</div>
       </div>`;
     });
     h+=`</div>`;
