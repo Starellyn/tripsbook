@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>上野・草津・輕井澤 四日旅遊行程書</title>
+<title>旅遊行程書</title>
 <style>
 /* ============================================================
    ★ 設計：和風旅遊誌 (washi paper editorial)
@@ -152,7 +152,7 @@ body{
 .nav .divider{flex:0 0 auto;width:1px;background:var(--line);margin:2px 4px}
 
 /* ---------- 每日區塊 ---------- */
-.day{display:none;animation:fade .3s ease both;will-change:opacity,transform}
+.day{display:none;animation:fade .4s ease both}
 .day.show{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .day-head{
@@ -232,6 +232,8 @@ body{
 }
 .btn-map{background:var(--vermilion);color:#fff}
 .btn-map:hover{background:var(--vermilion-d)}
+.btn-link{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn-link:hover{background:var(--indigo);color:#fff}
 .btn-search{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
 .btn-search:hover{background:var(--indigo);color:#fff}
 .btn-official{background:transparent;color:var(--matcha);border:1.5px solid var(--matcha)}
@@ -387,8 +389,8 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <div class="meta" id="cvMeta"></div>
   <p class="story" id="cvStory"></p>
   <button class="share-btn" id="shareBtn">🔗 複製連結分享</button>
-  <!-- 姊妹書跳轉：這趟 10/20–10/23 的上半段在北海道篇 -->
-  <a class="sister-book" href="../hokkaido-202610/">← 這趟上半段　北海道・札幌小樽四日</a>
+  <!-- 姊妹書跳轉：這趟 10/24 起的下半段在東京篇 -->
+  <a class="sister-book" href="../tokyo-202610/">這趟下半段　東京・草津四日 →</a>
   <div class="rule"></div>
 </header>
 
@@ -421,71 +423,71 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 <!-- ============ 預算（分頁） ============ -->
 <section class="wrap day" id="budget" style="padding-top:30px">
   <h2 class="section-title">旅費預算</h2>
-  <p class="section-sub">以每人計　·　匯率約 ¥1 ≈ NT$0.21　·　4 人同行版本（含包車機場接送分攤）</p>
+  <p class="section-sub">以每人計　·　匯率約 ¥1 ≈ NT$0.21　·　4 人同行版本（回程機票記於東京篇）</p>
 
   <!-- ① 固定支出（整趟一次性） -->
   <div class="bud-sub">① 固定支出　<small>整趟一次性、不隨天數變動</small></div>
   <table class="btable">
     <thead><tr><th>項目</th><th>說明</th><th>每人估算（4人均攤）</th></tr></thead>
     <tbody>
-      <tr><td>✈️ 機票</td><td>台北 ⇄ 東京（成田／羽田），10 月下旬來回，經濟艙</td><td>NT$11,000–18,000</td></tr>
-      <tr><td>🏨 住宿</td><td>上野・御徒町 3 晚（10/24・10/26 同飯店）＋ 草津旅館一泊二食 1 晚；4 人分 4 人房或 2 間雙人房</td><td>NT$8,400–14,000</td></tr>
-      <tr><td>🚌 高速巴士</td><td>上野 → 草津：JR 巴士關東 ¥3,200–3,600／人</td><td>NT$672–756</td></tr>
-      <tr><td>🚄 新幹線</td><td>輕井澤 → 上野：北陸新幹線指定席 ¥6,130／人</td><td>NT$1,287</td></tr>
-      <tr><td>🚗 包車機場接送</td><td>10/27 上野 → 成田：Jumbo Taxi 全車 ¥25,000–35,000，4 人均攤</td><td>NT$1,313–1,838</td></tr>
-      <tr><td>🎆 花火</td><td>東京灣大華火祭（免費觀覽區）；付費席另計 ¥2,000–5,000</td><td>NT$0–1,050</td></tr>
-      <tr><td>🚇 東京市區 IC 卡</td><td>上野⇄晴海、地鐵雜費，4 天估算</td><td>NT$630–840</td></tr>
-      <tr><td>🎟️ 草津體驗門票</td><td>西之河原露天風呂 ¥600 ＋ 熱の湯 ¥600</td><td>NT$252</td></tr>
-      <tr class="total"><td colspan="2">固定支出小計</td><td>NT$23,500–37,000</td></tr>
+      <tr><td>✈️ 機票（去程）</td><td>台北桃園 → 札幌新千歲，10 月下旬單程經濟艙（回程台北段記於東京篇）</td><td>NT$5,000–9,000</td></tr>
+      <tr><td>🏨 札幌住宿</td><td>札幌站／大通一帶 2 晚（10/20・10/21）；4 人分四人房或 2 間雙人房</td><td>NT$3,000–5,000</td></tr>
+      <tr><td>⛴️ 渡輪（含船宿 1 晚）</td><td>苫小牧西港 → 大洗・さんふらわあ夕方便，含 10/22 船上住宿一晚</td><td>NT$2,600–4,200</td></tr>
+      <tr><td>🚄 大洗 → 東京</td><td>大洗港連絡巴士 → 水戶站 → JR 特急ひたち → 上野</td><td>NT$1,000–1,400</td></tr>
+      <tr><td>🚌 札幌 → 苫小牧西港</td><td>高速巴士直達 約 1h50m ¥1,310／人</td><td>NT$275</td></tr>
+      <tr><td>🚆 機場・小樽往返</td><td>新千歲→札幌 ¥1,150；札幌⇄小樽 快速エアポート 來回 ¥1,500</td><td>NT$555</td></tr>
+      <tr><td>🚠 纜車門票</td><td>小樽天狗山 ¥1,600＋札幌藻岩山 ¥2,100（往復）</td><td>NT$780</td></tr>
+      <tr><td>🚇 札幌市區 IC 卡</td><td>地鐵・市電・雜支，2 整天估算</td><td>NT$400–600</td></tr>
+      <tr class="total"><td colspan="2">固定支出小計</td><td>NT$13,600–22,200</td></tr>
     </tbody>
   </table>
 
   <!-- ② 每日浮動（三版本只差在這裡） -->
-  <div class="bud-sub" style="margin-top:30px">② 每日浮動　<small>餐飲＋購物＋零用，三種版本只差在這裡（草津旅館餐已含於住宿，Day 2 浮動較低）</small></div>
+  <div class="bud-sub" style="margin-top:30px">② 每日浮動　<small>餐飲＋購物＋零用，三種版本只差在這裡（10/22 晚餐在船上、Day 4 多在移動，浮動較低）</small></div>
   <div class="budget-grid">
     <div class="tier">
       <div class="t-name">省錢</div>
       <div class="t-num">NT$1,200</div><div class="t-unit">／ 每日</div>
-      <div class="t-desc">超商早餐・牛丼定食・多慶屋克制・不買付費席<br><b style="color:var(--ink)">× 4 天 ≈ NT$4,800</b></div>
+      <div class="t-desc">超商早餐・迴轉壽司・拉麵・纜車挑一座<br><b style="color:var(--ink)">× 4 天 ≈ NT$4,800</b></div>
     </div>
     <div class="tier mid">
       <div class="t-name">舒適</div>
-      <div class="t-num">NT$2,500</div><div class="t-unit">／ 每日</div>
-      <div class="t-desc">一餐吃好・多慶屋適度掃・伴手禮・花火付費席<br><b style="color:var(--ink)">× 4 天 ≈ NT$10,000</b></div>
+      <div class="t-num">NT$2,600</div><div class="t-unit">／ 每日</div>
+      <div class="t-desc">一餐吃好・小樽名店壽司・伴手禮・渡輪升等個室<br><b style="color:var(--ink)">× 4 天 ≈ NT$10,400</b></div>
     </div>
     <div class="tier">
       <div class="t-name">享受</div>
       <div class="t-num">NT$4,200</div><div class="t-unit">／ 每日</div>
-      <div class="t-desc">好食廳每天一家・大方掃多慶屋・輕井澤名牌 Outlet<br><b style="color:var(--ink)">× 4 天 ≈ NT$16,800</b></div>
+      <div class="t-desc">螃蟹會席・成吉思汗・小樽硝子工藝・渡輪套房<br><b style="color:var(--ink)">× 4 天 ≈ NT$16,800</b></div>
     </div>
   </div>
 
   <!-- ③ 全程總計 = 固定 ＋ 每日 × 天數 -->
   <div class="bud-sub" style="margin-top:30px">③ 全程總計　<small>固定支出 ＋ 每日浮動 × 4 天（每人，4人同行版）</small></div>
   <div class="total-strip">
-    <div><span>省錢版</span><b>NT$28,000–42,000</b></div>
-    <div class="hot"><span>舒適版</span><b>NT$33,500–47,000</b></div>
-    <div><span>享受版</span><b>NT$40,000–54,000</b></div>
+    <div><span>省錢版</span><b>NT$18,000–27,000</b></div>
+    <div class="hot"><span>舒適版</span><b>NT$24,000–33,000</b></div>
+    <div><span>享受版</span><b>NT$30,000–39,000</b></div>
   </div>
 
   <div class="note" style="margin-top:22px">
-    <b style="color:var(--vermilion-d)">最容易超支：</b>① 多慶屋——「反正有退稅」心理容易失控，建議出發前設定上限預算。② 輕井澤 Outlet——名牌折扣誘人，尤其是 Coach、Gucci 幾乎比台灣便宜 40%，很容易超買。③ 草津旅館如有升房也會加不少。<br>
-    <b style="color:var(--vermilion-d)">省錢替代：</b>花火付費席可跳過（免費區也很精彩）；輕井澤 Outlet 提前列出想買清單，不清單不入手；機場接送若只有 2 人改搭 Skyliner（¥2,570）省一大截。
+    <b style="color:var(--vermilion-d)">最容易超支：</b>① 渡輪艙等——從相部屋升到私人個室／套房，一人可多 ¥3,000–8,000。② 螃蟹・會席料理——札幌螃蟹專門店一餐輕鬆破 ¥6,000。③ 小樽硝子・北菓樓伴手禮，很容易越買越多。<br>
+    <b style="color:var(--vermilion-d)">省錢替代：</b>渡輪選ツーリスト（相部屋）已含大浴場與舒適臥鋪；螃蟹改吃二条市場海鮮丼或迴轉壽司；纜車只挑「小樽天狗山」或「札幌藻岩山」一座登。
   </div>
 
   <div class="tools" style="margin-top:24px">
-    <h3>📍 我的地圖 ＆ 飯店</h3>
-    <p>討論定案後，把所有景點存進 Google「我的地圖」，現場找路最方便。把分享連結貼到下方按鈕的 href。</p>
+    <h3>📍 我的地圖 ＆ 住宿</h3>
+    <p>討論定案後，把所有景點存進 Google「我的地圖」（對應 Drive 的「11410-北海道旅遊資料」資料夾），現場找路最方便。把分享連結貼到下方按鈕的 href。</p>
     <a class="big-btn" href="https://www.google.com/maps/d/" target="_blank" rel="noopener">🗺️ 開啟我的地圖（替換成你的連結）</a>
     <a class="big-btn tool-locked" data-href="../_kakeibo/" style="margin-left:8px;background:var(--matcha)">🧾 旅遊記帳</a>
     <a class="big-btn tool-locked" data-href="../_warikan/" style="margin-left:8px;background:var(--indigo)">👥 多人分帳</a>
     <a class="big-btn tool-locked" data-href="../_nikki/" style="margin-left:8px;background:var(--gold)">📔 旅途日記</a>
     <div class="phase-hint" id="phaseHint"></div>
     <div class="hotel-box">
-      <div class="hb">🏨 上野住宿（10/24 & 10/26）<br><b>御徒町駅徒步圈</b>（多慶屋旁・往機場便利）</div>
-      <div class="hb">♨️ 草津住宿（10/25）<br><b>湯畑徒步 5 分以內旅館</b>（一泊二食含）</div>
-      <div class="hb">🚌 上野→草津<br><b>JR 巴士關東・上州ゆめぐり号</b>｜07:25 出發 / ¥3,200–3,600</div>
-      <div class="hb">🚄 輕井澤→上野<br><b>北陸新幹線 あさま／はくたか</b>｜約 60 分 / ¥6,130+</div>
+      <div class="hb">🏨 札幌住宿（10/20・10/21）<br><b>札幌站／大通一帶</b>（往小樽・機場・苫小牧皆順）</div>
+      <div class="hb">⛴️ 10/22 船宿<br><b>さんふらわあ 夕方便</b>｜苫小牧西港 18:45 → 大洗 翌 14:00</div>
+      <div class="hb">🚌 札幌→苫小牧西港<br><b>高速巴士直達</b>｜約 1h50m / ¥1,310</div>
+      <div class="hb">🏨 10/23 東京住宿<br><b>上野一帶</b>（建議與東京篇同一間，連住不搬行李）</div>
     </div>
   </div>
 
@@ -494,7 +496,7 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
     <h3>🧳 打包清單 <small id="packCount"></small></h3>
     <div class="pack-grid" id="packGrid"></div>
     <div class="pack-add">
-      <input type="text" id="packInput" placeholder="新增項目（例：暖暖包、溫泉毛巾）">
+      <input type="text" id="packInput" placeholder="新增項目（例：暖暖包、厚外套、暈船藥）">
       <button id="packAddBtn">＋</button>
     </div>
     <div class="pack-note">勾選狀態存在這支裝置的瀏覽器，出發前逐項打勾。</div>
@@ -515,7 +517,7 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <div class="food-grid" id="spotGrid"></div>
 </section>
 
-<!-- ============ 待定／候選比較（分頁。定案後刪掉資料，此分頁自動隱藏） ============ -->
+<!-- ============ 飯店推薦（分頁。定案後刪掉資料，此分頁自動隱藏） ============ -->
 <section class="wrap day" id="pending" style="padding-top:30px">
   <h2 class="section-title">飯店推薦</h2>
   <p class="section-sub">各區飯店候選並列比較　·　點地圖看位置；定案後再訂房，其餘可刪</p>
@@ -535,426 +537,398 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 const TRIP = {
   /* ===== 旅程基本資料 ===== */
   meta:{
-    stamp:"上野",
+    stamp:"札幌",
     phase:"draft",
-    vlabel:"紅葉・温泉・花火の旅",
-    titleMain:"上野・草津・輕井澤", titleAccent:"四日",
+    vlabel:"紅葉・船旅の北国",
+    titleMain:"札幌・小樽", titleAccent:"四日",
     titleTail:"旅遊行程書",
-    sub:"UENO · KUSATSU · KARUIZAWA · AUTUMN 2026",
-    departDate:"2026-10-24",
-    story:"從上野的人情市場出發，帶著滿袋多慶屋戰利品，搭上高速巴士穿越關東山嶽直奔草津。在硫磺白煙裡泡到指尖發皺，隔日走進輕井澤金黃落葉松林道，再逛 Outlet 掃最後一波。最後夜幕落下前，搭新幹線趕回上野，迎接 11 年難得一見的東京灣大華火祭——滿足感三倍加。",
-    chips:["📅 10/24 (六) – 10/27 (二)","🌙 3 晚 4 天","🎆 東京灣大華火祭 10/24","♨️ 草津溫泉 1 晚","🍂 輕井澤紅葉 10/26"],
+    sub:"SAPPORO · OTARU · AUTUMN FERRY 2026",
+    departDate:"2026-10-20",
+    story:"秋意正濃時降落新千歲，先在札幌的銀杏與楓紅裡散步、登藻岩山看萬家燈火。隔日奔小樽，天狗山俯瞰日本海與紅葉、運河旁的石造倉庫泛著昔日光澤。最後一個白天逛完札幌，傍晚從苫小牧搭上太平洋渡輪——在船上泡個大浴場、睡一覺，醒來已是茨城大洗，轉個車就接上東京的下半段旅程。",
+    chips:["📅 10/20 (二) – 10/23 (五)","🌙 3 晚 4 天（含船宿 1 晚）","🍁 札幌・小樽紅葉","⛴️ 苫小牧→大洗 夕方便","✈️ 台北直飛新千歲","➡️ 接續東京四日"],
     footStats:[
-      {label:"全程", value:"3 晚 4 天"},
-      {label:"亮點", value:"花火・溫泉・紅葉・購物一次收"},
-      {label:"舒適版總預算", value:"約 NT$45,000–60,000"}
+      {label:"全程", value:"3 晚 4 天（含船宿）"},
+      {label:"亮點", value:"紅葉・運河・太平洋船旅"},
+      {label:"舒適版總預算", value:"約 NT$24,000–33,000"}
     ],
-    footer:"硫磺泉配楓紅，秋日上野剛剛好 🍁"
+    footer:"楓紅看遍，搭著夜航的渡輪駛向東京 ⛴️🍁"
   },
 
-  /* ===== 人數設定 ===== */
+  /* ===== 人數設定 =====
+     北海道段以 JR＋高速巴士為主，包車非必要；charterTotal 填 0，卡片顯示 NT$0 */
   setup:{
     default:4,
     options:[
       {people:4, label:"4 人",
-       charterTotal:10000,
-       car:"包車到機場（最終日）", carNote:"4 人＋行李，指定大車較舒適",
+       charterTotal:0,
+       car:"以 JR＋高速巴士為主", carNote:"札幌→苫小牧西港 高速巴士 ¥1,310／人最划算；行李多可改 Jumbo Taxi 比較",
        luggage:"約 4 件大行李",
-       room:"1 間四人房（¥6,000–8,000）或 2 間雙人房（¥3,000–4,000／間）", roomEach:8400,
-       roomNote:"上野 3 晚（含 10/24 & 10/26 同一飯店），草津 1 晚"},
+       room:"札幌 1 間四人房，或 2 間雙人房", roomEach:4500,
+       roomNote:"札幌 2 晚（10/20・10/21）＋渡輪船宿 1 晚（10/22 船上）"},
       {people:2, label:"2 人",
        charterTotal:0,
-       car:"機場接送包車（最終日）", carNote:"2 人可用一般 Taxi 或 Uber 代替",
+       car:"以 JR＋高速巴士為主", carNote:"全段大眾運輸即可，行李多時短程叫計程車補位",
        luggage:"約 2 件大行李",
-       room:"2 間雙人房（¥3,000–4,000／間）或 1 間四人房（¥6,000–8,000）", roomEach:10500,
-       roomNote:"上野 3 晚（含花火日），草津 1 晚；依房型選擇"}
+       room:"札幌 1 間雙人房", roomEach:5500,
+       roomNote:"札幌 2 晚＋渡輪船宿 1 晚（10/22 船上）"}
     ]
   },
 
   days:[
-    /* ── Day 1：10/24 上野採購日 ＋ 花火 ── */
+    /* ── Day 1：10/20 台北→札幌・市區紅葉與夜景 ── */
     {
-      tab:"Day 1", num:"DAY ONE", title:"上野採購日・東京灣大華火祭 🎆",
-      date:"10/24 (六)",
-      theme:"飯店 → 多慶屋掃貨 → 阿美橫丁 → 晴海 花火",
-      area:"上野・御徒町 → 晴海", cost:"NT$2,000–4,500", walk:"先逛後走，花火會場步行多",
-      dayMap:"多慶屋 御徒町",
+      tab:"Day 1", num:"DAY ONE", title:"台北飛札幌・楓紅與夜景 🍁",
+      date:"10/20 (二)",
+      theme:"桃園 →【直飛 ~4h】→ 新千歲 → 札幌（中島公園・藻岩山夜景）",
+      area:"札幌市區", cost:"NT$2,000–4,500", walk:"抵達日，輕鬆為主",
+      dayMap:"中島公園 札幌",
       items:[
-        {time:"10:00", type:"hotel", badge:"入住", title:"上野・御徒町一帶飯店 Check-in",
-         desc:"先辦理入住或寄存行李。建議選御徒町站徒步 5 分鐘以內飯店，多慶屋採購最順。周六記得提早確認是否能早 Check-in。",
-         note:"顧問提醒：10 月底週六是花火前夕旺季，同區房源提早被訂光，不確定房源請盡快敲定！詳見「待定」分頁。",
-         map:"御徒町駅"},
+        {time:"出發", type:"move", badge:"航班", title:"台北桃園 → 札幌新千歲（暫定酷航）",
+         desc:"台北直飛新千歲約 3.5–4 小時。台北飛這條線的航空公司有酷航、虎航、星宇、長榮、華航等，你暫定酷航；確定航班後把實際起飛／抵達時間回填，整日時刻再依此微調。",
+         transit:"桃園(TPE) → 新千歲(CTS)｜直飛約 3.5–4 小時（日本比台灣快 1 小時）",
+         note:"此表以「約 14:30 抵達新千歲」推算。若搭午前抵達的早班，可在札幌多加一個白天景點（如北海道大學銀杏並木）；若是紅眼／傍晚才到，就把中島公園與藻岩山順延，先吃飯休息。航班、行李規定請以官網為準。",
+         link:"https://www.google.com/search?q=台北+札幌+新千歲+直飛+航班+2026&hl=zh-TW",
+         map:"桃園國際機場第一航廈"},
 
-        {time:"10:30", type:"shop", badge:"購物", title:"多慶屋（TAKEYA）御徒町本店",
-         desc:"上野御徒町地標折扣百貨，紫色外觀好認。藥妝、食品、雜貨、家電各棟分開——建議先整棟巡一圈比價，再集中下手。退稅統一在各棟服務台辦，記得帶護照。<br>📦 必掃：護膚藥妝（HABA、DHC）、零食（嬰兒星球、白色戀人）、廚房雜貨、玩具。",
-         duration:"2.5–3 小時", best:"平日傍晚最不擠，週六早上相對好逛",
-         note:"顧問提醒：多慶屋分本館・アネックス・スポーツ等多棟，建議從食品館逛起；退稅滿 ¥5,500 起，記得護照一起帶。",
-         link:"https://www.google.com/search?q=多慶屋+御徒町+攻略+2026&hl=zh-TW",
-         official:"https://stores.takeya.co.jp/",
-         map:"多慶屋 御徒町"},
+        {time:"14:30", type:"move", badge:"交通", title:"新千歲機場 → 札幌市區",
+         desc:"出關、領行李後直奔市區。最快是 JR 快速エアポート，每 15 分一班、直達札幌站；想省一點可搭機場聯絡巴士到大通／薄野。",
+         transit:"JR 快速エアポート 新千歲空港 → 札幌 約 37 分｜¥1,150（指定席加 ¥840 更舒適）",
+         note:"買一張 Welcome Suica／Kitaca 或用手機 Suica，整趟札幌地鐵、市電、便利商店都能嗶，省去買票時間。",
+         map:"新千歳空港駅"},
 
-        {time:"13:00", type:"food", badge:"午餐", title:"上野・松屋 或 吉野家（御徒町周邊）",
-         desc:"掃貨中場休息，御徒町周邊牛丼、拉麵選擇多，¥500–900 快速補血。若想吃好一點可走進阿美橫丁找海鮮丼定食，約 ¥1,200–1,800。",
-         duration:"30–45 分", map:"御徒町駅 周辺"},
+        {time:"15:30", type:"hotel", badge:"寄行李", title:"札幌飯店 Check-in／寄放行李",
+         desc:"先到飯店放行李、輕裝出門。建議住札幌站或大通一帶，往小樽、機場、苫小牧三個方向都最順。實際飯店候選見「飯店推薦」分頁。",
+         map:"札幌駅"},
 
-        {time:"14:00", type:"shop", badge:"商店街", title:"阿美橫丁（アメ横）",
-         desc:"從御徒町到上野站之間的戶外市場街，藥妝、乾貨零食、生鮮、平價服飾。邊走邊吃最對味，生牡蠣、海老仙貝攤販必試。比多慶屋更有市場氣息。",
-         duration:"60–90 分", best:"傍晚人氣最旺，週末熱鬧",
-         link:"https://www.google.com/search?q=阿美橫丁+上野+必吃+攻略+2026&hl=zh-TW",
-         map:"アメヤ横丁"},
+        {time:"16:00", type:"spot", badge:"賞楓", title:"中島公園・黃昏紅葉散策",
+         desc:"地鐵南北線「中島公園」站一出來就是，札幌市中心最方便的賞楓名所。菖蒲池倒映楓紅、日本庭園與銀杏並木層次豐富，10 月下旬正逐步進入見頃。黃昏柔光下散步、拍倒影最舒服。",
+         duration:"50–70 分", best:"日落前 1 小時光線最美",
+         note:"你問的「札幌夜楓」——中島公園的『紅葉ライトアップ』每年約 10/24 才開跑（2025 年為 10/24–11/3、17:30–21:00），你 10/22 就上船離開，正式點燈恰好還沒開始。所以夜楓今年難以特地安排；白天到黃昏的中島公園楓景仍很值得，夜晚改用下一站的藻岩山夜景補上『秋夜節目』。當年度點燈日期請再查證。",
+         link:"https://www.google.com/search?q=中島公園+紅葉+ライトアップ+2026+期間&hl=zh-TW",
+         official:"https://www.sapporo.travel/",
+         map:"中島公園 札幌"},
 
-        {time:"15:30", type:"hotel", badge:"行李", title:"回飯店換衣 ＆ 整理戰利品",
-         desc:"花火現場人多又溫差大（10 月晚間東京約 14–18°C），建議把採購品放回飯店、換上保暖外套再出發。手機記得充飽電、帶行動電源。",
-         duration:"45 分", map:"御徒町駅"},
+        {time:"17:30", type:"spot", badge:"夜景", title:"藻岩山ロープウェイ・札幌夜景",
+         desc:"標高 531m 的藻岩山是札幌夜景代表，纜車＋森林小車（もーりすカー）直上山頂展望台，市區燈海與石狩平野盡收眼底，獲選「日本新三大夜景」。秋夜空氣清澈，視野特別通透，正好替代看不到的夜楓。",
+         duration:"90 分（含上下纜車）", best:"日落後 30 分藍調時刻最美",
+         note:"山頂溫度比市區低 5–8°C，務必帶厚外套。纜車往復約 ¥2,100，建議用官網或現場確認末班下山時間，別待太晚錯過。",
+         link:"https://www.google.com/search?q=藻岩山+ロープウェイ+夜景+營業時間+2026&hl=zh-TW",
+         official:"https://mt-moiwa.jp/",
+         map:"藻岩山ロープウェイ もいわ山麓駅"},
 
-        {time:"16:30", type:"move", badge:"交通", title:"出發前往晴海・花火會場",
-         desc:"花火 19:00 開始，但人潮從下午就湧入，16:30–17:00 出發最穩。大江戸線「勝どき」是最近站，步行會場約 15 分。",
-         transit:"上野 →（東京Metro日比谷線）→ 築地 →（徒步）→ 勝どき站｜或 上野→ 月島（大江戸線）約 25 分",
-         note:"顧問提醒：花火當天大江戸線「勝どき」會極度壅塞，建議提早 2–3 小時入場，先吃飯再進場，並事先查好免費觀覽區位置。荒天中止不順延。",
-         map:"勝どき駅"},
+        {time:"19:30", type:"food", badge:"晚餐", title:"薄野（すすきの）・成吉思汗 or 味噌拉麵",
+         desc:"下山後到薄野覓食。北海道烤羊肉「成吉思汗」（だるま、ふじ田）香氣逼人；想暖身就鑽進「元祖さっぽろラーメン横丁」吃一碗濃郁味噌拉麵。兩人約 ¥3,000–5,000。",
+         duration:"60–80 分",
+         link:"https://www.google.com/search?q=薄野+成吉思汗+味噌拉麵+推薦+2026&hl=zh-TW",
+         map:"さっぽろラーメン横丁"},
 
-        {time:"17:30", type:"food", badge:"晚餐", title:"晴海周邊 or 月島 文字燒",
-         desc:"月島是東京最有名的もんじゃ焼（文字燒）發源地，就在勝どき隔壁站，可先吃飽再走去會場。¥2,000–3,000／人含一杯飲料。",
+        {time:"住宿", type:"hotel", badge:"住宿", title:"札幌站／大通一帶飯店（連住 2 晚）",
+         desc:"10/20、10/21 同一間，不搬行李。隔天往小樽、後天往苫小牧搭船都從這裡出發最順。",
+         map:"札幌駅"}
+      ]
+    },
+
+    /* ── Day 2：10/21 小樽紅葉一日 ── */
+    {
+      tab:"Day 2", num:"DAY TWO", title:"小樽紅葉・運河與日本海 ⛰️",
+      date:"10/21 (三)",
+      theme:"札幌 →【JR 32 分】→ 小樽（天狗山・運河・堺町通り）→ 札幌",
+      area:"小樽", cost:"NT$2,500–5,000", walk:"纜車＋散策，緩步一日",
+      dayMap:"小樽運河",
+      items:[
+        {time:"08:30", type:"move", badge:"交通", title:"札幌 → 小樽（JR 快速エアポート）",
+         desc:"早點出發避開人潮。快速エアポート一路沿石狩灣行駛，銭函到朝里一段海景很美，可坐右側（往小樽方向）看海。",
+         transit:"JR 快速エアポート 札幌 → 小樽 約 32 分｜¥750｜班次密集約 15 分一班",
+         map:"札幌駅",
+         note:"先在札幌站把當晚回程不需要的東西留飯店，輕裝去小樽最輕鬆。"},
+
+        {time:"09:30", type:"spot", badge:"賞楓", title:"小樽天狗山ロープウェイ・紅葉與大全景",
+         desc:"標高 532m，纜車 4 分上山，山頂五座展望台把小樽市街、港口與日本海一次收進眼底，配上山坡紅葉氣勢十足。山頂有天狗神社與滑雪資料館，散步約 1 小時。",
+         duration:"90 分（含纜車往復）", best:"上午順光、海面清晰",
+         note:"從小樽站搭巴士到天狗山纜車山麓站約 20 分；纜車往復約 ¥1,600。山頂風大偏冷，記得保暖。紅葉見頃年年略有早晚，出發前查當年度山頂紅葉速報。",
+         link:"https://www.google.com/search?q=小樽天狗山+ロープウェイ+紅葉+2026&hl=zh-TW",
+         official:"https://tenguyama.ckk.chuo-bus.co.jp/",
+         map:"小樽天狗山ロープウェイ"},
+
+        {time:"12:00", type:"food", badge:"午餐", title:"小樽・壽司屋通り or 海鮮丼",
+         desc:"小樽是壽司之鄉，「壽司屋通り」名店林立（政壽司、おたる政寿司、伊勢鮨）。想平價就到三角市場吃現撈海鮮丼。午間套餐約 ¥2,000–4,000。",
+         duration:"60–75 分",
+         link:"https://www.google.com/search?q=小樽+壽司+推薦+政壽司+2026&hl=zh-TW",
+         note:"名店中午常排隊，建議 11:30 前或 13:30 後入場；想吃特定店家可先線上訂位。",
+         map:"小樽 寿司屋通り"},
+
+        {time:"13:30", type:"spot", badge:"散策", title:"小樽運河・石造倉庫群",
+         desc:"小樽的招牌風景。沿運河的石造倉庫改成餐廳與玻璃工房，秋日爬牆虎轉紅、運河水面映著舊倉庫，懷舊感滿點。淺草橋一帶是經典拍照點，傍晚瓦斯燈亮起更有味道。",
+         duration:"45–60 分", best:"午後或黃昏瓦斯燈時段",
+         link:"https://www.google.com/search?q=小樽運河+散策+攻略+2026&hl=zh-TW",
+         map:"小樽運河 浅草橋"},
+
+        {time:"14:30", type:"shop", badge:"購物", title:"堺町通り・北一硝子・LeTAO・北菓樓",
+         desc:"從運河往南的老街，玻璃工藝（北一硝子）、音樂盒堂、洋菓子名店全集中於此。LeTAO 雙層起司蛋糕、北菓樓泡芙與年輪蛋糕、六花亭可現吃也好買伴手禮。",
+         duration:"75–90 分",
+         link:"https://www.google.com/search?q=小樽+堺町通り+北一硝子+LeTAO+攻略+2026&hl=zh-TW",
+         map:"堺町通り 小樽"},
+
+        {time:"16:00", type:"spot", badge:"展望", title:"水天宮・小樽市街俯瞰（紅葉備案）",
+         desc:"堺町商圈徒步可達的小高地神社，境內楓樹與鳥居，可俯瞰小樽港與市街，遊客少、氛圍清幽，是黃昏收尾的隱藏點。時間有限可省略，直接多逛堺町。",
+         duration:"30 分", best:"黃昏",
+         note:"想更開闊的紅葉俯瞰可改去「旭展望台」（需走一段上坡或搭計程車），視野更廣但較費腳程；趕回程就以水天宮代替。",
+         link:"https://www.google.com/search?q=小樽+水天宮+旭展望台+紅葉+2026&hl=zh-TW",
+         map:"水天宮 小樽"},
+
+        {time:"17:30", type:"move", badge:"交通", title:"小樽 → 札幌（JR 返回）",
+         desc:"搭快速エアポート或普通列車回札幌。回到市區再吃晚餐或逛狸小路採買。",
+         transit:"JR 小樽 → 札幌 約 32–45 分｜¥750",
+         map:"小樽駅"},
+
+        {time:"19:00", type:"food", badge:"晚餐", title:"札幌・湯咖哩 or 二条市場海鮮",
+         desc:"札幌名物湯咖哩（スープカレー，GARAKU、Suage）湯頭辛香、配大塊蔬菜雞腿，秋夜暖身一流；想吃海鮮就到二条市場周邊的食堂收尾。",
          duration:"60 分",
-         link:"https://www.google.com/search?q=月島文字燒+推薦店+攻略+2026&hl=zh-TW",
-         map:"月島 もんじゃストリート"},
+         link:"https://www.google.com/search?q=札幌+湯咖哩+推薦+GARAKU+2026&hl=zh-TW",
+         map:"狸小路 札幌"},
 
-        {time:"19:00", type:"spot", badge:"花火", title:"東京灣大華火祭（晴海會場）🎆",
-         desc:"睽違 11 年復辦，10/24（六）在晴海舉行。約 1.2 萬發，以彩虹橋與東京塔為背景，秋夜空氣清晰，煙火視覺絕佳。免費觀覽區在晴海ふ頭公園周邊，付費席需提前購買。",
-         duration:"觀賞約 60–75 分 ＋ 散場 30 分", best:"提早入場卡位",
-         note:"顧問提醒：官方網站確認最新施放時間與付費席資訊，近年付費席秒殺，免費區仍可看到精彩全景。散場人潮極大，建議原地等 30 分等人潮散退再移動。",
-         link:"https://www.google.com/search?q=東京灣大華火祭+2026+觀賞攻略&hl=zh-TW",
-         official:"https://toyosu.tokyo/event/tokyowandaihanabisai-2026-info/",
-         map:"晴海ふ頭公園"},
-
-        {time:"21:00", type:"move", badge:"交通", title:"返回上野飯店",
-         desc:"花火散場後大江戸線勝どき方向人潮超多，建議往豊洲方向步行後轉有樂町線，或等 20–30 分後人少再進站。",
-         transit:"勝どき → 月島 → 飯田橋 →（JR）→ 上野　或等人潮散後搭大江戸線",
-         map:"上野駅"},
-
-        {time:"住宿", type:"hotel", badge:"住宿", title:"上野・御徒町飯店（10/26 退房同一間）",
-         desc:"10/24 住宿，10/26 回來後繼續住同一間，不必搬行李，超省事。", map:"御徒町駅"}
+        {time:"住宿", type:"hotel", badge:"住宿", title:"札幌飯店（與 Day 1 同間）",
+         desc:"回到同一間飯店，今晚把行李整理好——明天白天逛完札幌，傍晚就要拉去搭渡輪。",
+         map:"札幌駅"}
       ]
     },
 
-    /* ── Day 2：10/25 高速巴士→草津 ── */
+    /* ── Day 3：10/22 札幌賞楓＋傍晚渡輪 ── */
     {
-      tab:"Day 2", num:"DAY TWO", title:"高速巴士・草津溫泉・賞楓 ♨️",
-      date:"10/25 (日)",
-      theme:"上野 →【高速巴士 4.5h】→ 草津溫泉・湯畑 → 西之河原・旅館",
-      area:"草津温泉", cost:"NT$3,500–6,000（含一泊二食旅館）", walk:"溫泉街散策・緩步為主",
-      dayMap:"草津温泉 湯畑",
+      tab:"Day 3", num:"DAY THREE", title:"札幌賞楓・登船渡海 ⛴️",
+      date:"10/22 (四)",
+      theme:"札幌（円山・北海道神宮・大通）→【高速巴士】→ 苫小牧西港 →【夕方便】→ 海上過夜",
+      area:"札幌 → 苫小牧（船上）", cost:"NT$2,500–5,500（含船宿）", walk:"上午散策，午後移動",
+      dayMap:"北海道神宮 円山公園",
       items:[
-        {time:"07:00", type:"hotel", badge:"退房", title:"飯店 Check-out・寄存行李",
-         desc:"帶基本換洗衣物即可，大件行李存放飯店（多數允許退房後寄放到當晚回來前）。確認 10/26 回來能 Check-in 同一房間。",
-         map:"御徒町駅"},
+        {time:"08:30", type:"hotel", badge:"退房", title:"飯店退房・行李寄放札幌站",
+         desc:"退房後把大件行李寄放札幌站投幣置物櫃（或飯店寄存），輕裝賞楓半天，傍晚搭巴士前再回來提。",
+         note:"今晚住船上，務必把上船要用的盥洗、換洗、暈船藥、行動電源放在隨身小包，大行李整理成方便拖運的狀態。",
+         map:"札幌駅"},
 
-        {time:"07:25", type:"move", badge:"高速巴士", title:"上野駅入谷口 → 草津溫泉BT 出發",
-         desc:"JR巴士關東「上州ゆめぐり号」從上野駅入谷口出發，直達草津溫泉巴士總站。車內附 Wi-Fi＋電源，4.5 小時可追劇補眠。建議提前在官網預約。",
-         transit:"上野駅入谷口 07:25 出發 → 草津温泉BT 約 12:02 抵達｜¥3,200–3,600／人",
-         note:"顧問提醒：週日旺季易滿席，建議至少兩週前在 JR 巴士關東官網訂位。乘車地點：JR 上野駅入谷口（地下鉄「上野」站 2 號出口旁）。",
-         link:"https://www.google.com/search?q=上野到草津溫泉+高速巴士+攻略+2026&hl=zh-TW",
-         official:"http://time.jrbuskanto.co.jp/bk03010.html",
-         map:"上野駅入谷口"},
+        {time:"09:00", type:"spot", badge:"賞楓", title:"円山公園・北海道神宮",
+         desc:"地鐵東西線「円山公園」站旁，原始林與參道的楓紅、銀杏層層疊疊，是札幌市民的賞楓聖地。順遊北海道神宮，參拜兼散步，腹地大、人潮舒適。",
+         duration:"75–90 分", best:"上午光線柔和、人少",
+         link:"https://www.google.com/search?q=円山公園+北海道神宮+紅葉+2026&hl=zh-TW",
+         official:"https://www.hokkaidojingu.or.jp/",
+         map:"北海道神宮 円山公園"},
 
-        {time:"12:00", type:"food", badge:"午餐", title:"草津溫泉街・草津市場食堂 或 湯畑周邊",
-         desc:"抵達後先填肚子，湯畑周邊有多家定食、烏龍麵、蕎麥麵，¥900–1,500。推薦「草津温泉食堂」或「きむら」的溫泉湯豆腐定食，在地感十足。",
-         duration:"45 分", map:"草津温泉 湯畑周辺"},
+        {time:"11:00", type:"spot", badge:"市中心", title:"北海道廳舊本廳舍（赤れんが）・大通公園",
+         desc:"回市中心走一段。紅磚廳舍（赤れんが）前的銀杏與池畔楓紅是札幌經典畫面（整修後重新開放，請查當年度開放狀況）；接著穿過大通公園綠帶，可順登札幌電視塔俯瞰市區秋色。",
+         duration:"60 分", best:"中午前後",
+         link:"https://www.google.com/search?q=北海道廳舊本廳舍+赤れんが+開放+大通公園+紅葉+2026&hl=zh-TW",
+         map:"北海道庁旧本庁舎"},
 
-        {time:"13:00", type:"spot", badge:"溫泉街", title:"湯畑（ゆばたけ）散策",
-         desc:"草津溫泉的心臟，滾燙硫磺泉從天然溫泉井湧出，水蒸氣裊裊，被石板街圍繞。傍晚點燈後氛圍最美，但白天的湯煙霧氣配上石造背景也別有風味。湯畑周邊有足湯免費泡、溫泉饅頭現蒸可買。",
-         duration:"45–60 分", best:"傍晚點燈後最美，白天拍照也好",
-         link:"https://www.google.com/search?q=草津溫泉湯畑+散策+攻略+2026&hl=zh-TW",
-         note:"顧問提醒：草津泉質極強酸（pH 約 2），泡前先沖身、勿泡超過 3 分鐘（初泡），初次建議體驗「熱の湯」的湯もみ表演或公共澡堂。",
-         map:"草津温泉 湯畑"},
+        {time:"12:30", type:"food", badge:"午餐", title:"札幌站周邊・味噌拉麵 or 海鮮丼",
+         desc:"回札幌站一帶吃午餐。站內「拉麵共和国」集合北海道名店、ESTA 與大丸地下美食街選擇多；想吃海鮮就到二条市場。吃飽再領行李去搭巴士。",
+         duration:"45–60 分", map:"札幌駅 ラーメン共和国"},
 
-        {time:"14:00", type:"spot", badge:"賞楓", title:"西之河原公園（西の河原公園）",
-         desc:"從湯畑沿溪步行約 10 分即達。楓樹與白樺沿溪兩岸，10 月下旬是草津最佳賞楓期，紅黃交織。公園深處是西之河原露天溫泉，可購票入浴。散步 + 泡湯合計 1.5–2 小時最愉快。",
-         duration:"60–90 分（含泡湯）", best:"午後陽光側射楓紅透亮",
-         note:"顧問提醒：西之河原露天溫泉入場費約 ¥600，開放式大浴場配楓葉，超值。記得帶毛巾（也可現場租）。",
-         link:"https://www.google.com/search?q=西之河原公園+草津溫泉+紅葉+2026&hl=zh-TW",
-         official:"https://www.kusatsu-onsen.ne.jp/",
-         map:"西の河原公園 草津温泉"},
+        {time:"14:00", type:"shop", badge:"土産", title:"札幌站・最後伴手禮採買",
+         desc:"白色戀人、ROYCE’ 生巧克力、六花亭、薯條三兄弟、LeTAO，大丸與 ESTA／APIA 地下街一次補齊。怕重的伴手禮也可在這裡辦宅配，但要送船的話建議隨身帶。",
+         duration:"45 分", map:"大丸札幌店"},
 
-        {time:"15:30", type:"spot", badge:"體驗", title:"熱の湯 湯もみ表演",
-         desc:"每日定時演出草津傳統「湯もみ」，用長板攪拌高溫泉水降溫並讓礦物質均勻，配合民謠表演，是草津最具代表性的文化體驗，約 20 分鐘。",
-         duration:"20 分（含入場）", best:"下午場次 15:30 or 16:30",
-         link:"https://www.google.com/search?q=草津熱の湯+湯もみ+表演時間+2026&hl=zh-TW",
-         official:"https://www.kusatsu-onsen.ne.jp/netsunoyu/",
-         note:"顧問提醒：入場費約 ¥600，建議現場購票，週末可能客滿，提早入場。旺季加開場次，現場確認時刻。",
-         map:"草津 熱の湯"},
+        {time:"15:30", type:"move", badge:"高速巴士", title:"札幌站 → 苫小牧西港渡輪總站",
+         desc:"領回行李，搭直達苫小牧西港的高速巴士，省去轉車拖行李。車程約 1 小時 50 分，抵達後辦理乘船手續。",
+         transit:"札幌駅前 → 苫小牧西港FT 高速巴士 直達 約 1h50m｜¥1,310｜1 日 5 班",
+         note:"請挑能在 17:30 前抵達碼頭的班次（夕方便 18:45 開船，乘船手續通常開船前 30–60 分截止）。班次與當日航班有無務必先在巴士公司與渡輪官網確認；備案是 JR 室蘭本線到苫小牧站，再轉連絡巴士約 20 分 ¥250。",
+         link:"https://www.google.com/search?q=札幌+苫小牧西港+高速巴士+時刻表+2026&hl=zh-TW",
+         official:"https://www.sunflower.co.jp/route/line/port/tomakomai/",
+         map:"苫小牧西港フェリーターミナル"},
 
-        {time:"16:00", type:"shop", badge:"土産", title:"溫泉街土產掃貨",
-         desc:"草津名物：湯花石鹼（硫磺溫泉萃取）¥500–800、溫泉饅頭（10 顆盒裝約 ¥600–800）、草津茶、上州牛肉乾。以湯畑為中心向周邊走，土產店集中好逛。",
-         duration:"30–45 分", map:"草津温泉 湯畑周辺"},
+        {time:"18:45", type:"move", badge:"渡輪", title:"⛴️ 苫小牧西港 → 大洗（さんふらわあ 夕方便）",
+         desc:"商船三井さんふらわあ「夕方便」橫渡太平洋開往茨城大洗，全程約 19 小時，船上過一夜。船內有大浴場、餐廳、展望沙龍與自販區，泡完澡看海上星空、睡一覺，醒來就快到本州了——這段海路本身就是旅程的亮點。",
+         transit:"苫小牧西港 18:45 出航 → 大洗 翌日 14:00 抵達｜約 19 小時｜船上住宿一晚",
+         note:"北海道沒有直達東京的渡輪，最接近首都圈的是這條「苫小牧→大洗」（大洗在茨城，距東京約 2–2.5 小時）。艙等從ツーリスト（相部屋臥鋪）到私人個室、套房都有，旺季與連假很搶，越早訂越好。週日等部分日期可能停航或改點，務必查當日航班；會暈船者先備暈船藥。",
+         link:"https://www.google.com/search?q=商船三井さんふらわあ+苫小牧+大洗+夕方便+時刻表+料金&hl=zh-TW",
+         official:"https://www.sunflower.co.jp/route/facilities/timetable/",
+         map:"苫小牧西港フェリーターミナル"},
 
-        {time:"18:00", type:"food", badge:"晚餐", title:"草津旅館・會席料理（一泊二食）",
-         desc:"入住溫泉旅館後享用晚餐。草津旅館多以上州豚、信州牛、高原野菜為主食材，懷石或會席形式呈現，搭配溫泉豆腐和山菜。晚餐後再泡一次溫泉，隔早退房前再泡一次，才划算。",
-         duration:"90 分", map:"草津温泉"},
+        {time:"19:30", type:"food", badge:"晚餐", title:"船上餐廳 or 自備晚餐",
+         desc:"船上設自助／定食餐廳（航班不同營業時段略異），也可上船前在苫小牧或札幌站買好便當與零食。看著漆黑海面用餐、再去泡個大浴場，是渡輪旅行的儀式感。",
+         duration:"60 分", map:"苫小牧西港フェリーターミナル"},
 
-        {time:"住宿", type:"hotel", badge:"住宿", title:"草津溫泉旅館（湯畑徒步圈）",
-         desc:"強烈建議選湯畑徒步 5 分鐘內的旅館，夜裡隨時可出去再泡一次。一泊二食約 ¥12,000–18,000／人。詳見「待定」分頁。",
-         map:"草津温泉 湯畑"}
+        {time:"住宿", type:"hotel", badge:"船宿", title:"⛴️ 渡輪船艙（10/22 海上過夜）",
+         desc:"今晚睡在船上，不另訂飯店。早點休息，明天下午抵達大洗後還要轉車進東京。",
+         map:"苫小牧西港フェリーターミナル"}
       ]
     },
 
-    /* ── Day 3：10/26 輕井澤 ＋ 新幹線回上野 ── */
+    /* ── Day 4：10/23 大洗上陸→東京 ── */
     {
-      tab:"Day 3", num:"DAY THREE", title:"輕井澤紅葉・Outlet → 新幹線回上野 🍂",
-      date:"10/26 (一)",
-      theme:"草津 →【草軽バス 85分】→ 輕井澤（雲場池・白絲瀑・Outlet）→【新幹線 60分】→ 上野",
-      area:"輕井澤 → 上野", cost:"NT$3,000–6,000", walk:"散策 ＋ 購物，移動多",
-      dayMap:"雲場池 軽井沢",
-      items:[
-        {time:"07:00", type:"spot", badge:"晨湯", title:"草津・清晨最後一泡",
-         desc:"退房前再泡一次。西之河原露天溫泉清晨 7 點開放，晨霧中泡湯是草津最難忘的體驗。若住旅館可直接用館內大浴場。",
-         duration:"45–60 分", best:"清晨 7–8 點人極少",
-         map:"西の河原露天風呂 草津"},
-
-        {time:"09:00", type:"hotel", badge:"退房", title:"草津旅館 Check-out",
-         desc:"辦理退房，確認行李存放（旅館通常可存到下午，但今天要移動建議帶走）。",
-         map:"草津温泉"},
-
-        {time:"09:50", type:"move", badge:"草軽巴士", title:"草津溫泉BT → 輕井澤駅",
-         desc:"草軽交通路線巴士，從草津溫泉出發穿越淺間山麓高原道路，窗外落葉松林道一路金黃，本身就是一段值得回味的景色。班次約 30 分一班，不需預約。",
-         transit:"草津温泉 09:50 出發 → 軽井沢駅 11:15 抵達｜約 85 分｜¥2,240／人",
-         note:"顧問提醒：行李若多建議放在草津旅館或大件宅配到東京飯店，輕裝搭巴士更舒適。宅配可在旅館前台辦理（ヤマト宅急便）。",
-         link:"https://www.google.com/search?q=草軽交通巴士+草津到輕井澤+時刻表+2026&hl=zh-TW",
-         official:"https://www.kkkg.co.jp/bus/rosen-bus.html",
-         map:"草津温泉バスターミナル"},
-
-        {time:"11:15", type:"spot", badge:"紅葉", title:"雲場池（Swan Lake）",
-         desc:"輕井澤最具代表性的紅葉名所，離車站步行約 20 分。環湖步道一圈約 600 公尺，水面倒映楓紅與落葉松，10 月下旬正值最佳賞楓期。早上光線順、人較少，拍倒影選無風時刻。",
-         duration:"45–60 分", best:"上午光線好、倒影清晰",
-         note:"顧問提醒：週末人潮極多，10 月下旬平日稍好。建議下巴士後直接走過去，比先逛 Outlet 後去人少很多。",
-         link:"https://www.google.com/search?q=雲場池+輕井澤+紅葉+2026&hl=zh-TW",
-         official:"https://karuizawa-kankokyokai.jp/",
-         map:"雲場池 軽井沢"},
-
-        {time:"12:30", type:"food", badge:"午餐", title:"輕井澤・川上庵（手打蕎麥麵）",
-         desc:"輕井澤人氣老牌蕎麥麵店，坐落日式老宅建築。手打冷蕎麥配天婦羅是招牌，秋季限定蕎麥香最濃。價位 ¥1,200–2,500，週末建議 11:30 前或 13:30 後入場避開排隊。",
-         duration:"60 分",
-         link:"https://www.google.com/search?q=川上庵+輕井澤+蕎麥麵+評價+2026&hl=zh-TW",
-         note:"顧問提醒：川上庵週末排隊常見，附近還有「草笛」（輕井澤老店）可作備案，兩家都很好吃。",
-         map:"川上庵 軽井沢"},
-
-        {time:"14:00", type:"spot", badge:"賞楓", title:"白絲瀑布（白糸の滝）",
-         desc:"寬 70 公尺的幕狀瀑布，地下水從岩壁細縫滲出，形成如白絲的涓流，秋天被紅黃楓葉環繞時最美。距輕井澤站搭巴士約 20 分，或可騎自行車前往。停留不需太久，但非常值得繞路。",
-         duration:"30–40 分", best:"午後順光",
-         link:"https://www.google.com/search?q=白絲瀑布+輕井澤+交通+2026&hl=zh-TW",
-         note:"顧問提醒：若時間有限可跳過白絲瀑布，直接延長 Outlet 時間；但若有租自行車可順路不浪費。",
-         map:"白糸の滝 軽井沢"},
-
-        {time:"15:00", type:"shop", badge:"購物", title:"輕井澤王子購物廣場（Outlet）",
-         desc:"就在輕井澤駅南口，出站 1 分鐘即達。200+ 品牌，Gucci、Coach、Adidas、無印良品、北臉全有，季中折扣約 30–50%。湖畔草地環境絕美，逛累可在草地休息。最後班新幹線前留 45 分餘裕。",
-         duration:"2–2.5 小時", best:"平日人少，週末建議 15 點後人潮稍退",
-         note:"顧問提醒：營業 10:00–19:00（美食街至 22:00）。10 月下旬楓紅期是旺季，行前看官方 App 確認當日特賣資訊，可提前領折價券。",
-         link:"https://www.google.com/search?q=輕井澤王子購物廣場+Outlet+攻略+2026&hl=zh-TW",
-         official:"https://www.princehotels.co.jp/shoppingplaza/karuizawa/",
-         map:"軽井沢プリンスショッピングプラザ"},
-
-        {time:"17:30", type:"move", badge:"新幹線", title:"輕井澤駅 → 上野駅（北陸新幹線）",
-         desc:"搭「あさま」或「はくたか」新幹線直達上野，約 60 分。輕井澤站在 Outlet 南口旁，逛完直接走過去。建議在 JR 官網或 EX 服務提前訂位（旺季指定席易滿）。",
-         transit:"輕井澤 17:30 出發 → 上野 約 18:35 抵達｜自由席 ¥5,590、指定席 ¥6,130 以上",
-         link:"https://www.google.com/search?q=輕井澤到上野新幹線+票價+購票+2026&hl=zh-TW",
-         official:"https://www.eki-net.com/top/",
-         note:"顧問提醒：北陸新幹線輕井澤→上野「はくたか」60 分、「あさま」75 分，「かがやき」不停輕井澤。提前在 えきねっと 訂位可優惠，早 14 天訂約省 ¥800–1,000。",
-         map:"軽井沢駅"},
-
-        {time:"19:30", type:"food", badge:"晚餐", title:"上野・阿美橫丁 or 大統領（串燒立飲）",
-         desc:"回上野後放行李，再出來吃一頓。阿美橫丁夜晚也熱鬧，大統領立飲居酒屋是老字號，馬肉串、煮込み豆腐聞名，兩人 ¥3,000–4,000 含啤酒。",
-         duration:"60–75 分", map:"大統領 上野"},
-
-        {time:"住宿", type:"hotel", badge:"住宿", title:"上野・御徒町飯店（與 Day 1 同間）",
-         desc:"回到出發前的飯店，行李一直在這裡，最省力。今晚好好休息，明天逛街 ＋ 機場。",
-         map:"御徒町駅"}
-      ]
-    },
-
-    /* ── Day 4：10/27 逛街 ＋ 包車到機場 ── */
-    {
-      tab:"Day 4", num:"DAY FOUR", title:"上野最後逛街・包車返機場 ✈️",
-      date:"10/27 (二)",
-      theme:"退房寄行李 → 補貨採購 → 包車 → 機場",
-      area:"上野・御徒町 → 成田／羽田", cost:"NT$1,500–3,500", walk:"輕裝半日",
+      tab:"Day 4", num:"DAY FOUR", title:"大洗上陸・轉進東京 🗼",
+      date:"10/23 (五)",
+      theme:"海上晨光 → 大洗港 →【巴士＋特急ひたち】→ 上野（傍晚晃東京）",
+      area:"大洗 → 東京・上野", cost:"NT$1,500–3,500", walk:"以移動為主，傍晚輕鬆逛",
       dayMap:"上野駅",
       items:[
-        {time:"09:00", type:"hotel", badge:"退房", title:"退房・寄存行李",
-         desc:"先退房，大件行李寄回飯店或帶去車站置物櫃，輕裝逛最後半天。若包車司機能到飯店接，可在退房前確認接車時間。",
-         map:"御徒町駅"},
+        {time:"上午", type:"spot", badge:"船上", title:"甲板晨光・太平洋海景",
+         desc:"利用上午在船上悠閒度過：甲板吹海風、展望沙龍看書、再泡一次大浴場。早餐在船上餐廳或吃昨晚備好的補給，慢慢等待大洗靠港。",
+         duration:"整個上午", best:"清晨甲板看日出",
+         map:"大洗港フェリーターミナル"},
 
-        {time:"09:30", type:"shop", badge:"補貨", title:"多慶屋 最後補漏 or 阿美橫丁",
-         desc:"昨天忘買的東西這時補。多慶屋週二早開門已有人潮但還算舒適。或去上野公園附近的阿美橫丁買乾貨、海苔、昆布等重型伴手禮。",
-         duration:"60–90 分", best:"平日早上最輕鬆", map:"多慶屋 御徒町"},
+        {time:"14:00", type:"move", badge:"上陸", title:"⛴️ 大洗港 抵達・準備轉車",
+         desc:"下船後跟著人潮往連絡巴士站。大洗是茨城縣的港口，距東京約 2–2.5 小時，先搭巴士到水戶站轉特急進東京最穩。",
+         transit:"大洗港フェリーターミナル 14:00 抵達",
+         map:"大洗港フェリーターミナル"},
 
-        {time:"11:00", type:"food", badge:"午餐", title:"上野駅周邊・最後一餐",
-         desc:"推薦選一家好一點的終點站飯：①三平食堂（上野老洋食店，蛋包飯/漢堡排）；②上野精養軒（老牌西餐）；③若時間緊就去吉祥寺旁的 Denny's 快解決。",
-         duration:"45–60 分", map:"三平食堂 上野"},
+        {time:"14:30", type:"move", badge:"巴士", title:"大洗港 → 水戶站",
+         desc:"搭茨城交通的連絡巴士（配合渡輪到港時刻）或路線巴士前往 JR 水戶站，車程約 40 分。也可步行到鹿島臨海鐵道「大洗站」轉車，但巴士直達水戶較省事。",
+         transit:"大洗港 → 水戶站 連絡／路線巴士 約 40 分｜約 ¥650",
+         note:"連絡巴士班次跟著渡輪到港時間走，下船後先確認站牌與發車時刻；若沒接上，改搭鹿島臨海鐵道 大洗 → 水戶 約 15 分。",
+         link:"https://www.google.com/search?q=大洗港+水戸駅+連絡バス+時刻表+2026&hl=zh-TW",
+         official:"https://www.sunflower.co.jp/route/line/port/oarai/",
+         map:"水戸駅"},
 
-        {time:"13:00", type:"move", badge:"包車", title:"包車接送 → 成田 or 羽田機場",
-         desc:"從上野到成田車程約 80–100 分，到羽田約 40–60 分。4 人含行李包車建議預訂 Jumbo Taxi（¥25,000–35,000 上野→成田），每人分攤比搭 Skyliner 貴一點但省去拖行李轉車的痛苦。",
-         transit:"上野 → 成田機場｜包車約 90 分｜¥25,000–35,000 全車（4人均分≈¥7,500）；若 2 人改搭 Skyliner 約 ¥2,570 更省",
-         note:"顧問提醒：4 人含大件行李強烈建議包車，比 Skyliner 貴約 1.5–2 倍，但完全省去拉行李轉站的體力消耗，抵達機場後心情更好。Uber Black也可比較。",
-         map:"成田国際空港"},
+        {time:"15:30", type:"move", badge:"特急", title:"水戶站 → 上野（JR 特急ひたち）",
+         desc:"從水戶搭 JR 常磐線特急「ひたち」直達上野／東京，約 70–80 分，舒適又快。指定席建議用えきねっと先訂，旺季較有保障。",
+         transit:"水戶 → 上野 特急ひたち 約 70–80 分｜約 ¥3,900–4,200（含特急料金）",
+         link:"https://www.google.com/search?q=水戸+上野+特急ひたち+時刻表+料金+2026&hl=zh-TW",
+         official:"https://www.eki-net.com/top/",
+         map:"水戸駅"},
 
-        {time:"15:00", type:"spot", badge:"機場", title:"機場辦理退稅 ＆ Check-in",
-         desc:"成田機場辦理退稅最方便在 3F 出境後免稅區，羽田在各航站大廳退稅窗口。預留機場退稅時間 30–45 分（旺季排隊長），建議出發前整理好所有收據一袋。",
-         duration:"45–60 分", map:"成田国際空港"},
+        {time:"17:00", type:"hotel", badge:"入住", title:"東京・上野一帶飯店 Check-in",
+         desc:"抵達上野，先到飯店放行李。建議直接訂東京篇 10/24 那間上野飯店、把 10/23 一起連住，省得隔天再搬一次行李。",
+         note:"若東京篇選定的上野飯店 10/23 也有空房，連訂 10/23–10/24（甚至到 10/27）最省事；訂房細節見「飯店推薦」分頁與東京篇。",
+         map:"上野駅"},
 
-        {time:"17:00", type:"move", badge:"返程", title:"搭機返台 ✈️",
-         desc:"結束充實的 4 天——花火、溫泉、紅葉、多慶屋，全部入袋。",
-         map:"成田国際空港"}
+        {time:"18:00", type:"spot", badge:"自由", title:"東京傍晚到處晃（阿美橫丁 or 淺草夜訪）",
+         desc:"放完行李輕鬆逛。就近選擇：① 上野阿美橫丁吃喝採買、感受庶民市場；② 搭兩站到淺草看點燈的雷門與仲見世、遠眺晴空塔夜景；③ 想血拚就去銀座／秋葉原。第一晚不排太滿，吃頓好的、早點休息，養精神迎接東京篇。",
+         duration:"自由", best:"傍晚到晚上",
+         link:"https://www.google.com/search?q=上野+阿美橫丁+淺草+夜晚+逛街+2026&hl=zh-TW",
+         map:"アメヤ横丁"},
+
+        {time:"19:30", type:"food", badge:"晚餐", title:"上野・阿美橫丁居酒屋 or 淺草老舖",
+         desc:"上野「大統領」立飲居酒屋、阿美橫丁海鮮攤、或淺草的天婦羅與壽喜燒老店都好。慶祝上半段順利完成，乾一杯。",
+         duration:"60–75 分",
+         link:"https://www.google.com/search?q=上野+阿美橫丁+居酒屋+推薦+2026&hl=zh-TW",
+         map:"アメヤ横丁"},
+
+        {time:"接續", type:"move", badge:"銜接", title:"➡️ 10/24 起：東京・草津四日行程書",
+         desc:"北海道上半段到此告一段落。10/24 之後的東京採購、草津溫泉、輕井澤紅葉與東京灣花火，請翻開姊妹書「東京・草津四日」（封面上方也有跳轉鈕）。",
+         link:"../tokyo-202610/",
+         map:"上野駅"},
+
+        {time:"住宿", type:"hotel", badge:"住宿", title:"東京・上野一帶飯店（建議接續東京篇連住）",
+         desc:"10/23 住上野，隔天直接展開東京篇行程。",
+         map:"上野駅"}
       ]
     }
   ],
 
   food:[
-    {name:"大統領（上野・阿美橫丁）", price:"¥2,000–3,500", desc:"老字號串燒立飲居酒屋，馬肉串、煮込み豆腐必點，日本人下班聖地。"},
-    {name:"阿美橫丁・海鮮市場攤位", price:"¥800–1,500", desc:"現切海膽、生蠔、鮭魚卵握壽司，站著吃、邊走邊吃，最有市場感。"},
-    {name:"月島 もんじゃ焼（文字燒）", price:"¥1,500–2,500", desc:"東京文字燒發源地，就在花火會場旁，先吃飽再去看煙火最完美。"},
-    {name:"草津温泉街・溫泉豆腐定食", price:"¥900–1,500", desc:"高原嫩豆腐以溫泉水料理，口感極細嫩，佐山菜配飯，草津在地感滿分。"},
-    {name:"草津旅館・一泊二食會席料理", price:"含住宿一泊二食", desc:"上州豚、信州牛、高原蔬菜懷石，泡完湯後最享受的一餐。"},
-    {name:"草津・溫泉饅頭（各店）", price:"¥100–120／個", desc:"現蒸熱騰騰，白豆沙最正統，在湯畑旁就能買到，散步邊吃。"},
-    {name:"輕井澤・川上庵（手打蕎麥麵）", price:"¥1,200–2,500", desc:"老宅建築裡吃手打冷蕎麥，天婦羅套餐是首選，秋日蕎麥香氣最濃。"},
-    {name:"輕井澤・澤屋 or 塩沢通りカフェ", price:"¥600–1,200", desc:"輕井澤最有名果醬品牌澤屋，附設咖啡可搭配烤土司試吃，吃完再買最準。"},
-    {name:"上野・三平食堂", price:"¥900–1,500", desc:"昭和 36 年老洋食堂，蛋包飯與漢堡排是招牌，性價比極高，最後一天收尾最適合。"}
+    {name:"札幌・味噌拉麵（さっぽろラーメン横丁）", price:"¥900–1,300", desc:"札幌味噌拉麵發源地，濃郁味噌湯頭配捲麵與炒蔬菜，秋夜暖身首選。"},
+    {name:"成吉思汗 烤羊肉（だるま・ふじ田）", price:"¥3,000–5,000", desc:"北海道名物烤羊肉，鮮嫩不羶、配生啤最對味，薄野一帶名店林立。"},
+    {name:"小樽・壽司（政壽司 ほか壽司屋通り）", price:"¥2,000–5,000", desc:"小樽是壽司之鄉，近海現撈握壽司鮮甜，午間套餐 CP 值高。"},
+    {name:"二条市場・海鮮丼", price:"¥1,800–3,500", desc:"札幌市中心市場，海膽、蟹肉、鮭魚卵鋪滿一碗，早午餐都適合。"},
+    {name:"札幌・湯咖哩（GARAKU・Suage）", price:"¥1,300–1,900", desc:"札幌獨創スープカレー，辛香湯頭配大塊雞腿與當地蔬菜，暖到心底。"},
+    {name:"螃蟹會席（かに本家・かに將軍）", price:"¥5,000–10,000", desc:"想犒賞自己的一餐，帝王蟹、松葉蟹整套上桌，預算高但記憶點滿分。"},
+    {name:"LeTAO 雙層起司蛋糕（小樽本店）", price:"¥600–1,200", desc:"小樽必吃，入口即化的雙層乳酪，本店附咖啡可現吃再外帶伴手禮。"},
+    {name:"渡輪船上餐廳（さんふらわあ）", price:"¥1,000–2,500", desc:"海上自助／定食，邊看漆黑太平洋邊用餐，是渡輪旅行的儀式感。"}
   ],
 
+  /* ===== 飯店推薦（草稿期討論用）=====
+     · 住宿類 group 設 booking:true（＋ priceChecked），渲染才顯示查價日與各訂房網一鍵比價
+     · 渡輪艙等那組不是訂房網商品，booking 不設，改放官網連結 */
   pending:[
     {
-      topic:"10/24 ＆ 10/26 住宿 ①：上野・御徒町（核心區・首選）",
-      booking:true, priceChecked:"2026-06-02",
-      note:"多慶屋採購日 ＋ 花火日靠上野最順；10/26 輕井澤回來後繼續住同間，不搬行李。皆在御徒町／上野站徒步圈，往成田機場（京成線）也方便。需確認有 4 人房（24㎡+）或 2 間雙人房（16㎡+）。價位為 10 月下旬花火週旺季概估，務必於訂房網即時確認。",
+      topic:"10/20 ＆ 10/21 札幌住宿 ①：札幌站前（交通樞紐・首選）",
+      booking:true, priceChecked:"2026-06-05",
+      note:"連住 2 晚最方便的一區——往小樽（JR）、機場（JR）、苫小牧搭船（高速巴士起站就在站前）三個方向都從這裡出發。需確認 4 人房或 2 間相鄰雙人房。價位為 10 月下旬概估，務必於訂房網即時確認。",
       options:[
-        {name:"Sotetsu Fresa Inn 上野御徒町", price:"4人房一晚 ¥25,000–35,000 / 雙人房一晚 ¥11,000–16,000", status:"傾向", pick:true,
-         desc:"連鎖商務型，設施新、評價高（4.2）。位置與多慶屋的距離是本區最順的一間。",
-         pros:["御徒町站徒步 5 分","多慶屋旁邊","銀座線＋山手線＋京成三線"],
-         cons:["4 人房需事先確認有無","週末花火週旺季可能無房"],
-         map:"Sotetsu Fresa Inn Ueno Okachimachi",
-         link:"https://www.google.com/search?q=Sotetsu+Fresa+Inn+上野御徒町+評價+2026&hl=zh-TW",
-         official:"https://www.sotetsu-hotels.com/fresa-inn/ueno-okachimachi/"},
-        {name:"MIMARU 東京 上野御徒町", price:"公寓式 4 人房整間一晚 ¥30,000–45,000", status:"待決定",
-         desc:"公寓式飯店，正 4 人房附廚房（電磁爐、鍋具、餐具、大冰箱、大餐桌），空間遠大於一般日系商務房——4 人同房最舒服的選擇。設有忍者／壽司吧主題房，小孩會喜歡。",
-         pros:["真正寬敞 4 人房，免訂 2 間","附廚房可煮戰利品零食／泡麵","御徒町站徒步圈、多慶屋近"],
-         cons:["整間計價，旺季單價偏高","熱門房型需提早訂"],
-         map:"ミマル東京上野御徒町",
-         link:"https://www.google.com/search?q=MIMARU+上野御徒町+評價+2026&hl=zh-TW",
-         official:"https://mimaruhotels.com/"},
-        {name:"Dormy Inn 上野御徒町", price:"4人房一晚 ¥28,000–38,000 / 雙人房一晚 ¥12,000–18,000", status:"待決定",
-         desc:"連鎖品質穩定，有大浴場（晚泡澡很舒服）＋免費宵夜拉麵，御徒町站徒步圈（評價 4.3）。",
-         pros:["有大浴場（免費泡）","評價穩定","離多慶屋近"],
-         cons:["花火週末同樣搶手","早餐另計"],
-         map:"ドーミーイン上野御徒町"},
-        {name:"三井花園飯店 上野（Mitsui Garden）", price:"雙人房一晚 ¥14,000–22,000", status:"待決定",
-         desc:"JR 上野站徒步 2–3 分，走得到阿美橫丁與上野動物園。有人氣熊貓主題房與晴空塔景觀房，義式自助早餐評價佳。",
-         pros:["上野站超近、機能滿分","熊貓房適合親子拍照","品牌品質穩定"],
-         cons:["4 人房少，多為雙人","熱門主題房要早搶"],
-         map:"三井ガーデンホテル上野",
-         link:"https://www.google.com/search?q=三井花園飯店+上野+評價+2026&hl=zh-TW"},
-        {name:"Super Hotel 上野御徒町", price:"連通房（2 雙人）一晚 ¥18,000–28,000 / 雙人房 ¥9,000–14,000", status:"待決定",
-         desc:"高 CP 值連鎖，御徒町站徒步 3 分、阿美橫丁 5 分。可選枕頭、附免費日式早餐；有「連通房」（兩間雙人中間一扇門互通），4 人剛好。",
-         pros:["價格實惠＋免費早餐","連通房適合 2+2","天然溫泉大浴場（部分分館）"],
-         cons:["房間偏精簡","連通房數量少需早訂"],
-         map:"スーパーホテル上野御徒町",
-         link:"https://www.google.com/search?q=Super+Hotel+上野御徒町+評價+2026&hl=zh-TW"},
-        {name:"Hotel Resol 上野", price:"雙人房一晚 ¥12,000–18,000", status:"待決定",
-         desc:"JR 上野站前，徒步 1 分到 JR、6 分到京成上野（往成田超方便），阿美橫丁 5 分。客房乾淨附浴缸，公共區有微波爐與洗脫烘。",
-         pros:["上野站正前方、生活機能極佳","往成田機場最順","房間新淨"],
-         cons:["以雙人房為主，4 人需 2 間","旺季房價會跳高"],
-         map:"ホテルリソル上野",
-         link:"https://www.google.com/search?q=Hotel+Resol+上野+評價+2026&hl=zh-TW"},
-        {name:"APA Hotel 上野廣小路", price:"雙人房一晚 ¥10,000–15,000（無 4 人房）", status:"待決定",
-         desc:"若找不到合適 4 人房，訂 2 間雙人房的平價備選，評價 4.3，房間偏小但乾淨。",
-         pros:["價格最實惠","品質可預期","離地鐵近"],
-         cons:["無 4 人房，需訂 2 間","房間最小"],
-         map:"APA Hotel Ueno Hirokoji"},
-        {name:"Hotel Sardonyx 上野（寶石飯店）", price:"雙人房一晚 ¥9,000–14,000", status:"待決定",
-         desc:"JR 御徒町站約 300m，平價老牌、Agoda 高評價，提供免費早餐與免費寄行李，位置就在上野中心。",
-         pros:["價格最低區間之一","御徒町站超近","免費早餐＋寄行李"],
-         cons:["設施較舊","僅雙人房，4 人需 2 間"],
-         map:"ホテルサードニクス上野",
-         link:"https://www.google.com/search?q=Hotel+Sardonyx+上野+評價+2026&hl=zh-TW"}
+        {name:"JR Inn 札幌", price:"雙人房一晚 ¥12,000–18,000", status:"傾向", pick:true,
+         desc:"直接連通札幌站（JR 改札步行數分），頂樓大浴場可眺市景，性價比與位置兼顧，行李拖到月台最省力。",
+         pros:["札幌站正上方、最好接駁","頂樓大浴場","往小樽/機場/巴士站都最順"],
+         cons:["旺季搶手需早訂","以雙人房為主，4 人需 2 間"],
+         map:"JRイン札幌",
+         link:"https://www.google.com/search?q=JR+Inn+札幌+評價+2026&hl=zh-TW",
+         official:"https://www.jr-inn.jp/sapporo/"},
+        {name:"三井花園飯店 札幌（Mitsui Garden）", price:"雙人房一晚 ¥13,000–20,000", status:"待決定",
+         desc:"札幌站徒步約 5 分，房間質感佳、有大浴場，早餐評價高，品牌品質穩定。",
+         pros:["大浴場可泡湯","早餐口碑好","站前生活機能滿分"],
+         cons:["4 人房較少","旺季價格中上"],
+         map:"三井ガーデンホテル札幌",
+         link:"https://www.google.com/search?q=三井花園飯店+札幌+評價+2026&hl=zh-TW"},
+        {name:"Daiwa Roynet 札幌站前", price:"雙人房一晚 ¥11,000–17,000", status:"待決定",
+         desc:"札幌站南口徒步 5 分，房間寬敞乾淨、商務型穩定，房型選擇多、含部分大床房。",
+         pros:["房間偏大、舒適","站前位置佳","房型彈性"],
+         cons:["無大浴場","熱門日期漲價"],
+         map:"ダイワロイネットホテル札幌駅前",
+         link:"https://www.google.com/search?q=Daiwa+Roynet+札幌駅前+評價+2026&hl=zh-TW"}
       ]
     },
     {
-      topic:"10/24 ＆ 10/26 住宿 ②：周邊延伸（日暮里/鶯谷・秋葉原/淺草橋）",
-      booking:true, priceChecked:"2026-06-02",
-      note:"略離御徒町但各有優勢：日暮里 Skyliner 直達成田最快、秋葉原/淺草橋一帶有超大公寓房適合一家人。到多慶屋以徒步＋一段地鐵為主，必要時短程計程車約 ¥1,000–1,500。",
+      topic:"10/20 ＆ 10/21 札幌住宿 ②：大通・狸小路（鬧區・美食購物環繞）",
+      booking:true, priceChecked:"2026-06-05",
+      note:"想一出門就是商圈、餐廳、藥妝與狸小路拱廊，選大通一帶最熱鬧；地鐵到札幌站僅 1–2 站，往各地也方便。",
       options:[
-        {name:"Almont Hotel 日暮里（阿爾蒙特）", price:"雙人房一晚 ¥11,000–17,000（旺季）", status:"待決定",
-         desc:"JR 日暮里站徒步 5 分，最大亮點是大浴場＋豐盛在地食材自助早餐（Agoda 9.3、逾 1.3 萬則評價）。京成 Skyliner 直達成田僅約 40 分。",
-         pros:["大浴場可泡湯","早餐評價極高","Skyliner 直達成田最省事"],
-         cons:["離多慶屋一段（搭 JR 一站到御徒町）","以雙人房為主"],
-         map:"アルモントホテル日暮里",
-         link:"https://www.google.com/search?q=Almont+Hotel+日暮里+評價+2026&hl=zh-TW",
-         official:"https://www.almont.jp/nippori/"},
-        {name:"MIMARU 東京 上野 EAST", price:"公寓房整間一晚 ¥35,000–55,000（4–6 人）", status:"待決定",
-         desc:"少見的「連通公寓」，最大可達 80㎡，4–10 人都住得下，附完整廚房——兩個家庭或三代同堂出遊首選。位於新御徒町站（大江戶線）旁，距御徒町徒步約 10 分。",
-         pros:["空間超大、可連通","附廚房、客廳","適合多人／大行李攤開"],
-         cons:["整間計價，人少不划算","距多慶屋徒步約 10 分或一站地鐵"],
-         map:"ミマル東京上野イースト",
-         link:"https://www.google.com/search?q=MIMARU+東京+上野EAST+評價+2026&hl=zh-TW",
-         official:"https://mimaruhotels.com/"}
+        {name:"Cross Hotel Sapporo", price:"雙人房一晚 ¥14,000–22,000", status:"待決定",
+         desc:"設計風精品商務飯店，狸小路／大通徒步圈，頂樓有露天大浴場，氛圍與機能俱佳。",
+         pros:["設計感強、大浴場","狸小路美食購物環繞","評價高"],
+         cons:["旺季價格偏高","4 人房需確認"],
+         map:"クロスホテル札幌",
+         link:"https://www.google.com/search?q=Cross+Hotel+Sapporo+評價+2026&hl=zh-TW"},
+        {name:"La'gent Stay 札幌大通", price:"雙人／四人房一晚 ¥13,000–24,000", status:"待決定",
+         desc:"大通／狸小路一帶，有家庭房與大浴場，空間實用、適合 4 人同住，採買補貨方便。",
+         pros:["有 4 人房型","大浴場","鬧區中心、生活機能強"],
+         cons:["週末熱門","部分房型較精簡"],
+         map:"ラ・ジェント・ステイ札幌大通",
+         link:"https://www.google.com/search?q=La'gent+Stay+札幌大通+評價+2026&hl=zh-TW"}
       ]
     },
     {
-      topic:"10/24 ＆ 10/26 住宿 ③：淺草（特色備選・靠地鐵或計程車往返）",
-      booking:true, priceChecked:"2026-06-02",
-      note:"你特別點名想列入的淺草——雷門、晴空塔夜景與在地氛圍最強，且淺草站可一班車直達成田／羽田。代價是離多慶屋／御徒町較遠：銀座線「淺草→上野廣小路」約 8 分，或計程車約 10–15 分 ¥1,500–2,000（當行李多時的備案）。",
+      topic:"10/20 ＆ 10/21 札幌住宿 ③：薄野（すすきの・夜歸方便）",
+      booking:true, priceChecked:"2026-06-05",
+      note:"晚上想吃成吉思汗、拉麵橫丁、逛到晚的話，住薄野最省走路；地鐵南北線一站到大通、兩站到札幌站。",
       options:[
-        {name:"THE GATE HOTEL 雷門 by HULIC", price:"正 4 人房（36㎡＋小客廳）一晚 ¥30,000–45,000", status:"待決定",
-         desc:"位置王者，斜對面就是雷門大燈籠，頂樓酒吧晴空塔夜景一流。一樓有 Ozeki 超市好補貨，淺草站可免換車直達成田／羽田。有四張單人床的正 4 人房附小客廳。",
-         pros:["雷門正對面、景觀無敵","正 4 人房＋小客廳","機場直達一班車"],
-         cons:["離多慶屋最遠（需地鐵或計程車）","旺季房價偏高"],
-         map:"ザ・ゲートホテル雷門 by HULIC",
-         link:"https://www.google.com/search?q=THE+GATE+HOTEL+雷門+評價+2026&hl=zh-TW"},
-        {name:"淺草東武飯店（Asakusa Tobu Hotel）", price:"4 人房一晚 ¥20,000–32,000", status:"待決定",
-         desc:"淺草站徒步 1 分，CP 值高、有晴空塔景觀房，機場直達。房型大小與價格的綜合性價比在淺草區數一數二。",
-         pros:["淺草站超近","晴空塔景觀＋4 人房","CP 值高、機場直達"],
-         cons:["離多慶屋遠（需地鐵或計程車）","熱門景觀房要早訂"],
-         map:"浅草東武ホテル",
-         link:"https://www.google.com/search?q=淺草東武飯店+評價+2026&hl=zh-TW"}
+        {name:"Dormy Inn PREMIUM 札幌", price:"雙人房一晚 ¥12,000–19,000", status:"傾向",
+         desc:"連鎖品質穩定，天然溫泉大浴場＋免費宵夜拉麵（夜鳴きそば），薄野徒步圈，泡完湯吃碗拉麵超療癒。",
+         pros:["天然溫泉大浴場","免費宵夜拉麵","薄野美食環繞"],
+         cons:["人氣高需早訂","以雙人房為主"],
+         map:"ドーミーインPREMIUM札幌",
+         link:"https://www.google.com/search?q=Dormy+Inn+PREMIUM+札幌+評價+2026&hl=zh-TW"},
+        {name:"Premier Hotel -CABIN- 札幌", price:"雙人房一晚 ¥10,000–16,000", status:"待決定",
+         desc:"薄野與大通之間，價格實惠、房間乾淨，有大浴場，預算優先的好選擇。",
+         pros:["價格實惠","有大浴場","位置介於大通與薄野"],
+         cons:["房間偏精簡","4 人需 2 間"],
+         map:"プレミアホテルキャビン札幌",
+         link:"https://www.google.com/search?q=Premier+Hotel+CABIN+札幌+評價+2026&hl=zh-TW"}
       ]
     },
     {
-      topic:"10/25 草津溫泉旅館選擇",
-      booking:true, priceChecked:"2026-06-02",
-      note:"建議選湯畑徒步 5 分鐘內、含一泊二食；4 人需確認有 4 人間或相鄰 2 間。下列依「高級老舗 → 傳統中價 → 平價 → 大型家族」鋪開，價位為旺季概估／每人，務必於官網或訂房網即時確認。",
+      topic:"10/22 渡輪艙等（船宿・非訂房網商品）",
+      note:"10/22 晚住船上，艙等請在「商船三井さんふらわあ」官網或電話直接訂（非 Booking／Agoda 商品）。由便宜到舒適鋪開，4 人可考慮包一間個室更自在。旺季與連假很搶，越早越好。",
       options:[
-        {name:"ホテル一井（Ichii）", price:"一泊二食 ¥13,000–18,000／人", status:"傾向", pick:true,
-         desc:"湯畑正對面（徒步 3 分），大浴場開放時間長，評價高、性價比佳，定番穩當之選。",
-         pros:["湯畑最近","大浴場寬敞","晚餐和食美味"],
-         cons:["網路爆滿時需早訂","無私人露天溫泉"],
-         map:"ホテル一井 草津温泉",
-         official:"https://www.hotel-ichii.co.jp/"},
-        {name:"草津温泉 望雲（Boun）", price:"一泊二食 ¥15,000–22,000／人", status:"待決定",
-         desc:"湯畑徒步 3 分，傳統優雅，大浴場與貸切風呂可享兩種草津名湯源泉，提供免費接駁，CP 值高。",
-         pros:["兩種源泉＋貸切風呂","氛圍典雅","BT 免費接駁"],
-         cons:["人氣高需早訂","旺季價格中上"],
-         map:"草津温泉 望雲",
-         link:"https://www.google.com/search?q=草津温泉+望雲+評價+2026&hl=zh-TW"},
-        {name:"草津温泉 奈良屋（Narayaya）", price:"一泊二食 ¥20,000–30,000／人", status:"待決定",
-         desc:"溫泉街中心的老舗高級旅館，湯畑徒步 5 分，料理與服務口碑頂級，想犒賞自己的一晚首選。提供 BT 免費接駁。",
-         pros:["老舗高級體驗","料理評價最高一檔","湯畑徒步圈＋接駁"],
-         cons:["價格最高","旺季最早被訂滿"],
-         map:"草津温泉 奈良屋",
-         link:"https://www.google.com/search?q=草津温泉+奈良屋+評價+2026&hl=zh-TW"},
-        {name:"草津温泉 ホテルKirishima（桐島）", price:"一泊二食 ¥11,000–15,000／人", status:"待決定",
-         desc:"湯畑徒步 5 分，性價比高，溫泉泉質直接引入，家族對應佳（評價 4.0 以上）。",
-         pros:["價格親切","溫泉直引","家族對應良好"],
-         cons:["晚餐豐盛度稍遜一等","部分房間較舊"],
-         map:"草津温泉 桐島旅館"},
-        {name:"草津 みやこや（都屋旅館）", price:"一泊二食 ¥10,000–13,000／人", status:"待決定",
-         desc:"老字號平價旅館，湯畑步行 2 分，泉質強勁，家族客好評，預算優先的選擇。",
-         pros:["湯畑最近","泉質強、價格平實","傳統旅館體驗"],
-         cons:["設施略舊","房間偏小"],
-         map:"草津温泉 都屋旅館"},
-        {name:"草津温泉 ホテル櫻井（Sakurai）", price:"一泊二食 ¥13,000–20,000／人", status:"待決定",
-         desc:"大型溫泉飯店（湯畑徒步約 9 分，有接駁），自助餐＋會席兩種餐型、露天風呂與三種源泉，每晚有湯もみ表演，最適合家族與長輩同行。",
-         pros:["大浴場＋露天＋三源泉","自助餐選擇多、長輩友善","館內有湯もみ表演"],
-         cons:["離湯畑稍遠（靠接駁）","大型旅館較不私密"],
-         map:"草津温泉 ホテル櫻井",
-         official:"https://www.hotel-sakurai.co.jp/"}
+        {name:"ツーリスト（相部屋臥鋪）", price:"¥11,000–14,000／人 起", status:"傾向", pick:true,
+         desc:"最經濟的選擇，附簾子的個人臥鋪＋共用空間，已含大浴場與餐廳使用，CP 值最高。",
+         pros:["最省錢","仍可用大浴場、餐廳","適合單純過夜"],
+         cons:["與他人同房、較無隱私","置物空間小"],
+         map:"苫小牧西港フェリーターミナル",
+         official:"https://www.sunflower.co.jp/route/fare/twilight/"},
+        {name:"プライベート個室（私人房）", price:"¥16,000–24,000／人", status:"待決定",
+         desc:"私人房有獨立空間與較佳隱私，部分房型附電視、洗手台；4 人包一間最自在。",
+         pros:["隱私好、可放鬆","行李好擺","適合家庭／同行"],
+         cons:["比相部屋貴","熱門先售完"],
+         map:"苫小牧西港フェリーターミナル",
+         official:"https://www.sunflower.co.jp/route/fare/twilight/"},
+        {name:"スイート／デラックス（套房）", price:"¥28,000–／人", status:"待決定",
+         desc:"最高等級，寬敞海景套房，想把渡輪本身當亮點體驗時的選擇。",
+         pros:["海景、空間大","體驗感最佳"],
+         cons:["價格最高","數量極少需早訂"],
+         map:"苫小牧西港フェリーターミナル",
+         official:"https://www.sunflower.co.jp/route/fare/twilight/"}
+      ]
+    },
+    {
+      topic:"10/23 東京住宿：建議接續東京篇上野飯店",
+      booking:true, priceChecked:"2026-06-05",
+      note:"10/23 進東京要住一晚。最省事的做法是直接訂「東京篇」選定的上野飯店、把 10/23 一起連住（10/23–10/24…），免得隔天再搬行李。詳細候選與比較請看東京篇的「飯店推薦」分頁；下面放一個代表選項方便比價。",
+      options:[
+        {name:"上野・御徒町一帶飯店（同東京篇）", price:"依東京篇選定", status:"待決定",
+         desc:"與東京篇 10/24 起的上野飯店同一間，10/23 先住一晚連起來最順。可比價後一次訂足整段日期。",
+         pros:["與東京篇連住、不搬行李","上野機能佳、往各地方便"],
+         cons:["需先和東京篇一起定案飯店","旺季整段要早訂"],
+         map:"御徒町駅",
+         link:"https://www.google.com/search?q=上野+御徒町+飯店+10月+2026&hl=zh-TW"}
       ]
     }
   ]
@@ -970,7 +944,7 @@ document.querySelectorAll(".day:not(#overview)").forEach(d=>{ d.style.display="n
 /* —— 封面 / 頁尾 / 總覽底部（讀 TRIP.meta）—— */
 const M=TRIP.meta;
 const ARRIVE_ON=(M.phase==="travelling");
-const LS_PREFIX="tripsbook_ueno202610_";
+const LS_PREFIX="tripsbook_hokkaido202610_";
 document.title=`${M.titleMain}${M.titleAccent}${M.titleTail}`;
 document.getElementById("cvVLabel").textContent=M.vlabel||"";
 document.getElementById("cvStamp").textContent=M.stamp||"";
@@ -1024,7 +998,7 @@ document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M
         <div class="su-sub">${o.room}　·　${o.roomNote}</div></div>
       <div class="su-card"><div class="su-label">🧳 行李 × 車型</div>
         <div class="su-val" style="font-size:15px;line-height:1.5">${o.car}</div>
-        <div class="su-sub">${o.luggage}　→　${o.people>=4?"務必指定大車":"標準車廂即可"}</div></div>`;
+        <div class="su-sub">${o.luggage}　→　${o.people>=4?"行李多時改 Jumbo Taxi":"標準車廂即可"}</div></div>`;
   }
   render();
 })();
@@ -1078,8 +1052,7 @@ TRIP.days.forEach((d,i)=>{
         ${it.note?`<div class="note">${it.note}</div>`:""}
         <div class="btns">
           ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
-          ${it.link?`<a class="btn-search" target="_blank" rel="noopener" href="${it.link}">🔍 最新資訊</a>`:""}
-          ${it.official?`<a class="btn-official" target="_blank" rel="noopener" href="${it.official}">🏛️ 官網</a>`:""}
+          ${it.link?`<a class="btn-link" target="_blank" rel="noopener" href="${it.link}">🔗 介紹</a>`:""}
         </div>
       </div></div>`;
   });
@@ -1096,11 +1069,11 @@ const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
 /* 景點推薦分頁：自動彙整各日 type:spot；沒有景點時不顯示 */
 const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
 if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
-/* 只有當 TRIP.pending 有內容時，才顯示「飯店推薦」分頁（草稿期候選，定案清空後自動隱藏） */
+/* 只有當 TRIP.pending 有內容時才顯示；本書 pending 全為住宿候選，標「🏨 飯店推薦」更好找 */
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
 if(hasPending)extraTabs.push({label:"🏨 飯店推薦"});
 extraTabs.forEach((p,k)=>{
-  const idx=TRIP.days.length+1+k;     // 總覽0 + N天 → 預算/美食/待定 依序接在後面
+  const idx=TRIP.days.length+1+k;     // 總覽0 + N天 → 預算/美食/景點/飯店 依序接在後面
   const btn=document.createElement("button");
   btn.textContent=p.label;
   btn.className="extra";
@@ -1128,39 +1101,10 @@ TRIP.days.forEach((d,i)=>{
   ovGrid.appendChild(card);
 });
 
-let _curTab=0;
-function show(i,jumpToFirstCard=false){
-  /* 點同一個分頁不做任何事 */
-  if(i===_curTab)return;
-  _curTab=i;
-
-  /* 先把所有 day 隱藏，再顯示目標，避免 layout 抖動造成閃爍 */
-  const days=document.querySelectorAll(".day");
-  const btns=document.querySelectorAll(".nav button");
-  days.forEach((d,j)=>{
-    d.classList.remove("show");
-    d.style.display=(j===i)?"block":"none";
-  });
-  /* 延一幀再加 show，讓 CSS fade-in 動畫正常觸發 */
-  requestAnimationFrame(()=>{ if(days[i])days[i].classList.add("show"); });
-  btns.forEach((b,j)=>b.classList.toggle("active",j===i));
-
-  /* 取導覽列尺寸（sticky nav 高度，作為捲動偏移基準） */
-  const nav=document.querySelector(".nav");
-  const navH=nav?nav.getBoundingClientRect().height:56;
-  const navBottom=nav?nav.getBoundingClientRect().bottom+window.scrollY:0;
-
-  if(jumpToFirstCard){
-    /* 從總覽點某天 → 跳到第一個 .card，跳過 DAY ONE 大標區 */
-    const firstCard=days[i]&&days[i].querySelector(".card");
-    if(firstCard){
-      const top=firstCard.getBoundingClientRect().top+window.scrollY-navH-10;
-      window.scrollTo({top,behavior:"smooth"});
-      return;
-    }
-  }
-  /* 一般分頁切換 → 捲到導覽列正下方，不回頁面頂端 */
-  window.scrollTo({top:navBottom,behavior:"smooth"});
+function show(i){
+  document.querySelectorAll(".day").forEach((d,j)=>d.classList.toggle("show",j===i));
+  document.querySelectorAll(".nav button").forEach((b,j)=>b.classList.toggle("active",j===i));
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 const foodGrid=document.getElementById("foodGrid");
@@ -1193,11 +1137,12 @@ if(hasSpots){
   });
 }
 
-/* —— 待定／候選比較 —— */
+/* —— 飯店推薦／候選比較 —— */
 if(hasPending){
   const pw=document.getElementById("pendingWrap");
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
-  /* 訂房比價（A+B）：住宿類 group 設 booking:true（＋ priceChecked 日期）→ 顯示查價日＋各選項加比價連結 */
+  /* 訂房比價（A+B）：住宿類 group 設 booking:true（可加 priceChecked:"YYYY-MM-DD"）→
+     該組顯示查價日提示，每個選項自動帶訂房網一鍵比價（走 Google 站內導向、永不失效、離線僅不載入） */
   const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
   const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
   TRIP.pending.forEach(group=>{
@@ -1249,7 +1194,7 @@ if(hasPending){
 })();
 (function(){
   const KEY=LS_PREFIX+"packing";
-  const DEFAULT=["護照","現金","信用卡","手機＋充電線","行動電源","轉接頭","常備藥","盥洗","換洗衣物","外套","雨具","環保袋"];
+  const DEFAULT=["護照","現金","信用卡","手機＋充電線","行動電源","轉接頭","常備藥","暈船藥","厚外套","保暖帽圍","換洗衣物","盥洗","雨具","環保袋"];
   let items;try{items=JSON.parse(localStorage.getItem(KEY));}catch(e){}
   if(!Array.isArray(items))items=DEFAULT.map(t=>({t,done:false}));
   const grid=document.getElementById("packGrid"),input=document.getElementById("packInput"),cnt=document.getElementById("packCount");
