@@ -939,9 +939,6 @@ const TRIP = {
 const badgeClass={move:"b-move",spot:"b-spot",food:"b-food",shop:"b-shop",hotel:"b-hotel"};
 const gmap=q=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
-/* —— 初始化：確保非 overview 的 .day 一開始就隱藏，防止載入閃爍 —— */
-document.querySelectorAll(".day:not(#overview)").forEach(d=>{ d.style.display="none"; d.classList.remove("show"); });
-
 /* —— 封面 / 頁尾 / 總覽底部（讀 TRIP.meta）—— */
 const M=TRIP.meta;
 const ARRIVE_ON=(M.phase==="travelling");
