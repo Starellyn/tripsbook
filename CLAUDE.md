@@ -1,5 +1,7 @@
 # CLAUDE.md — 給 AI 的專案說明
 
+> **版本:v2(2026-07-06)** — 對應三階段流程(構想→草稿→定版)、variant 版本切換、meta.rate 匯率雙軌。
+>
 > 在 VS Code（或任何 AI 工具）開這個專案時，先讀這份。它是「30 秒上手卡」；
 > 詳細規範在 `旅遊行程書_規格書.md`，需要細節時去查對應章節。
 
@@ -30,6 +32,9 @@ Fail Loud… 見 `~/.claude/CLAUDE.md`）。
 - 先讀 `旅遊行程書_規格書.md` 對應章節，再改檔；本檔只是導覽，不是完整規範。
 - 確認要改的是 `TRIP` / `BOOKS` 資料區，而非版面或渲染程式。
 - 開始一趟新行程前，先確認人數與行李（影響包車車型與分攤），再往下排。
+- **本專案採三階段流程**（構想→草稿→定版，詳見 `規劃準則.md` 第二章）：
+  「想」在 claude.ai（產構想書、轉 TRIP），「做」在 VS Code（貼 TRIP 生書、push）。
+  VS Code 端**只執行不討論**——收到的 TRIP 照規格生成即可，不重新解讀或改寫內容。
 
 ### 產出時
 - 產新書一律**複製 `旅遊行程書_模版.html`**，依資料區填寫，不重寫版面。
@@ -37,6 +42,8 @@ Fail Loud… 見 `~/.claude/CLAUDE.md`）。
 - 新書要設 `meta.phase`（規劃期填 `draft`）。
 - 產出後在書架 `index.html` 的 `BOOKS` 加一張卡（含 `url`、`sortKey`），並提醒發佈流程。
 - 可留白的欄位就留白，不要塞佔位字；該元素會自動不顯示。
+- 有 AB 版分歧時：`meta.variants` 定義版本、分歧日標 `variant`、共用日不標（規格 26）。
+- `meta.rate`／`rateDate` 為台幣換算基準：草稿期參考值、定版鎖當日（規格 27）。
 
 ### 絕不要
 - 不要從零另寫一套版面或樣式（破壞一致性與可維護性）。
@@ -44,6 +51,7 @@ Fail Loud… 見 `~/.claude/CLAUDE.md`）。
 - 不要用中文當資料夾名或檔名（網址會變亂碼編碼）。
 - 不要加會破壞「純靜態、push 就更新」原則的功能（如即時多人同步後端）——要加先問擁有者。
 - 不要替擁有者操作他的 Google 帳號（建試算表、設權限等只能他本人做）；AI 只改檔案內的 `SHEET_API`、`TRIP_NAME` 等設定。
+- 執行中發現模版／渲染問題時，**不要現場自行改版面**——記進 `待更新GitHub_記錄.md` 的「問題回報區」，回流 claude.ai 討論定義後再處理。
 
 ### 不確定時
 - 涉及現況的資訊（花火/活動日期、紅葉時機、價格、營業時間、交通班次）**必須查證**，不可憑印象填。
@@ -103,6 +111,8 @@ tripsbook/
 
 行程點 `type`：`move`(藍) / `spot`(金) / `food`(朱紅) / `shop`(綠) / `hotel`(灰)。
 留白原則：可留白欄位不填，該元素就不出現，不留空殼。
+AB 版：`meta.variants` 定義版本清單，日層級 `variant` 標分歧日（規格 26）。
+匯率：`meta.rate` + `rateDate` 為全書台幣換算基準（規格 27）。
 
 ## 旅程階段（`meta.phase`）
 
@@ -134,10 +144,11 @@ tripsbook/
 
 ## 工作流速記
 
+0. **構想階段（claude.ai）**：產「旅遊構想書」→ 主軸確認 → 依轉換 checklist 轉 TRIP（規劃準則.md 第二～四章）。VS Code 從步驟 1 接手。
 1. 複製模版 → 新資料夾 `地點-YYYYMM/index.html`。
-2. 填 `meta`(含 `phase:"draft"`) → `setup` → `days` → `food`；草稿選項放 `pending`。
+2. 貼上 claude.ai 交付的 `meta`(含 `phase:"draft"`、`rate`/`rateDate`) → `setup` → `days`(分歧日含 `variant`) → `food` → `pending`。
 3. 在書架 `index.html` 的 `BOOKS` 加一張卡（含 `url`、`sortKey`）。
-4. 定案：清空 `pending`、`phase` 改 `final`、存我的地圖。
+4. 定案：清空 `pending`、移除落選 variant 的日子與 `meta.variants`、鎖定當日匯率進 `rate`/`rateDate`、`phase` 改 `final`、存我的地圖。
 5. 出發：`phase` 改 `travelling`。
 6. push → GitHub Pages 自動更新（同網址永遠最新）。
 
@@ -149,3 +160,4 @@ tripsbook/
 ---
 
 > 準則層級：user-level 12 條通用準則（`~/.claude/CLAUDE.md`）打底 → 本檔頂部 ⚙️ Instructions 為旅遊專案專屬補充 → 需要完整規範時查 `旅遊行程書_規格書.md`。
+> 三份正本（本檔、規劃準則、規格書）修改後：更新版本號 → 入 repo → **重新上傳 claude.ai project knowledge**，兩邊版本必須一致。
