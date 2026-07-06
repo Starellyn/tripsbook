@@ -1,0 +1,17 @@
+{
+  "name": "日本旅遊收據記帳",
+  "short_name": "旅遊記帳",
+  "description": "拍收據、AI 辨識、寫入 Notion 的旅遊記帳系統",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F3EC",
+  "theme_color": "#D4502A",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+receipt-tracker/.env
+receipt-tracker/.env.local
+receipt-tracker/.env*.local
+receipt-tracker/test-notion.mjs
+receipt-tracker/node_modules
+receipt-tracker/.next
+receipt-tracker/out
+receipt-tracker/next-env.d.ts
+receipt-tracker/tsconfig.tsbuildinfo
