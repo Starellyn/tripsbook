@@ -1,117 +1,54 @@
-# 📌 待更新到 GitHub 的記錄
+# 📌 待更新GitHub_記錄 — claude.ai ↔ Claude Code 常設工項清單
 
-> 本次新增了幾個功能，整理成這份清單。回家後照著做即可。
-> repo：`Starellyn/tripsbook`　·　網址：`https://starellyn.github.io/tripsbook/`
-
----
-
-## 一、這次新增 / 改動了什麼
-
-| # | 功能 | 狀態 |
-|---|---|---|
-| 1 | **書架首頁**（所有旅遊書總目錄） | 已做好，待上傳 |
-| 2 | **共用資源頁**（我的地圖、App、行李清單、緊急聯絡） | 已做好，待上傳 |
-| 3 | **簡易記帳頁**（單人記出入、分類、結餘、匯出） | 已做好，待上傳 |
-| 4 | **多人分帳頁**（一人記帳、自動算誰補誰） | 已做好，待上傳 |
-| 5 | **記帳同步 Google 試算表** | 程式已改好，**需另做設定**（見下方四） |
-| 6 | **家人意見回饋按鈕**（連 Google 表單） | 按鈕已加，**需自己建表單填網址** |
-| 7 | **東京行程書**：資料夾改名、加記帳/分帳/日記/意見按鈕 | 部分要操作（見下方二） |
-| 8 | **旅途日記頁**（記實際去哪、計劃 vs 實際） | 已做好，待上傳 |
-| 9 | **規格書**更新到第二十一章 | 已做好，待上傳 |
+> **版本:v2(2026-07-06)** — 本檔自本版起**轉型為常設交辦通道**:
+> claude.ai 負責「定義」(把需求寫成工項、指向規格章節),Claude Code 負責「實作」。
+> 做完把該項移到「已完成」;實作中發現模版/渲染問題,記進「問題回報區」回流討論,
+> **不要現場自行改版面**。
+>
+> repo:`Starellyn/tripsbook`　·　網址:`https://starellyn.github.io/tripsbook/`
 
 ---
 
-## 二、檔案要放的位置（目標結構）
+## 一、待辦工項(2026-07-06 批次:三階段流程改版)
 
-```
-tripsbook/
-├── index.html                      ← #1 書架（放根目錄，覆蓋舊的）
-├── 旅遊行程書_規格書.md             ← #8 規格書（根目錄）
-├── 旅遊行程書_模版.html             ← 模版（根目錄）
-├── _shared/
-│   └── index.html                  ← #2 共用資源（由 _shared_共用資源.html 改名）
-├── _kakeibo/
-│   └── index.html                  ← #3 簡易記帳（由 _kakeibo_記帳.html 改名）
-├── _warikan/
-│   └── index.html                  ← #4 多人分帳（由 _warikan_分帳.html 改名）
-├── _nikki/
-│   └── index.html                  ← #8 旅途日記（由 _nikki_旅途日記.html 改名）
-└── tokyo-202610/                   ← #7 注意：資料夾要從 tokyo-2026 改成 tokyo-202610
-    └── index.html                  ← 東京行程書（已加好工具按鈕）
-```
+### 5. 完成後的收尾(擁有者操作)
 
-### 各檔案對應（我給的檔名 → 放上去的位置）
-
-| 我給的檔名 | 放到 GitHub 的位置 |
-|---|---|
-| `index.html`（書架） | `tripsbook/index.html` |
-| `_shared_共用資源.html` | `tripsbook/_shared/index.html`（改名 index.html） |
-| `_kakeibo_記帳.html` | `tripsbook/_kakeibo/index.html`（改名 index.html） |
-| `_warikan_分帳.html` | `tripsbook/_warikan/index.html`（改名 index.html） |
-| `_nikki_旅途日記.html` | `tripsbook/_nikki/index.html`（改名 index.html） |
-| `東京輕井澤草津行程書.html` | `tripsbook/tokyo-202610/index.html`（覆蓋舊的） |
-| `旅遊行程書_規格書.md` | `tripsbook/旅遊行程書_規格書.md` |
-| `旅遊行程書_模版.html` | `tripsbook/旅遊行程書_模版.html` |
-| `Google同步_AppsScript程式碼.gs` | 不放 repo，貼進 Google Apps Script（見四） |
-| `Google同步_設定說明.md` | 可放 repo 留存，或自己留著參考 |
+- push 後用 GitHub Actions 分頁確認部署完成(勿只靠重新整理;CDN 快取可達 1 小時,驗證用無痕視窗)。
+- 把 v2 的三份 .md **重新上傳 claude.ai project knowledge**,兩邊版本對齊。
+- (後續批次)tokyo-202610 由雙版本收斂為單書 AB variant——TRIP 內容屆時由 claude.ai 依新流程轉出提供,本批不動。
 
 ---
 
-## 三、操作步驟（VS Code）
+## 二、問題回報區(Claude Code 實作時填)
 
-1. **改資料夾名**：`tokyo-2026` → `tokyo-202610`（左側右鍵 Rename）。
-   - 書架 `index.html` 裡東京的 `url` 已經是 `tokyo-202610/`，對得上，不用再改。
-2. **建四個新資料夾**：`_shared`、`_kakeibo`、`_warikan`、`_nikki`，各放一個改名成 `index.html` 的檔。
-3. **覆蓋 / 新增**其餘檔案到對應位置。
-4. **Source Control** → 寫 commit 訊息（例：「加入書架、共用資源、記帳/分帳、東京改名」）→ ✓ → Sync/Push。
-5. 等 1–2 分鐘，測這些網址：
-   - `…/tripsbook/` → 書架
-   - `…/tripsbook/tokyo-202610/` → 東京行程書
-   - `…/tripsbook/_shared/`、`…/_kakeibo/`、`…/_warikan/` → 三個工具頁
+> 發現模版/渲染的問題或疑義,記在這裡回流 claude.ai 討論,不自行改版面。
+
+- **規格 26 疑義:分歧模式下 `num` 欄的重新編號**。規格只說「重新編號 Day 1…N」(對應 `tab`),未提日頁大標 `num`(如 `DAY ONE` 英文字)。已實作:`meta.variants` 有內容時,`tab` 與 `num` 一律依可見順序以數字重編(`Day 3`/`DAY 3`),忽略資料裡的原值;無 variants 時完全用原始資料(向後相容)。若希望分歧模式仍顯示英文序數,回流討論。
+- **規格 26 疑義:「景點推薦」分頁與 variant 的關係**。規格 26 只列「待定、美食不受 variant 影響」,未提規格 25 的景點推薦分頁。已實作:景點推薦彙整**全部版本**的 spot(不隨切換過濾)。若希望只列當前版本的景點,回流討論。
 
 ---
 
-## 四、需要「另外設定」的兩件事
+## 三、已完成(歸檔)
 
-### A. 記帳同步 Google 試算表（選做，想要雲端備份才設）
+### 2026-07-06 批次:三階段流程改版(工項 1–4)
 
-詳見 `Google同步_設定說明.md`，簡述：
+1. **三份正本文件入 repo(v2)**:`規劃準則.md`、`CLAUDE.md`、`旅遊行程書_規格書.md` 覆蓋根目錄同名檔並 push。
+2. **模版:variant 版本切換器**(規格 26):總覽頁頂端切換鈕(沿用人數切換器樣式)、共用日＋當前版本日過濾、依原始順序重編 Day 1…N、分歧日標版本標籤、不存 localStorage;`meta.variants` 留空時行為與改版前完全相同(jsdom 驗證通過)。
+3. **模版:匯率基準列**(規格 27):預算頁頂端顯示 `匯率基準:¥1 ≈ NT$X（YYYY-MM-DD）`,draft 尾註「參考」、final 起「定版鎖定」;`rate`/`rateDate` 留白不顯示。
+4. **模版:pending 空值防呆**(規格 10):`draft` 且 pending 空/未定義時,總覽頁基本設定下方顯示灰色小字提示;final/travelling 不顯示。
 
-1. 開一份 Google 試算表。
-2. 擴充功能 → Apps Script，貼上 `Google同步_AppsScript程式碼.gs`，存檔。
-3. 部署 → 新增部署 → 網頁應用程式（執行身分：我自己；存取：所有人）→ 複製網址。
-4. 把 `_kakeibo/index.html` 和 `_warikan/index.html` 最上面的 `const SHEET_API=""` 填入那個網址。
-5. push。記一筆看到「已同步 ✓」就成功。
+驗證:jsdom 行為測試 23 項全過(向後相容、防呆顯示/隱藏、匯率列雙軌、AB 切換與分頁索引)。兩項規格疑義記於問題回報區。
 
-> 沒設也沒關係：留空 `""` 時記帳照常運作，只是僅存本機。
+### 2025 批次:書架與工具頁上線
 
-### B. 家人意見 Google 表單（選做）
-
-1. 到 forms.google.com 建表單（欄位：哪一天/項目、想怎麼改、其他）。
-2. 取連結。
-3. 把 `tokyo-202610/index.html` 裡 `feedback-btn` 的 `href="https://forms.gle/你的表單網址"` 換成你的連結。
-4. push。
+書架首頁、`_shared` 共用資源、`_kakeibo` 記帳、`_warikan` 分帳、`_nikki` 日記、Google 同步(Apps Script)、家人意見按鈕、`tokyo-2026`→`tokyo-202610` 改名、規格書更新至二十一章。
+(原始操作細節見 git 歷史;若此批仍有未上線項目,移回上方待辦。)
 
 ---
 
-## 五、各功能的入口（上線後從哪點到）
+## 四、常備小抄(避免踩雷)
 
-- **書架** = 總入口 `…/tripsbook/`，列出所有旅遊書。
-- **東京行程書**內：
-  - 預算頁工具盒 → 🗺️ 我的地圖、🧾 旅遊記帳、👥 多人分帳、📔 旅途日記
-  - 總覽頁底部 → 💬 家人意見（連表單）
-- **共用資源** `…/_shared/`：每趟通用的地圖、App、行李清單、緊急聯絡。
-
----
-
-## 六、小提醒（避免踩雷）
-
-- 每本行程書、每個工具頁的檔名都用 `index.html`，網址才乾淨。
-- 網址一定要帶資料夾名，`…/tripsbook/` 是書架、各頁在子資料夾。
-- 記帳頁換新旅程時要改 `KEY` 和 `TRIP_NAME`（帳本才分開）。
+- 每本行程書、每個工具頁的檔名都用 `index.html`,網址才乾淨;網址一定帶資料夾名。
+- 記帳/分帳/日記換新旅程要改 `KEY`、`SHEET_ID`、`LS_PREFIX`(帳本與勾選狀態才分開)。
 - 改了 Apps Script 程式要「重新部署」才生效。
-- push 後若沒更新，是瀏覽器快取 → 重新整理或用無痕視窗。
-
----
-
-*記錄建立於規劃階段，回家後照「三、操作步驟」走，選做項見「四」。*
+- push 後若沒更新,是瀏覽器快取 → GitHub Actions 確認部署,無痕視窗驗證。

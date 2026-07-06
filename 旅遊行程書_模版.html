@@ -276,6 +276,18 @@ body{
 .su-card.hl{border:2px solid var(--vermilion)}
 .su-card.hl .su-val{color:var(--vermilion)}
 
+/* ---------- AB 版切換（規格 26）：切換鈕沿用 .ppl-toggle 樣式 ---------- */
+.variant-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.variant-bar .vb-label{font-family:var(--f-serif);font-size:15px;font-weight:700}
+.v-tag{display:inline-block;font-family:var(--f-sans);font-size:11px;font-weight:700;background:#efe6cf;color:var(--gold);border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+
+/* ---------- pending 空值防呆提示（規格 10） ---------- */
+.pending-guard{font-size:12.5px;color:var(--ink-soft);margin:-6px 0 16px}
+
+/* ---------- 匯率基準列（規格 27） ---------- */
+.rate-base{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:13px;color:var(--ink-soft);margin-bottom:18px}
+.rate-base b{color:var(--ink)}
+
 /* ---------- 預算 ---------- */
 .budget-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
 .tier{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 16px;text-align:center;box-shadow:var(--shadow)}
@@ -395,6 +407,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <h2 class="section-title">行程總覽</h2>
   <p class="section-sub">一眼看完整趟　·　點任一張卡片跳到當天細節</p>
 
+  <!-- ★ AB 版切換鈕（meta.variants 有內容才顯示，規格 26） -->
+  <div class="variant-bar" id="variantBar"></div>
+
   <!-- ★ 基本設定：人數／行李 → 自動換算包車與住宿分攤（不需要就刪掉這塊，並刪 TRIP.setup） -->
   <div class="setup">
     <div class="setup-head">
@@ -403,6 +418,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
     </div>
     <div class="setup-grid" id="setupGrid"></div>
   </div>
+
+  <!-- ★ pending 空值防呆（phase:draft 且無待定候選才顯示，規格 10） -->
+  <div class="pending-guard" id="pendingGuard" style="display:none">⚠️ 草稿階段但無待定候選；若剛完成轉檔，請確認候選未遺失</div>
 
   <div class="ov-grid" id="ovGrid"></div>
   <div class="ov-foot" id="ovFoot"></div>
@@ -415,6 +433,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 <section class="wrap day" id="budget" style="padding-top:30px">
   <h2 class="section-title">旅費預算</h2>
   <p class="section-sub">以每人計　·　匯率與數字依實際調整　·　＜編輯說明：此頁為靜態表格，直接改文字即可＞</p>
+
+  <!-- ★ 匯率基準列（meta.rate / rateDate 有填才顯示，規格 27） -->
+  <div class="rate-base" id="rateBase"></div>
 
   <!-- ① 固定支出（整趟一次性） -->
   <div class="bud-sub">① 固定支出　<small>整趟一次性、不隨天數變動</small></div>
@@ -526,6 +547,13 @@ const TRIP = {
     /* 旅程階段：draft(草稿) / final(定案) / travelling(旅途中)
        draft 時記帳/分帳/日記按鈕會變灰、標「定案後開放」、點不了 */
     phase:"draft",
+    /* 匯率雙軌（規格 27）：rate = NT$/¥1（如 0.21），全書台幣換算唯一基準；
+       rateDate = 基準日 YYYY-MM-DD。draft=參考值、final 起=定版鎖定。兩欄留白則預算頁不顯示基準列 */
+    rate:null,
+    rateDate:"",
+    /* AB 版切換（規格 26）：如 [{id:"A",label:"花火票版"},{id:"B",label:"無票版"}]
+       留空＝無分歧，一切照舊。分歧日在 days[] 該日加 variant:"A"，共用日不標 */
+    variants:[],
     vlabel:"○○の旅",                                 // 封面右側直書小標
     titleMain:"目的地名稱", titleAccent:"X 日",        // 主標：前段（黑）＋ 強調段（朱紅）
     titleTail:"旅遊行程書",                            // 主標尾
@@ -558,7 +586,8 @@ const TRIP = {
   /* ===== 每日行程 =====
      · 要加一天 → 整個 { ... } 區塊複製貼上
      · type 種類：move(交通) spot(景點) food(美食) shop(購物) hotel(住宿)
-     · 每個欄位都可留白；留白的就不會顯示                       */
+     · 每個欄位都可留白；留白的就不會顯示
+     · AB 版分歧日加 variant:"A"（共用日不標；同一天兩種走法寫成兩個 day 物件相鄰排列，A 在前。規格 26） */
   days:[
     {
       tab:"Day 1",                                  // 導覽列按鈕文字
@@ -720,101 +749,155 @@ document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M
 
 const navBar=document.getElementById("navBar");
 const daysEl=document.getElementById("days");
+const ovGrid=document.getElementById("ovGrid");
 
-/* 總覽分頁按鈕（index 0） */
-const ovBtn=document.createElement("button");
-ovBtn.textContent="🏠 總覽";
-ovBtn.className="extra active";
-ovBtn.onclick=()=>show(0);
-navBar.appendChild(ovBtn);
+/* —— AB 版切換（規格 26）——
+   meta.variants 留空＝無分歧，渲染行為與單版本完全相同（向後相容）。
+   有內容時：只顯示「共用日＋當前版本日」，依 days[] 原始順序重新編號 Day 1…N。
+   純前端切換、不存 localStorage（每次開啟回預設版）。 */
+const VARIANTS=Array.isArray(M.variants)?M.variants:[];
+let curVariant=VARIANTS.length?VARIANTS[0].id:null;
+const variantLabel=id=>{const v=VARIANTS.find(x=>x.id===id);return v?v.label:id;};
+const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>!x.d.variant||x.d.variant===curVariant);
 
-TRIP.days.forEach((d,i)=>{
-  const btn=document.createElement("button");
-  btn.textContent=d.tab;
-  btn.onclick=()=>show(i+1);          // 總覽佔 0，各日往後移一位
-  navBar.appendChild(btn);
-
-  const sec=document.createElement("section");
-  sec.className="day";
-  sec.id="day"+i;
-  let html=`<div class="day-head">
-      <div class="num">${d.num}</div>
-      <h2 class="serif">${d.title}</h2>
-      <div class="date">📅 ${d.date}</div>
-      <div class="theme">${d.theme}</div>
-    </div>
-    <div class="day-summary">
-      <div class="ds-item"><span>📍 主要區域</span><b>${d.area||"—"}</b></div>
-      <div class="ds-item"><span>💰 當日預估</span><b>${d.cost||"—"}</b></div>
-      <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
-      ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
-    </div>
-    ${ARRIVE_ON?`<div class="day-progress" data-day="${i}"><div class="bar"><i style="width:0%"></i></div><div class="txt">0/${d.items.length}</div></div>`:""}
-    <div class="tl">`;
-  d.items.forEach((it,j)=>{
-    const meta=[];
-    if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
-    if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
-    const aKey=i+"-"+j;
-    html+=`<div class="item">
-      <div class="time-col"><div class="time">${it.time}</div>${ARRIVE_ON?`<div class="arrived" data-arrive="${aKey}" data-day="${i}">✓</div>`:""}</div>
-      <div class="card">
-        <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
-        <h3>${it.title}</h3>
-        ${it.desc?`<div class="desc">${it.desc}</div>`:""}
-        ${meta.length?`<div class="metaline">${meta.join("")}</div>`:""}
-        ${it.transit?`<div class="transit">🚇 ${it.transit}</div>`:""}
-        ${it.note?`<div class="note">${it.note}</div>`:""}
-        <div class="btns">
-          ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
-          ${it.link?`<a class="btn-link" target="_blank" rel="noopener" href="${it.link}">🔗 介紹</a>`:""}
-        </div>
-      </div></div>`;
-  });
-  html+=`</div>`;
-  sec.innerHTML=html;
-  daysEl.appendChild(sec);
-});
-
-/* 追加分頁：預算、美食（對應已存在的 #budget / #food，DOM 順序接在各 day 之後） */
-const divider=document.createElement("div");
-divider.className="divider";
-navBar.appendChild(divider);
-const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
-/* 景點推薦分頁：自動彙整各日 type:spot；沒有景點時不顯示 */
+/* 景點推薦、待定分頁不受 variant 影響（全版本共用） */
 const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
-if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
-/* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁（若整組都是住宿候選，可改成「🏨 飯店推薦」更好找） */
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
-if(hasPending)extraTabs.push({label:"🤔 待定"});
-extraTabs.forEach((p,k)=>{
-  const idx=TRIP.days.length+1+k;     // 總覽0 + N天 → 預算/美食/待定 依序接在後面
-  const btn=document.createElement("button");
-  btn.textContent=p.label;
-  btn.className="extra";
-  btn.onclick=()=>show(idx);
-  navBar.appendChild(btn);
-});
 /* 沒有對應內容時，把該分頁從 DOM 移除，避免索引錯位 */
 if(!hasSpots){const se=document.getElementById("spots");if(se)se.remove();}
 if(!hasPending){const pe=document.getElementById("pending");if(pe)pe.remove();}
 
-/* 建立總覽卡片 */
-const ovGrid=document.getElementById("ovGrid");
-TRIP.days.forEach((d,i)=>{
-  const card=document.createElement("div");
-  card.className="ov-card";
-  card.onclick=()=>show(i+1);
-  card.innerHTML=`
-    <div class="ov-day">${d.tab} <span>${d.date}</span></div>
-    <div class="ov-title">${d.title}</div>
-    <div class="ov-theme">${d.theme}</div>
-    <div class="ov-tags">
-      <span>📍 ${d.area||"—"}</span>
-      <span>💰 ${d.cost||"—"}</span>
-    </div>`;
-  ovGrid.appendChild(card);
-});
+/* —— 導覽列＋各日分頁＋總覽日卡（variant 切換時整組重建）—— */
+function renderTrip(){
+  const list=visibleDays();
+  navBar.innerHTML="";daysEl.innerHTML="";ovGrid.innerHTML="";
+
+  /* 總覽分頁按鈕（index 0） */
+  const ovBtn=document.createElement("button");
+  ovBtn.textContent="🏠 總覽";
+  ovBtn.className="extra active";
+  ovBtn.onclick=()=>show(0);
+  navBar.appendChild(ovBtn);
+
+  list.forEach((x,k)=>{
+    const d=x.d,oi=x.oi;               // oi＝days[] 原始索引（抵達勾選的 key 用它，切版本不亂）
+    const tabText=VARIANTS.length?`Day ${k+1}`:d.tab;   // 有 AB 版時依可見順序重新編號
+    const numText=VARIANTS.length?`DAY ${k+1}`:d.num;
+    const vTag=d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"";
+
+    const btn=document.createElement("button");
+    btn.textContent=tabText;
+    btn.onclick=()=>show(k+1);          // 總覽佔 0，各日往後移一位
+    navBar.appendChild(btn);
+
+    const sec=document.createElement("section");
+    sec.className="day";
+    sec.id="day"+oi;
+    let html=`<div class="day-head">
+        <div class="num">${numText}</div>
+        <h2 class="serif">${d.title}${vTag}</h2>
+        <div class="date">📅 ${d.date}</div>
+        <div class="theme">${d.theme}</div>
+      </div>
+      <div class="day-summary">
+        <div class="ds-item"><span>📍 主要區域</span><b>${d.area||"—"}</b></div>
+        <div class="ds-item"><span>💰 當日預估</span><b>${d.cost||"—"}</b></div>
+        <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
+        ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
+      </div>
+      ${ARRIVE_ON?`<div class="day-progress" data-day="${oi}"><div class="bar"><i style="width:0%"></i></div><div class="txt">0/${d.items.length}</div></div>`:""}
+      <div class="tl">`;
+    d.items.forEach((it,j)=>{
+      const meta=[];
+      if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
+      if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
+      const aKey=oi+"-"+j;
+      html+=`<div class="item">
+        <div class="time-col"><div class="time">${it.time}</div>${ARRIVE_ON?`<div class="arrived" data-arrive="${aKey}" data-day="${oi}">✓</div>`:""}</div>
+        <div class="card">
+          <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
+          <h3>${it.title}</h3>
+          ${it.desc?`<div class="desc">${it.desc}</div>`:""}
+          ${meta.length?`<div class="metaline">${meta.join("")}</div>`:""}
+          ${it.transit?`<div class="transit">🚇 ${it.transit}</div>`:""}
+          ${it.note?`<div class="note">${it.note}</div>`:""}
+          <div class="btns">
+            ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
+            ${it.link?`<a class="btn-link" target="_blank" rel="noopener" href="${it.link}">🔗 介紹</a>`:""}
+          </div>
+        </div></div>`;
+    });
+    html+=`</div>`;
+    sec.innerHTML=html;
+    daysEl.appendChild(sec);
+
+    /* 總覽日卡 */
+    const card=document.createElement("div");
+    card.className="ov-card";
+    card.onclick=()=>show(k+1);
+    card.innerHTML=`
+      <div class="ov-day">${tabText} <span>${d.date}</span>${vTag}</div>
+      <div class="ov-title">${d.title}</div>
+      <div class="ov-theme">${d.theme}</div>
+      <div class="ov-tags">
+        <span>📍 ${d.area||"—"}</span>
+        <span>💰 ${d.cost||"—"}</span>
+      </div>`;
+    ovGrid.appendChild(card);
+  });
+
+  /* 追加分頁：預算、美食（對應已存在的 #budget / #food，DOM 順序接在各 day 之後） */
+  const divider=document.createElement("div");
+  divider.className="divider";
+  navBar.appendChild(divider);
+  const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
+  if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
+  /* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁（若整組都是住宿候選，可改成「🏨 飯店推薦」更好找） */
+  if(hasPending)extraTabs.push({label:"🤔 待定"});
+  extraTabs.forEach((p,k)=>{
+    const idx=list.length+1+k;          // 總覽0 + 可見天數 → 預算/美食/待定 依序接在後面
+    const btn=document.createElement("button");
+    btn.textContent=p.label;
+    btn.className="extra";
+    btn.onclick=()=>show(idx);
+    navBar.appendChild(btn);
+  });
+
+  initArrived();
+  show(0);
+}
+
+/* —— AB 版切換鈕（總覽頁最上方；樣式沿用人數切換器）—— */
+(function(){
+  const bar=document.getElementById("variantBar");if(!bar)return;
+  if(!VARIANTS.length){bar.remove();return;}
+  function render(){
+    bar.innerHTML=`<span class="vb-label">🔀 版本</span><div class="ppl-toggle">${
+      VARIANTS.map(v=>`<button class="${v.id===curVariant?"on":""}" data-v="${v.id}">${v.label}</button>`).join("")}</div>`;
+    bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      if(b.dataset.v===curVariant)return;
+      curVariant=b.dataset.v;render();renderTrip();
+    });
+  }
+  render();
+})();
+
+/* —— pending 空值防呆（規格 10）：draft 且 pending 空/未定義時提示，final/travelling 不顯示 —— */
+(function(){
+  const el=document.getElementById("pendingGuard");if(!el)return;
+  if(M.phase==="draft"&&!hasPending)el.style.display="block";
+  else el.remove();
+})();
+
+/* —— 匯率基準列（規格 27）：rate/rateDate 留白則不顯示 —— */
+(function(){
+  const el=document.getElementById("rateBase");if(!el)return;
+  if(!M.rate){el.remove();return;}
+  const tag=(M.phase==="draft")?"參考":"定版鎖定";
+  el.innerHTML=`💱 匯率基準：¥1 ≈ NT$<b>${M.rate}</b>${M.rateDate?`（${M.rateDate}）`:""}　·　${tag}`;
+})();
+
+renderTrip();
 
 function show(i){
   document.querySelectorAll(".day").forEach((d,j)=>d.classList.toggle("show",j===i));
@@ -928,7 +1011,8 @@ if(hasPending){
   input.addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("packAddBtn").click();});
   render();
 })();
-(function(){
+/* 抵達打勾：由 renderTrip() 每次重建各日分頁後呼叫重綁（key 用 days[] 原始索引，切版本不亂） */
+function initArrived(){
   if(!ARRIVE_ON)return;
   const KEY=LS_PREFIX+"arrived";let set;
   try{set=new Set(JSON.parse(localStorage.getItem(KEY))||[]);}catch(e){set=new Set();}
@@ -944,7 +1028,7 @@ if(hasPending){
     el.onclick=()=>{el.classList.toggle("on");el.classList.contains("on")?set.add(k):set.delete(k);save();updateDay(el.dataset.day);};
   });
   TRIP.days.forEach((d,i)=>updateDay(i));
-})();
+}
 (function(){
   const btn=document.getElementById("toTop");if(!btn)return;
   window.addEventListener("scroll",()=>{btn.classList.toggle("show",window.scrollY>400);});
