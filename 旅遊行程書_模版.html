@@ -758,6 +758,8 @@ const ovGrid=document.getElementById("ovGrid");
 const VARIANTS=Array.isArray(M.variants)?M.variants:[];
 let curVariant=VARIANTS.length?VARIANTS[0].id:null;
 const variantLabel=id=>{const v=VARIANTS.find(x=>x.id===id);return v?v.label:id;};
+/* variant 模式下 num 重編用的英文序數（超出 14 天以數字 fallback） */
+const DAY_ORD=["ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN"];
 const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>!x.d.variant||x.d.variant===curVariant);
 
 /* 景點推薦、待定分頁不受 variant 影響（全版本共用） */
@@ -782,7 +784,7 @@ function renderTrip(){
   list.forEach((x,k)=>{
     const d=x.d,oi=x.oi;               // oi＝days[] 原始索引（抵達勾選的 key 用它，切版本不亂）
     const tabText=VARIANTS.length?`Day ${k+1}`:d.tab;   // 有 AB 版時依可見順序重新編號
-    const numText=VARIANTS.length?`DAY ${k+1}`:d.num;
+    const numText=VARIANTS.length?`DAY ${DAY_ORD[k]||k+1}`:d.num;
     const vTag=d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"";
 
     const btn=document.createElement("button");
