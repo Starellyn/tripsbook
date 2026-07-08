@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 一 push 就更新：要求瀏覽器每次先向伺服器確認有無新版；離線時仍會用快取，不影響出國斷網 -->
 <meta http-equiv="Cache-Control" content="no-cache">
-<title>上野・草津・輕井澤 四日旅遊行程書</title>
+<title>旅遊行程書</title>
 <style>
 /* ============================================================
    ★ 設計：和風旅遊誌 (washi paper editorial)
@@ -55,15 +56,6 @@ body{
   background:var(--card);transition:.18s;
 }
 .cover .back-shelf:hover{border-color:var(--vermilion);color:var(--vermilion)}
-/* 姊妹書（這趟另一半行程）跳轉鈕 */
-.cover .sister-book{
-  display:inline-flex;align-items:center;gap:6px;margin:18px auto 0;
-  font-family:var(--f-sans);font-size:13px;font-weight:700;
-  color:var(--indigo);text-decoration:none;
-  border:1.5px solid var(--indigo);border-radius:30px;padding:8px 18px;
-  background:var(--card);transition:.18s;
-}
-.cover .sister-book:hover{background:var(--indigo);color:#fff}
 
 /* 倒數計時 */
 .countdown{margin-top:14px;font-family:var(--f-serif);font-size:15px;color:var(--vermilion-d);font-weight:700}
@@ -153,7 +145,7 @@ body{
 .nav .divider{flex:0 0 auto;width:1px;background:var(--line);margin:2px 4px}
 
 /* ---------- 每日區塊 ---------- */
-.day{display:none;animation:fade .3s ease both;will-change:opacity,transform}
+.day{display:none;animation:fade .4s ease both}
 .day.show{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .day-head{
@@ -233,6 +225,8 @@ body{
 }
 .btn-map{background:var(--vermilion);color:#fff}
 .btn-map:hover{background:var(--vermilion-d)}
+.btn-link{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
+.btn-link:hover{background:var(--indigo);color:#fff}
 .btn-search{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo)}
 .btn-search:hover{background:var(--indigo);color:#fff}
 .btn-official{background:transparent;color:var(--matcha);border:1.5px solid var(--matcha)}
@@ -281,6 +275,18 @@ body{
 .su-card .su-sub{font-size:12px;color:var(--ink-soft);margin-top:5px;line-height:1.55}
 .su-card.hl{border:2px solid var(--vermilion)}
 .su-card.hl .su-val{color:var(--vermilion)}
+
+/* ---------- AB 版切換（規格 26）：切換鈕沿用 .ppl-toggle 樣式 ---------- */
+.variant-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.variant-bar .vb-label{font-family:var(--f-serif);font-size:15px;font-weight:700}
+.v-tag{display:inline-block;font-family:var(--f-sans);font-size:11px;font-weight:700;background:#efe6cf;color:var(--gold);border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+
+/* ---------- pending 空值防呆提示（規格 10） ---------- */
+.pending-guard{font-size:12.5px;color:var(--ink-soft);margin:-6px 0 16px}
+
+/* ---------- 匯率基準列（規格 27） ---------- */
+.rate-base{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 14px;font-size:13px;color:var(--ink-soft);margin-bottom:18px}
+.rate-base b{color:var(--ink)}
 
 /* ---------- 預算 ---------- */
 .budget-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:26px}
@@ -388,8 +394,6 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <div class="meta" id="cvMeta"></div>
   <p class="story" id="cvStory"></p>
   <button class="share-btn" id="shareBtn">🔗 複製連結分享</button>
-  <!-- 姊妹書跳轉：這趟的另一個版本（無花火票備案） -->
-  <a class="sister-book" href="../tokyo-202610-v2/">🔀 看另一版　無花火票・直奔草津版</a>
   <div class="rule"></div>
 </header>
 
@@ -403,6 +407,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <h2 class="section-title">行程總覽</h2>
   <p class="section-sub">一眼看完整趟　·　點任一張卡片跳到當天細節</p>
 
+  <!-- ★ AB 版切換鈕（meta.variants 有內容才顯示，規格 26） -->
+  <div class="variant-bar" id="variantBar"></div>
+
   <!-- ★ 基本設定：人數／行李 → 自動換算包車與住宿分攤（不需要就刪掉這塊，並刪 TRIP.setup） -->
   <div class="setup">
     <div class="setup-head">
@@ -411,6 +418,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
     </div>
     <div class="setup-grid" id="setupGrid"></div>
   </div>
+
+  <!-- ★ pending 空值防呆（phase:draft 且無待定候選才顯示，規格 10） -->
+  <div class="pending-guard" id="pendingGuard" style="display:none">⚠️ 草稿階段但無待定候選；若剛完成轉檔，請確認候選未遺失</div>
 
   <div class="ov-grid" id="ovGrid"></div>
   <div class="ov-foot" id="ovFoot"></div>
@@ -423,6 +433,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 <section class="wrap day" id="budget" style="padding-top:30px">
   <h2 class="section-title">旅費預算</h2>
   <p class="section-sub">以每人計　·　匯率與數字依實際調整　·　＜編輯說明：此頁為靜態表格，直接改文字即可＞</p>
+
+  <!-- ★ 匯率基準列（meta.rate / rateDate 有填才顯示，規格 27） -->
+  <div class="rate-base" id="rateBase"></div>
 
   <!-- ① 固定支出（整趟一次性） -->
   <div class="bud-sub">① 固定支出　<small>整趟一次性、不隨天數變動</small></div>
@@ -495,6 +508,7 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
     <div class="pack-note">勾選狀態存在這支裝置的瀏覽器。</div>
   </div>
 </section>
+
 <!-- ============ 美食（分頁） ============ -->
 <section class="wrap day" id="food" style="padding-top:30px">
   <h2 class="section-title">美食推薦</h2>
@@ -511,8 +525,8 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
 <!-- ============ 待定／候選比較（分頁。定案後刪掉資料，此分頁自動隱藏） ============ -->
 <section class="wrap day" id="pending" style="padding-top:30px">
-  <h2 class="section-title">飯店推薦</h2>
-  <p class="section-sub">各區飯店候選並列比較　·　點地圖看位置；定案後再訂房，其餘可刪</p>
+  <h2 class="section-title">待定・候選比較</h2>
+  <p class="section-sub">還在討論的選項並列在這裡　·　決定後把選中的搬進對應日程、其餘刪除</p>
   <div id="pendingWrap"></div>
 </section>
 
@@ -526,26 +540,54 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
    ★★★ 資料區：要改行程，改這裡就好 ★★★
    type 種類：move(交通) / spot(景點) / food(美食) / shop(購物) / hotel(住宿)
    ============================================================ */
+/* ============================================================
+   tokyo-202610 草稿 TRIP 資料區塊（v2：整合 AB 版）
+   來源：構想書.md v3.0（2026-07-06）
+   狀態：phase = "draft"
+   分歧僅在 Day 1、Day 4，其餘天數共用（見規格書第26章 variant 機制）。
+
+   ⚠️ 尚未解決事項（不擋轉草稿，擋定版）：
+   - 東京住宿「天空樹之家」尚未訂房，且查無此確切名稱物件，
+     pending[] 中列了地址周邊（錦糸町／押上一帶）的候選供參考，
+     使用者若有訂房連結或原文名稱，需回頭核對更新。
+   - 若走「有花火版」：9/9（三）10:00 起一般民眾先着售票，需自行搶票。
+   - 日光紅葉見頃 2026 年官方預報 9 月才發布，沿用去年同期參考。
+   - JAL 松山→羽田 09:40 班機為 6 月班表資料，10 月正式班表
+     8 月下旬才公布，屆時建議核對班號與時刻。
+   - 上野→草津 9:00「草津・四萬31號」僅土曜・休日運行，10/25
+     為週日，理論上有開，但訂票前建議再次確認當週實際運行日。
+
+   ⚠️ 反向追溯：住宿由前版「淺草 2 晚」改為使用者最新提供的
+   「天空樹之家」（墨田區江東橋周邊），原淺草飯店候選整組移除；
+   輕井澤仍為當天來回、不過夜。
+   ============================================================ */
+
 const TRIP = {
 
   /* ── 基本資訊 ─────────────────────────── */
   meta: {
-    stamp: "東京",
+    stamp: "草津",
     phase: "draft",
-    vlabel: "東京・草津・輕井澤之旅",
-    titleMain: "東京・草津",
-    titleAccent: "五日",
+    vlabel: "草津・輕井澤・東京之旅",
+    titleMain: "草津・輕井澤",
+    titleAccent: "東京",
     titleTail: "旅遊行程書",
-    sub: "TOKYO · KUSATSU · KARUIZAWA",
-    chips: ["📅 10/24–10/28", "👥 4 人旅", "🎆 花火觀賞券", "🍂 紅葉季"],
+    sub: "KUSATSU · KARUIZAWA · TOKYO",
+    chips: ["📅 10/24–10/28", "👥 4 人旅", "🍂 紅葉見頃", "♨️ 溫泉"],
     departDate: "2026-10-24",
-    story: "睽違 11 年的東京灣大華火祭，在金秋楓紅的季節重返晴海夜空。花火、溫泉、紅葉，三位一體，一趟收盡初秋日本的最精彩。",
+    story: "秋高氣爽，直奔日本三名泉。從草津的湯煙楓紅，到輕井澤的晨霧高原，再轉往東京──有花火版直奔東京灣看今年復辦的大華火祭，無花火版則多留一天給日光紅葉，兩種秋天，任你切換。",
     footStats: [
       { label: "日程", value: "10/24–10/28（5天4夜）" },
       { label: "人數", value: "4 人" },
-      { label: "主題", value: "花火 · 溫泉 · 紅葉 · 購物" }
+      { label: "主題", value: "溫泉 · 紅葉 · 高原 · 花火／日光" }
     ],
-    footer: "花火散盡，各懷美夢歸。"
+    footer: "湯煙深處，秋色最真。",
+    rate: 0.20,
+    rateDate: "2026-07-05",
+    variants: [
+      { id: "A", label: "有花火版" },
+      { id: "B", label: "無花火版" }
+    ]
   },
 
   /* ── 基本設定 ─────────────────────────── */
@@ -554,12 +596,13 @@ const TRIP = {
     options: [
       {
         people: 4, label: "4 人",
-        charterTotal: 32000, // 10/28 包車估算，4人分攤
-        car: "Alphard 或 大型休旅",
-        carNote: "10/28 東京市區購物含機場接送，預估整台 ¥28,000–40,000",
-        luggage: "大行李 4 件，建議入住後寄存飯店",
-        room: "雙人房 × 2 間",
-        roomNote: "草津：界草津含 2 食，2 間和式雙人房；東京：同一飯店 3 晚"
+        charterTotal: 0,
+        car: "無花火版 Day 4 改包車一日（日光），約 10 小時",
+        carNote: "無花火版：07:00–17:00 包車往返日光，費用另計（建議直接向車行詢價，KKday／KLOOK 皆有中文司機選項）",
+        luggage: "大行李 4 件。⚠️ 永田屋昭和館為貸別荘型態，是否提供行李先送服務尚未確認",
+        room: "草津：永田屋昭和館 1 棟整包（已定案）；東京：天空樹之家（⚠️ 尚未訂房，見 pending）",
+        roomEach: 3636,
+        roomNote: "草津 10/25–10/26 已定案（NT$14,542 ÷ 4 人 ≈ NT$3,636／人，僅該晚）；東京 10/24、10/26、10/27 三晚（不連續，中間夾草津 1 晚）尚未訂房，此欄暫無法反映東京部分費用"
       }
     ]
   },
@@ -567,408 +610,457 @@ const TRIP = {
   /* ── 每日行程 ─────────────────────────── */
   days: [
 
-    /* ──────── Day 1：抵達・東京車站・花火大會 ──────── */
+    /* ──────── Day 1（有花火版）：抵達 → 天空樹之家 → 有明購物 → 花火 ──────── */
     {
       tab: "Day 1",
       num: "DAY ONE",
-      title: "抵達 · 東京車站 · 花火大會",
+      variant: "A",
+      title: "抵達東京 → 有明親水海浜公園看花火",
       date: "10/24（六）",
-      theme: "降落東京 → 車站散策 → 晴海花火✨",
-      area: "東京・千代田・中央區晴海",
-      cost: "交通 ¥2,360–12,280｜餐飲 ¥4,000–8,000（門票已購）",
-      walk: "輕度，花火後人潮擁擠，預留緩衝 30–45 分鐘",
-      dayMap: "東京駅 丸の内",
+      theme: "羽田抵達 → 天空樹之家入住 → 有明Garden購物 → 東京灣大華火祭",
+      area: "東京・有明",
+      cost: "花火觀覽席 ¥5,000–10,000/人｜購物依個人",
+      walk: "輕度，多為電車移動",
+      dayMap: "有明親水海浜公園",
       items: [
         {
-          time: "依航班",
+          time: "09:40",
           type: "move",
-          badge: "抵達",
-          title: "機場 → 東京車站",
-          desc: "羽田：京急＋JR山手線 約40分，¥590（NT$124）。成田：N'EX 特快 約60分，¥3,070（NT$645）。行李先寄放飯店或 Coin Locker。",
-          transit: "羽田 →（京急+山手線）→ 東京駅；成田 →（N'EX）→ 東京駅",
-          map: "東京駅 丸の内南口"
+          badge: "航班",
+          title: "台北松山 → 東京羽田（JAL JL96）",
+          desc: "松山 09:40 起飛，羽田 13:50 抵達（飛行約 3 小時 10 分）。",
+          note: "⚠️ 為 6 月班表資料，10 月下旬正式班表 8 月下旬才公布，屆時建議核對班號與時刻。",
+          map: "羽田空港 国際線ターミナル"
         },
         {
-          time: "14:00",
-          type: "hotel",
-          badge: "住宿",
-          title: "飯店辦理入住",
-          desc: "東京車站周邊（詳見「待定」頁候選比較）。輕裝出門，行李放飯店。",
-          duration: "30 分鐘",
-          map: "東京駅周辺ホテル"
-        },
-        {
-          time: "15:00",
-          type: "spot",
-          badge: "景點",
-          title: "東京車站丸之內 · KITTE 散策",
-          desc: "丸の内紅磚站體（1914年，重要文化財）打卡必訪。KITTE 屋頂可俯瞰月台全景；GRANSTA 地下街掃伴手禮；丸の内 BRICK SQUARE 適合傍晚散步。",
-          duration: "90 分鐘",
-          best: "傍晚 17:00 燈光亮起前後",
-          map: "東京駅 丸の内駅舎",
-          link: "https://www.tokyostation.com/"
-        },
-        {
-          time: "16:30",
-          type: "food",
-          badge: "晚餐",
-          title: "花火前早點吃晚餐",
-          desc: "建議在東京車站周邊或提早前往勝どき餐廳用餐，避免花火結束後餐廳爆滿。KITTE 6F 餐廳街或丸の内周邊。¥2,500–5,000/人（NT$525–1,050）。",
-          duration: "60–80 分鐘",
-          map: "KITTE東京 6階レストラン"
-        },
-        {
-          time: "17:30",
+          time: "14:30",
           type: "move",
           badge: "交通",
-          title: "前往晴海花火會場",
-          desc: "東京駅 →（都営バス）→ 勝どき駅前，或都営大江戸線 勝どき駅下車後步行約 15 分至會場。花火當日建議提早 1–1.5 小時抵達入場。",
-          transit: "東京駅 →（都営バス/大江戸線）→ 勝どき",
-          note: "觀賞區持票入場（指定席），提早到才有時間整頓。花火打上時間尚未公告，出發前請確認中央區官方公告。",
-          map: "晴海ふ頭公園"
-        },
-        {
-          time: "夜間",
-          type: "spot",
-          badge: "🎆花火",
-          title: "東京灣大華火祭（觀賞區持票入場）",
-          desc: "睽違 11 年重返！約 12,200 發，含尺五寸玉（直徑 45 cm 巨玉）。秋季澄淨夜空配東京灣燈影，視覺衝擊勝過夏季。荒天中止，不順延。",
-          duration: "約 1.5–2 小時",
-          best: "天色越深越壯觀",
-          note: "花火結束後勝どき駅・月島駅極度擁擠。建議在附近等待 30–45 分鐘散人潮，或步行往築地・月島方向叫 Uber（花火後計程車溢價）。",
-          map: "晴海ふ頭公園 花火会場",
-          link: "https://www.city.chuo.lg.jp/a0013/r8tokyohanabifestival.html"
-        },
-        {
-          time: "22:00",
-          type: "move",
-          badge: "返回",
-          title: "返回飯店",
-          desc: "等人潮稍退後移動。勝どき →（大江戸線）→ 築地市場/月島，轉乘 JR 回東京駅。明天早出發，盡早休息。",
-          transit: "勝どき駅 →（大江戸線）→ 東京駅方向",
-          map: "勝どき駅"
-        }
-      ]
-    },
-
-    /* ──────── Day 2：東京 → 草津溫泉 · 界草津 ──────── */
-    {
-      tab: "Day 2",
-      num: "DAY TWO",
-      title: "東京 → 草津溫泉 · 界草津",
-      date: "10/25（日）",
-      theme: "特急上野発 → 湯畑・紅葉見頃 → 界草津溫泉宿",
-      area: "群馬縣草津溫泉",
-      cost: "交通 ¥6,080–9,000/人｜景點 ¥1,100｜住宿另計（含 2 食）",
-      walk: "草津溫泉街步行為主，舒適悠閒",
-      dayMap: "草津温泉 湯畑",
-      items: [
-        {
-          time: "07:00",
-          type: "move",
-          badge: "交通",
-          title: "東京 → 上野 → 長野原草津口 → 草津溫泉",
-          desc: "東京駅 →（JR 山手線 5 分）→ 上野駅，搭特急「草津・四万」（全車指定席，1日 2 班）→ 長野原草津口駅（約 2 小時 20 分）→ JR バス（約 25 分）→ 草津溫泉バスターミナル。\n\n⬤ 費用：¥6,080/人（NT$1,277）；4人合計 ¥24,320（NT$5,107）\n⬤ 建議班次：上野 07:10 発 → 長野原草津口 09:36 着 → バス → 草津 10:00 頃",
-          transit: "上野駅 →（特急草津・四万）→ 長野原草津口 →（JRバス）→ 草津溫泉",
-          note: "★ 省錢替代方案：高速巴士「上州ゆめぐり号」東京駅八重洲南口 08:00 発 → 草津 12:02 着，¥2,000–3,500/人，但週日可能客滿，建議提早訂位。省下 ¥2,500/人，代價多 1 小時。",
-          map: "上野駅 14番線 特急ホーム"
-        },
-        {
-          time: "10:15",
-          type: "spot",
-          badge: "景點",
-          title: "草津溫泉・湯畑",
-          desc: "草津象徵。每分鐘自然湧出 32,300 公升熱泉！湯畑免費開放全天。10 月下旬楓紅見頃，湯煙裊裊配秋色，是草津最迷人的畫面之一。\n\n⬤ 湯もみと踊りショー（見どころ）：¥600/人，每天多場",
-          duration: "60–80 分鐘",
-          best: "午前光線最佳，人潮最少",
-          map: "草津温泉 湯畑",
-          link: "https://www.kusatsu-onsen.ne.jp/"
-        },
-        {
-          time: "11:30",
-          type: "food",
-          badge: "午餐",
-          title: "草津溫泉街午餐",
-          desc: "推薦：溫泉街的群馬鄉土料理。草津牛肉、上州うどん、名物溫泉まんじゅう（可邊走邊吃）。¥1,000–2,500/人（NT$210–525）。",
-          duration: "60 分鐘",
-          map: "草津温泉バスターミナル周辺"
-        },
-        {
-          time: "13:00",
-          type: "spot",
-          badge: "紅葉",
-          title: "西之河原公園・露天溫泉",
-          desc: "草津最大野溪溫泉景區，10 月中旬～下旬楓紅正值見頃（10/25 完美！）。露天風呂可邊泡湯邊賞楓（¥600/人）。\n\n★ 界草津的專用隧道出口就在公園旁，入住後可穿浴衣直接走過來——是這間旅館的最大特色之一。",
-          duration: "90 分鐘",
-          best: "午後 13:00–15:00，陽光最美",
-          map: "草津温泉 西の河原公園",
-          link: "https://www.sainokawara.com/"
+          title: "羽田 → 天空樹之家（墨田區江東橋周邊）",
+          desc: "入境、領行李後前往住宿，車程／電車約 40–50 分鐘。",
+          note: "⚠️ 住宿尚未訂房，見「待定」頁候選。",
+          map: "錦糸町駅"
         },
         {
           time: "15:30",
           type: "hotel",
-          badge: "住宿",
-          title: "界草津 辦理入住",
-          desc: "星野集團 界草津（2026 年 6 月 7 日開業）。草津高台に佇む新銳溫泉旅館。\n\n⬤ 特色：専用トンネルで西の河原公園すぐ横に直結\n⬤ 溫泉：万代鉱源泉（強酸性・高溫）＋西の河原源泉（兩種酸性泉）\n⬤ 客室：シルクアートの間（群馬絲織文化主題）\n⬤ 晚餐：上州豊伝会席（含上州常夜鍋），或蕎麦割烹 SAI",
-          duration: "Check-in 15:00–",
-          note: "新開業旅館＋10月紅葉旺季，預訂非常搶手。若尚未確認，立刻確認！",
-          map: "星野リゾート 界草津",
-          link: "https://hoshinoresorts.com/ja/hotels/kaikusatsu/"
-        },
-        {
-          time: "夜間",
-          type: "spot",
-          badge: "溫泉",
-          title: "界草津 大浴場・夜間泡湯",
-          desc: "万代鉱源泉の強酸性高溫泉。泡後皮膚光滑，殺菌力一流。夜晚透過大浴場窗外看楓紅夜景。晚餐享用界草津招牌上州常夜鍋會席。",
-          best: "入住後至翌日早晨，任意進出大浴場",
-          map: "界草津 大浴場"
-        }
-      ]
-    },
-
-    /* ──────── Day 3：草津 → 輕井澤 → 東京 ──────── */
-    {
-      tab: "Day 3",
-      num: "DAY THREE",
-      title: "草津 → 輕井澤 → 東京",
-      date: "10/26（一）",
-      theme: "草軽バス 76 分 → 輕井澤散策・Outlet → 新幹線回東京",
-      area: "長野縣輕井澤・東京",
-      cost: "交通 ¥7,590/人｜購物・餐飲依個人",
-      walk: "輕度，Outlet 區域廣，注意腳程",
-      dayMap: "軽井沢駅 北口",
-      items: [
-        {
-          time: "08:30",
-          type: "hotel",
-          badge: "退房",
-          title: "界草津 退房・前往巴士總站",
-          desc: "退房後步行或搭計程車至草津溫泉バスターミナル（約 10 分）。",
-          map: "草津温泉バスターミナル"
-        },
-        {
-          time: "09:30",
-          type: "move",
-          badge: "交通",
-          title: "草津溫泉 → 輕井澤（草輕交通急行巴士）",
-          desc: "草軽交通急行バス，無需預訂，先到先搭。09:50 発 → 軽井沢駅北口 11:15 着（85 分）。\n\n⬤ 費用：¥2,200/人（NT$462）；4人合計 ¥8,800\n⬤ 沿途穿越ラーチ林道、眺望浅間山，車程本身即是風景",
-          transit: "草津温泉バスターミナル →（草軽交通急行）→ 軽井沢駅北口",
-          note: "⚠️ 旺季週一仍可能排隊，建議 09:20 到達バスターミナル排隊。白糸の滝途中下車可觀瀑（停靠後需等下一班次，約 40 分）。",
-          map: "草津温泉バスターミナル"
-        },
-        {
-          time: "11:30",
-          type: "food",
-          badge: "午餐",
-          title: "輕井澤 丸山珈琲・舊輕井澤銀座",
-          desc: "⬤ 丸山珈琲軽井沢本店：日本精品咖啡翹楚，¥800–1,200（NT$168–252）\n⬤ 旧軽井沢銀座：土産・食事街，步行 20 分，嘗地元パン屋\n⬤ ハルニレテラス：湯川沿いの露台，人氣咖啡＋輕食，10 月楓紅最美",
-          duration: "60–90 分鐘",
-          map: "丸山珈琲 軽井沢本店",
-          link: "https://www.maruyamacoffee.com/"
-        },
-        {
-          time: "13:00",
-          type: "shop",
-          badge: "購物",
-          title: "輕井澤・王子購物廣場",
-          desc: "軽井沢駅直結 Outlet Mall。名牌服飾、運動品牌、生活雜貨齊全，秋季楓紅背景下購物體驗加倍。\n\n⬤ 東館・西館：Coach、Burberry、Tiffany 等\n⬤ 建議規劃 2–3 小時，留意 16:30 前出發新幹線",
-          duration: "2–3 小時",
-          map: "軽井沢・プリンスショッピングプラザ",
-          link: "https://www.karuizawa-psp.jp/"
+          badge: "入住",
+          title: "天空樹之家 辦理入住（放行李）",
+          desc: "放行李、稍作休息即可出發，不需久留。",
+          map: ""
         },
         {
           time: "16:00",
+          type: "shop",
+          badge: "購物",
+          title: "有明Garden 購物中心",
+          desc: "就在有明親水海浜公園旁邊（同鄰ゆりかもめ「有明テニスの森駅」），花火開場前先逛一輪，逛完直接走去會場，不用折返飯店。",
+          duration: "1–1.5 小時",
+          map: "有明ガーデン"
+        },
+        {
+          time: "17:00",
           type: "move",
           badge: "交通",
-          title: "輕井澤 → 東京（北陸新幹線）",
-          desc: "軽井沢駅 →（北陸新幹線 約 1 小時 10 分）→ 東京駅。\n\n⬤ 費用：自由席 ¥5,390/人（NT$1,132）；指定席加 ¥530\n⬤ 4人合計（自由席）¥21,560（NT$4,528）\n⬤ 建議班次：16:18 発 → 東京 17:32 着（出發前確認）",
-          transit: "軽井沢駅 →（北陸新幹線）→ 東京駅",
-          note: "10 月旺季週一指定席仍可能滿，建議提前購票（えきねっと）。",
-          map: "軽井沢駅 新幹線ホーム"
+          title: "有明Garden → 有明親水海浜公園（會場）",
+          desc: "步行約 12 分鐘，建議提前入場找位置、避開人潮。",
+          transit: "有明ガーデン → 徒歩 → 有明親水海浜公園",
+          map: "有明親水海浜公園"
         },
         {
-          time: "18:00",
-          type: "hotel",
-          badge: "住宿",
-          title: "東京車站飯店 再次入住",
-          desc: "返回東京車站周邊飯店（同 10/24 住宿，見「待定」頁）。",
-          map: "東京駅周辺"
-        },
-        {
-          time: "19:30",
-          type: "food",
-          badge: "晚餐",
-          title: "丸之內・東京車站一帶晚餐",
-          desc: "推薦：KITTE 6F 餐廳街，或丸の内 BRICK SQUARE 一帶的居酒屋。¥2,500–6,000/人（NT$525–1,260）。",
-          duration: "90 分鐘",
-          map: "KITTE東京 6階レストラン"
+          time: "17:30–19:00",
+          type: "spot",
+          badge: "花火",
+          title: "東京灣大華火祭",
+          desc: "11 年來首次復辦，晴海埠頭沖海上施放約 12,000 發。有明親水海浜公園是開放一般民眾購票的場館之一。",
+          note: "⚠️ 完全預售制、無現場票。一般民眾（不限居住地）購票窗口是 9/9（三）10:00 起先着順販售，賣完為止，記得屆時儘快搶票。",
+          map: "有明親水海浜公園",
+          link: "https://tokyo-hanabi-festival.com/"
         }
       ]
     },
 
-    /* ──────── Day 4：日光紅葉 ＋ 多慶屋 ──────── */
+    /* ──────── Day 1（無花火版）：抵達 → 多慶屋 → 東京駅購物 ──────── */
     {
-      tab: "Day 4",
-      num: "DAY FOUR",
-      title: "日光紅葉 · 多慶屋購物",
-      date: "10/27（二）",
-      theme: "スペーシアX → いろは坂・中禅寺湖絕景（紅葉見頃！） → 東照宮 → 御徒町多慶屋",
-      area: "栃木縣日光市・東京御徒町",
-      cost: "交通 ¥5,440–6,440/人｜門票 ¥2,170/人｜餐飲 ¥2,000–4,000",
-      walk: "多步行，日光山間地形，穿著舒適球鞋必備",
-      dayMap: "日光東照宮",
+      tab: "Day 1",
+      num: "DAY ONE",
+      variant: "B",
+      title: "抵達東京 → 多慶屋・東京車站購物",
+      date: "10/24（六）",
+      theme: "羽田抵達 → 天空樹之家入住 → 上野多慶屋 → 東京車站購物晚餐",
+      area: "東京・上野・東京駅",
+      cost: "購物依個人｜晚餐 ¥2,000–4,000/人",
+      walk: "輕度，多為電車移動",
+      dayMap: "多慶屋 御徒町",
       items: [
         {
-          time: "07:00",
+          time: "09:40",
           type: "move",
-          badge: "交通",
-          title: "東京車站 → 淺草 → 東武日光（Spacia X）",
-          desc: "東京駅 →（東京メトロ銀座線 約 15 分）→ 浅草駅，搭乘東武特急スペーシアX（浅草 07:20 頃発）→ 東武日光駅（約 09:10 着，所要約 1 小時 50 分）。\n\n⬤ スタンダードシート：¥2,720/人（NT$571）；4人 ¥10,880\n⬤ コンパートメント（4人個室）：¥4,920/人，旅途更私密",
-          transit: "東京駅 →（銀座線）→ 浅草駅 →（スペーシアX）→ 東武日光駅",
-          note: "スペーシアX 1日4往復，早班次在旺季搶手。盡早預訂：https://www.tobu.co.jp/spaciax/",
-          map: "浅草駅 東武線ホーム",
-          link: "https://www.tobu.co.jp/spaciax/"
+          badge: "航班",
+          title: "台北松山 → 東京羽田（JAL JL96）",
+          desc: "松山 09:40 起飛，羽田 13:50 抵達（飛行約 3 小時 10 分）。",
+          note: "⚠️ 為 6 月班表資料，10 月下旬正式班表 8 月下旬才公布，屆時建議核對班號與時刻。",
+          map: "羽田空港 国際線ターミナル"
         },
         {
-          time: "09:20",
+          time: "14:30",
           type: "move",
           badge: "交通",
-          title: "東武日光車站 → 奧日光（巴士）",
-          desc: "東武日光駅前 → 東武バス（中禅寺温泉行）→ 中禅寺湖 約 45 分，¥1,200/人。\n\n沿途行駛いろは坂（48 個大彎，10 月中旬～下旬紅葉見頃 → 10/27 絕對完美！）",
-          transit: "東武日光駅 →（東武バス）→ 中禅寺湖",
-          note: "週二（平日）渋滞少，但旺季仍建議早出。バスは自駕更不易遇到停車難題。",
-          map: "東武日光駅前バス停"
+          title: "羽田 → 天空樹之家（墨田區江東橋周邊）",
+          desc: "入境、領行李後前往住宿，車程／電車約 40–50 分鐘。",
+          note: "⚠️ 住宿尚未訂房，見「待定」頁候選。",
+          map: "錦糸町駅"
         },
         {
-          time: "10:30",
-          type: "spot",
-          badge: "紅葉",
-          title: "中禪寺湖・華嚴瀑布",
-          desc: "⬤ 中禅寺湖（標高 1,269 m）：湖面倒映男体山紅葉，見頃 10月中旬～11月上旬 → 10/27 極致！\n⬤ 華厳の滝：高 97 m 壯觀瀑布＋楓紅，搭電梯至展望台（¥570/人）近距離欣賞\n⬤ 建議：湖畔散步 20 分 → 華厳滝展望台 40 分",
-          duration: "90–120 分鐘",
-          best: "午前 09:00–12:00 光線最美，人潮最少",
-          map: "華厳の滝",
-          link: "https://www.kegon.jp/"
+          time: "15:30",
+          type: "hotel",
+          badge: "入住",
+          title: "天空樹之家 辦理入住（放行李）",
+          desc: "放行李後即可出發購物。",
+          map: ""
+        },
+        {
+          time: "16:00",
+          type: "shop",
+          badge: "購物",
+          title: "多慶屋（御徒町）",
+          desc: "御徒町最大折扣百貨，藥妝、化妝品、食品、電器、日用品。營業 10:30–21:00（部分樓層 20:00）。免稅手續在各棟結帳時辦理，記得帶護照。",
+          duration: "1.5–2 小時",
+          map: "多慶屋 御徒町",
+          link: "https://www.takeya.co.jp/"
+        },
+        {
+          time: "18:00",
+          type: "move",
+          badge: "交通",
+          title: "御徒町 → 東京駅",
+          desc: "JR 山手線／京浜東北線，約 12 分鐘。",
+          transit: "御徒町駅 →（JR）→ 東京駅",
+          map: "東京駅"
+        },
+        {
+          time: "18:30",
+          type: "food",
+          badge: "晚餐",
+          title: "東京車站 購物＋晚餐",
+          desc: "GRANSTA 東京地下街或八重洲一帶，逛街兼解決晚餐。¥2,000–4,000/人。",
+          duration: "90 分鐘",
+          map: "GRANSTA東京 地下街"
+        }
+      ]
+    },
+
+    /* ──────── Day 2（共用）：抵達草津溫泉 ──────── */
+    {
+      tab: "Day 2",
+      num: "DAY TWO",
+      title: "抵達草津溫泉",
+      date: "10/25（日）",
+      theme: "上野 → JR特急 → 草津老街・湯もみ・賞楓 → 永田屋昭和館入住",
+      area: "群馬縣草津溫泉",
+      cost: "交通 ¥5,500–6,500/人（自由席，實際依班次）",
+      walk: "輕度，抵達後散策",
+      dayMap: "草津温泉 湯畑",
+      items: [
+        {
+          time: "09:00",
+          type: "move",
+          badge: "交通",
+          title: "上野 → 草津溫泉（JR特急 草津・四萬）",
+          desc: "特急「草津・四萬31號」上野 9:00 發車 → 約 12:00–12:45 抵草津溫泉（含長野原草津口＋JRバス 25 分接駁）。",
+          transit: "上野駅 →（特急草津・四万）→ 長野原草津口 →（JRバス）→ 草津温泉",
+          note: "⚠️ 31號僅土曜・休日運行，10/25 為週日理論上有開，但建議訂票前再次確認當週實際運行日；全車指定席，越早訂越好。備案：10:00 常態班次（12:18 到長野原草津口）。",
+          map: "上野駅 特急ホーム"
         },
         {
           time: "12:30",
           type: "food",
           badge: "午餐",
-          title: "日光 湯波料理 或 日光東照宮參道蕎麥麵",
-          desc: "日光名物：湯波（豆腐皮）料理，精緻細膩。東照宮参道沿いの蕎麦店亦是選項。¥1,500–2,500/人（NT$315–525）。",
+          title: "草津老街 午餐",
+          desc: "溫泉街名物：草津牛肉飯、湯もみうどん，或邊走邊吃溫泉饅頭。¥1,000–2,500/人。",
           duration: "60 分鐘",
-          map: "日光 神橋 周辺食事処"
+          map: "草津温泉 温泉街"
         },
         {
-          time: "13:30",
+          time: "14:00",
+          type: "spot",
+          badge: "表演",
+          title: "湯もみ表演",
+          desc: "湯畑周邊的傳統湯もみ與踊り表演，每日場次請至現場或官網確認。",
+          duration: "20–30 分鐘",
+          map: "草津温泉 湯畑"
+        },
+        {
+          time: "14:30",
+          type: "spot",
+          badge: "紅葉",
+          title: "逛老街・賞楓",
+          desc: "湯畑・西の河原公園一帶，10 月下旬楓紅見頃，邊走邊逛老街店家。",
+          duration: "2–3 小時",
+          map: "草津温泉 西の河原公園"
+        },
+        {
+          time: "18:00",
+          type: "hotel",
+          badge: "入住",
+          title: "永田屋 昭和館 辦理入住",
+          desc: "貸別荘（整棟包棟），4LDK，最多住 6 人，布團無床架。溫泉為「わたの湯源泉」，館內有免費包場貸切風呂。距湯畑徒步約 20 分。",
+          note: "⚠️ Check-in 須先到永田屋本館辦手續（車程約 7 分外）。NT$14,542（1 晚）幣別／含稅／早餐細項待對照訂房確認信核對。",
+          map: "永田屋 昭和館"
+        },
+        {
+          time: "晚間",
+          type: "food",
+          badge: "晚餐",
+          title: "老街晚餐 ＋ 採買隔日早餐水果",
+          desc: "溫泉街晚餐後，順道買隔天的早餐與水果點心備用。¥1,000–2,500/人。",
+          duration: "60 分鐘",
+          map: "草津温泉 温泉街"
+        },
+        {
+          time: "夜間",
+          type: "spot",
+          badge: "溫泉",
+          title: "享受飯店湯屋",
+          desc: "入住後好好享受永田屋昭和館的包場貸切風呂。",
+          map: ""
+        }
+      ]
+    },
+
+    /* ──────── Day 3（共用）：草津 → 輕井澤（不過夜）→ 東京 ──────── */
+    {
+      tab: "Day 3",
+      num: "DAY THREE",
+      title: "草津 → 輕井澤賞楓 → 回東京",
+      date: "10/26（一）",
+      theme: "草輕巴士 → 輕井澤全天賞楓 → Outlet → JR回東京 → 天空樹之家",
+      area: "長野縣輕井澤・東京",
+      cost: "交通 ¥7,590–8,590/人｜購物依個人｜晚餐 ¥1,000–2,000",
+      walk: "中度，輕井澤全天散策",
+      dayMap: "軽井沢駅",
+      items: [
+        {
+          time: "09:00",
+          type: "move",
+          badge: "交通",
+          title: "草津溫泉 → 輕井澤（草輕交通急行巴士）",
+          desc: "草軽交通急行バス，無需預訂、先到先搭。約 85 分鐘車程，¥2,200/人（4 人合計 ¥8,800）。沿途淺間山眺望、秋日高原風景。",
+          transit: "草津温泉バスターミナル →（草軽交通急行）→ 軽井沢駅北口",
+          note: "10 月週日／連假巴士可能客滿，建議提早 20–30 分鐘到站排隊。",
+          map: "草津温泉バスターミナル"
+        },
+        {
+          time: "10:30",
+          type: "move",
+          badge: "寄放",
+          title: "輕井澤車站 寄放行李",
+          desc: "行李寄放車站置物櫃，輕裝開始賞楓行程。",
+          map: "軽井沢駅"
+        },
+        {
+          time: "11:00",
+          type: "spot",
+          badge: "紅葉",
+          title: "輕井澤賞楓（榆樹露台・舊輕井澤銀座）",
+          desc: "榆樹露台：湯川沿木棧台，咖啡廳・雜貨聚集，楓紅景致佳；舊輕井澤銀座：土產、輕食、散步街道。全天賞楓，步調可以放鬆。",
+          duration: "5–6 小時",
+          best: "上午～下午皆宜，注意保留回程時間",
+          map: "ハルニレテラス 軽井沢",
+          link: "https://www.hoshino-area.jp/shop/harunire/"
+        },
+        {
+          time: "17:00",
+          type: "shop",
+          badge: "購物",
+          title: "軽井沢・プリンスショッピングプラザ（Outlet）",
+          desc: "約 240 間店鋪的大型 Outlet，10 月營業時間 10:00–19:00。",
+          duration: "2 小時",
+          note: "19:00 打烊後走去車站還來得及搭 20:00 那班車，時間抓得出來。",
+          map: "軽井沢・プリンスショッピングプラザ",
+          link: "https://www.karuizawa-psp.jp/"
+        },
+        {
+          time: "20:00",
+          type: "move",
+          badge: "交通",
+          title: "輕井澤 → 東京（北陸新幹線）",
+          desc: "軽井沢駅 →（北陸新幹線，約 1 小時 10 分）→ 東京駅。自由席 ¥5,390/人。",
+          transit: "軽井沢駅 →（北陸新幹線）→ 東京駅",
+          map: "軽井沢駅 新幹線ホーム"
+        },
+        {
+          time: "晚間",
+          type: "food",
+          badge: "晚餐",
+          title: "Outlet 內解決 或 車上便當",
+          desc: "Outlet 美食街用餐，或買便當上車吃，看行程節奏彈性選。¥1,000–2,000/人。",
+          map: ""
+        },
+        {
+          time: "21:30",
+          type: "hotel",
+          badge: "入住",
+          title: "天空樹之家 回住",
+          desc: "抵達東京後回天空樹之家住宿。",
+          map: ""
+        }
+      ]
+    },
+
+    /* ──────── Day 4（有花火版）：東京逛街 ──────── */
+    {
+      tab: "Day 4",
+      num: "DAY FOUR",
+      variant: "A",
+      title: "東京逛街（銀座・上野多慶屋）",
+      date: "10/27（二）",
+      theme: "銀座／上野多慶屋 悠閒逛街日",
+      area: "東京・銀座・上野",
+      cost: "購物依個人｜餐飲 ¥2,000–4,000",
+      walk: "視路線彈性安排",
+      dayMap: "銀座",
+      items: [
+        {
+          time: "上午",
+          type: "shop",
+          badge: "購物",
+          title: "上野多慶屋 補貨",
+          desc: "若 Day 1 買得不夠盡興，這天可以再去一趟；或直接跳過，全天排銀座。",
+          map: "多慶屋 御徒町"
+        },
+        {
+          time: "下午",
+          type: "shop",
+          badge: "購物",
+          title: "銀座 逛街",
+          desc: "松屋、マロニエゲート等百貨，補伴手禮、化妝品。",
+          duration: "3–4 小時",
+          map: "銀座 マロニエゲート"
+        },
+        {
+          time: "晚間",
+          type: "food",
+          badge: "晚餐",
+          title: "銀座 晚餐",
+          desc: "¥2,500–5,000/人。",
+          duration: "90 分鐘",
+          map: "銀座"
+        }
+      ]
+    },
+
+    /* ──────── Day 4（無花火版）：日光一日來回（包車）──────── */
+    {
+      tab: "Day 4",
+      num: "DAY FOUR",
+      variant: "B",
+      title: "日光紅葉一日來回（包車）",
+      date: "10/27（二）",
+      theme: "包車往返日光（約10小時）→ 錦糸町購物晚餐",
+      area: "栃木縣日光市",
+      cost: "包車費用另計｜門票 ¥2,170/人｜餐飲 ¥2,000–3,500",
+      walk: "多步行，建議穿好走的鞋、帶外套",
+      dayMap: "日光東照宮",
+      items: [
+        {
+          time: "07:00",
+          type: "move",
+          badge: "包車",
+          title: "天空樹之家 出發（包車往日光）",
+          desc: "全日包車往返，約 10 小時（07:00–17:00）。費用未定，建議向車行詢價（KKday／KLOOK 中文司機選項）。",
+          note: "取捨透明：包車比電車＋巴士接駁更省事、不用轉車，但費用較高，是否改用スペーシアX＋巴士接駁可再討論。",
+          map: ""
+        },
+        {
+          time: "09:30",
+          type: "spot",
+          badge: "紅葉",
+          title: "中禪寺湖・華嚴瀑布",
+          desc: "中禪寺湖（標高 1,269m）男體山與紅葉映湖面；華嚴瀑布高 97m，可搭電梯至展望台（¥570/人）近距離仰望。",
+          duration: "90–120 分鐘",
+          note: "⚠️ 2026 年官方紅葉預報 9 月才發布，此處沿用 2025 年同期實況（中禪寺湖約 10/26、華嚴瀑布約 10/27 見頃）作參考。",
+          map: "華厳の滝",
+          link: "https://www.kegon.jp/"
+        },
+        {
+          time: "12:00",
+          type: "food",
+          badge: "午餐",
+          title: "日光 湯波料理・蕎麥麵",
+          desc: "日光名物湯波（豆腐皮）懷石，或東照宮參道沿線蕎麥店。¥2,000–3,500/人。",
+          duration: "60 分鐘",
+          map: "日光東照宮 参道周辺"
+        },
+        {
+          time: "13:00",
           type: "spot",
           badge: "世界遺産",
-          title: "日光東照宮（世界遺産）",
-          desc: "德川家康祭祀靈廟，1999 年世界遺産。4月～10月 09:00–17:00（最終入場 16:30）。\n\n⬤ 入場：¥1,600/人（NT$336）；4人合計 ¥6,400\n⬤ 必看：陽明門（國寶）、三猿、眠り猫、奥社\n⬤ 紅葉：東照宮周邊は 11 月上旬が見頃，10/27 は色づき始め（仍很美）",
+          title: "日光東照宮",
+          desc: "德川家康靈廟，世界遺産。09:00–17:00（最終入場 16:30），入場 ¥1,600/人。",
           duration: "80–100 分鐘",
-          best: "13:00 之後，大批早場團客較少",
-          note: "境內多台階，穿舒適鞋。建議提前購電子票避免排隊。",
+          note: "⚠️ 東照宮周邊紅葉通常要到 11 月上旬才見頃，10/27 這天很可能只是「剛開始變色」。",
           map: "日光東照宮",
           link: "https://www.toshogu.jp/"
         },
         {
-          time: "15:30",
+          time: "17:00",
           type: "move",
-          badge: "交通",
-          title: "東武日光 → 北千住 → 御徒町",
-          desc: "東武日光駅 →（特急けごん/スペーシア）→ 北千住（約 1 小時 50 分）→（JR 京浜東北線）→ 御徒町駅（約 12 分）。\n\n⬤ 建議班次：東武日光 15:30–16:00 頃発 → 北千住 17:20–17:50 頃着 → 御徒町 18:10 前後",
-          transit: "東武日光駅 →（特急）→ 北千住 →（JR）→ 御徒町",
-          map: "東武日光駅 特急ホーム"
+          badge: "包車",
+          title: "包車返回天空樹之家",
+          desc: "全日包車行程結束，返回住宿。",
+          map: ""
         },
         {
           time: "18:00",
           type: "shop",
           badge: "購物",
-          title: "多慶屋（御徒町）",
-          desc: "御徒町最大折扣百貨，藥妝、化妝品、食品、電器、日用品，折扣真實可信。\n\n⬤ 地址：台東区上野 4-6-1（御徒町駅より徒歩 1 分）\n⬤ 營業：10:30–21:00（部分樓層 20:00 閉店）\n⬤ 建議留 1.5–2 小時，免稅手續在各棟結帳處辦理",
-          duration: "90–120 分鐘",
-          best: "平日傍晚人潮相對少",
-          note: "藥妝棟・食品棟分開，各自有結帳與免稅。注意各棟關門時間（部分 20:00）。",
-          map: "多慶屋 御徒町",
-          link: "https://www.takeya.co.jp/"
-        },
-        {
-          time: "20:30",
-          type: "move",
-          badge: "返回",
-          title: "御徒町 → 東京車站飯店",
-          desc: "御徒町駅 →（JR 山手線/京浜東北線）→ 東京駅（約 10 分）。返回飯店休息，明天最後採購。",
-          transit: "御徒町駅 →（山手線）→ 東京駅",
-          map: "東京駅"
+          title: "錦糸町 購物＋晚餐",
+          desc: "住宿附近的錦糸町商圈補貨、解決晚餐。¥2,000–4,000/人。",
+          duration: "2 小時",
+          map: "錦糸町駅"
         }
       ]
     },
 
-    /* ──────── Day 5：東京購物・歸程 ──────── */
+    /* ──────── Day 5（共用）：東京逛街 → 成田出發 ──────── */
     {
       tab: "Day 5",
       num: "DAY FIVE",
-      title: "東京購物 · 歸程",
+      title: "東京最後逛街 · 成田出發",
       date: "10/28（三）",
-      theme: "包車採購（渋谷・表参道・銀座）→ 機場出發",
-      area: "東京・渋谷・表参道・銀座",
-      cost: "包車 ¥28,000–40,000/台（4人分攤 ¥7,000–10,000）｜購物依個人",
-      walk: "視路線而定，行李全程在車上",
-      dayMap: "渋谷 スクランブル交差点",
+      theme: "東京逛街（版本一：錦糸町／東京車站；版本二：淺草＋銀座）→ 成田出發",
+      area: "東京",
+      cost: "購物依個人｜餐飲 ¥2,000–4,000",
+      walk: "視路線",
+      dayMap: "成田空港",
       items: [
         {
-          time: "09:00",
-          type: "hotel",
-          badge: "退房",
-          title: "東京車站飯店 退房",
-          desc: "退房後行李放入包車，開始最終採購。",
-          map: "東京駅周辺"
-        },
-        {
-          time: "09:30",
-          type: "move",
-          badge: "包車",
-          title: "包車出發（取捨說明）",
-          desc: "★ 包車 vs. 電車取捨：\n\n⬤ 包車優點：行李全程在車、隨時停靠、雨天方便、直送機場省力\n⬤ 包車缺點：市區停車費高、遇塞車浪費時間、費用偏高\n\n⬤ 電車替代：JR 山手線 ¥900/人/日，機動性更高，不受停車限制。行李可存 Coin Locker 再取。\n\n建議路線（包車）：渋谷スクランブル → 原宿・竹下通 → 表参道ヒルズ → 銀座 → 機場",
-          note: "包車費用估算（含日文或中文司機，8–10 小時）：¥28,000–40,000/台。台灣預訂平台：KKday、KLOOK，可選中文車牌司機。",
-          map: "渋谷スクランブル交差点"
-        },
-        {
-          time: "10:00",
+          time: "上午",
           type: "shop",
           badge: "購物",
-          title: "澀谷・原宿・表參道",
-          desc: "⬤ 渋谷スクランブルスクエア：百貨 + SHIBUYA SKY 展望台\n⬤ 原宿・竹下通：藥妝、流行雜貨、可愛甜食\n⬤ 表参道ヒルズ：設計師品牌、精品咖啡",
-          duration: "2–3 小時",
-          map: "渋谷スクランブル交差点"
+          title: "東京最後逛街",
+          desc: "有花火版：錦糸町／東京車站周邊；無花火版：淺草＋銀座。可安排吃鰻魚飯。",
+          duration: "3–4 小時",
+          map: ""
         },
         {
           time: "13:00",
           type: "food",
           badge: "午餐",
-          title: "最後的東京美食",
-          desc: "表参道・銀座一帯のカフェランチ，¥1,500–3,500/人（NT$315–735）。或去銀座いきなりステーキ、六花亭など正式一餐。",
+          title: "最後一餐（鰻魚飯可考慮）",
+          desc: "¥2,000–4,000/人。",
           duration: "60 分鐘",
-          map: "表参道 カフェエリア"
+          map: ""
         },
         {
           time: "14:00",
-          type: "shop",
-          badge: "購物",
-          title: "銀座・最終補貨",
-          desc: "松屋銀座、マロニエゲート銀座、東急プラザ銀座：化妝品、伴手禮最終採購。",
-          duration: "1.5–2 小時",
-          map: "銀座 マロニエゲート"
-        },
-        {
-          time: "16:00",
           type: "move",
           badge: "歸程",
-          title: "包車 → 機場・出發",
-          desc: "羽田：市區出發約 50–70 分（含交通）。成田：約 90–120 分。\n\n⬤ 航班前至少 2.5–3 小時抵達機場，依航班時間調整包車出發時刻\n⬤ 包車直送航廈，省去拖行李搭電車之苦——這是最後一天包車最大的優點",
-          transit: "市區 →（包車）→ 羽田/成田空港",
-          map: "羽田空港 国際線ターミナル"
+          title: "前往成田機場",
+          desc: "市區到成田約 90–120 分鐘。日航 18:00 班機，建議提前 3–4 小時抵達機場（14:00–15:00 出發）。⚠️ 去程羽田、回程成田為刻意安排的機場對調，非筆誤。",
+          transit: "東京市区 → 成田空港",
+          map: "成田空港 第2ターミナル"
         }
       ]
     }
@@ -978,297 +1070,75 @@ const TRIP = {
   /* ── 美食推薦 ─────────────────────────── */
   food: [
     {
-      name: "草津 湯揉烏龍麵（湯畑周邊各店）",
-      price: "¥1,000–1,800",
-      desc: "草津溫泉街定番，上州產小麥，Q彈有嚼勁"
+      name: "草津 溫泉饅頭（湯畑周邊）",
+      price: "¥500–800（袋）",
+      desc: "草津名物，湯畑周邊試吃店家多，適合邊走邊吃"
     },
     {
-      name: "蕎麥割烹 SAI（界草津內）",
-      price: "¥2,500–4,000",
-      desc: "界草津附設本格蕎麦割烹，地粉生粉打ち，住宿者專屬"
-    },
-    {
-      name: "丸山珈琲 輕井澤本店",
-      price: "¥800–1,500",
-      desc: "日本精品咖啡代名詞，輕井澤必訪，選豆嚴謹"
-    },
-    {
-      name: "榆樹露台 Harunire Terrace（輕井澤）",
+      name: "萬平飯店 Café（輕井澤）",
       price: "¥1,500–3,000",
-      desc: "湯川沿いの木棧道，聚集人氣咖啡店與輕食，楓紅期間最美"
+      desc: "1894 年創業古典飯店，名物蘋果派與皇家奶茶（純喝咖啡不需入住）"
     },
     {
       name: "日光 湯波料理（東照宮參道周邊）",
       price: "¥2,000–4,000",
-      desc: "日光名物豆腐皮（湯波），口感細緻，是正宗日光土産"
-    },
-    {
-      name: "KITTE 東京 6F 餐廳街",
-      price: "¥1,500–4,000",
-      desc: "東京駅丸の内，多種料理，可俯瞰月台全景，花火前後用餐"
+      desc: "日光名物豆腐皮料理，精緻懷石風格（無花火版限定）"
     },
     {
       name: "多慶屋 地下食品棟（御徒町）",
       price: "¥500–2,000",
-      desc: "折扣零食・土産・生鮮，旅途最後採購戰略要地，物美價廉"
+      desc: "折扣食品、零食、伴手禮"
+    },
+    {
+      name: "東京 鰻魚飯",
+      price: "¥2,500–4,500",
+      desc: "Day 5 最後一餐可考慮的選項，依所在區域找老舖"
     }
   ],
 
   /* ── 待定候選 ─────────────────────────── */
   pending: [
     {
-      topic: "住宿方案 A：2人1室 × 2間",
-      note: "每間房 2 人，共訂 2 間，每晚總費用控制在 NT$10,000 以內。浴缸＋淋浴合用、廁所獨立。10月紅葉旺季建議盡早確認空房。",
-      booking: true,
-      priceChecked: "2026-06-22",
+      topic: "東京住宿「天空樹之家」— 尚未訂房，查無此確切名稱",
+      note: "使用者提供地址「墨田區江東橋4-7-10」，查證後落在錦糸町車站周邊（距晴空塔約 1.5 公里，非鄰接），沒有查到叫「天空樹之家」的具體物件，推測可能是自訂暫稱或平台顯示名稱不同。以下列出該區域（錦糸町／押上・晴空塔一帶）幾個實際可查候選供參考；若使用者已有訂房連結或原文名稱，請提供後核對取代本清單。",
       options: [
         {
-          name: "APA 飯店 淺草藏前",
-          price: "¥12,000–18,000／室・晚（NT$2,520–3,780）× 2 間",
+          name: "（使用者原訂目標）天空樹之家",
+          price: "未知",
           status: "待決定",
-          desc: "蔵前駅徒步 2 分鐘。2025 年 3 月完成翻新，12 樓大浴殿＋露天風呂。五間中最省錢。",
-          pros: [
-            "五間中最省，預算彈性最大",
-            "2025 年 3 月翻新完畢，設備新",
-            "12F 露天大浴殿補強客房浴室"
-          ],
-          cons: [
-            "客房偏小，部分評論反映隔音較薄",
-            "評分 ★3.9 為五間最低",
-            "蔵前到浅草寺步行約 10 分鐘"
-          ],
-          map: "アパホテル浅草蔵前",
-          link: "http://www.apahotel.com/hotel/shutoken/18_asakusa-kuramae/"
+          desc: "地址：東京都墨田区江東橋4-7-10。⚠️ 查無此名稱物件，建議使用者提供訂房平台連結或日文原名核對。",
+          map: "墨田区江東橋4-7-10"
         },
         {
-          name: "徒士之湯 Dormy Inn 上野・御徒町",
-          price: "¥16,000–24,000／室・晚（NT$3,360–5,040）× 2 間",
+          name: "住福 東京晴空塔套房（SUMIFUKU）",
+          price: "詢價（月租公寓型態，依房型與晚數異動）",
           status: "待決定",
-          desc: "仲御徒町駅徒步 1 分鐘，多慶屋徒步 2 分鐘。半露天風呂＋乾式桑拿大浴場。",
-          pros: [
-            "多慶屋徒步 2 分鐘——採購完直接回房",
-            "半露天風呂＋桑拿讓旅途更輕鬆",
-            "上野、浅草兩個方向皆方便"
-          ],
-          cons: [
-            "電梯僅一部，尖峰時段等候時間長",
-            "距浅草寺步行約 15 分鐘",
-            "10 月旺季每室可能超過 NT$5,000（建議直接查價）"
-          ],
-          map: "徒士の湯 ドーミーイン上野御徒町",
-          link: "https://dormy-hotels.com/dormyinn/hotels/ueno/"
+          desc: "押上駅徒步 6 分鐘，公寓式，含簡易廚房，適合家庭多晚連住，中文服務。",
+          map: "押上駅周辺",
+          link: "https://sumifuku.net/skytree/"
         },
         {
-          name: "御宿野乃 淺草",
-          price: "¥18,000–26,000／室・晚（NT$3,780–5,460）× 2 間",
-          status: "傾向",
-          pick: true,
-          desc: "TX 浅草駅徒步 4 分鐘。五間中評分最高（★4.4）。自家源泉天然黑湯大浴場＋桑拿水風呂。",
-          pros: [
-            "五間中評分最高（★4.4）",
-            "天然黑湯溫泉大浴場＋桑拿，品質佳",
-            "距浅草寺仲見世最近，觀光機能最好"
-          ],
-          cons: [
-            "TX 浅草駅徒步 4 分鐘，非直結",
-            "全館榻榻米地板，需在走廊反覆穿脫鞋",
-            "10 月旺季每室可能超過 NT$5,000（建議直接查價）"
-          ],
-          map: "御宿野乃浅草",
-          link: "https://dormy-hotels.com/dormyinn/hotels/nono_asakusa/"
-        },
-        {
-          name: "維拉芳泉 東京丸之內",
-          price: "¥15,000–22,000／室・晚（NT$3,150–4,620）× 2 間",
+          name: "Japan House Sky Tree（アパートホテル）",
+          price: "詢價",
           status: "待決定",
-          desc: "東京駅徒步 5 分鐘。版本一（花火票版）搭草津特急、新幹線最方便的地點。整潔商務風格。",
-          pros: [
-            "東京駅徒步 5 分鐘——版本一行程最順",
-            "東京駅周邊中預算最實惠的選項",
-            "整潔舒適，出差族評價穩定"
-          ],
-          cons: [
-            "無大浴場，僅個人衛浴",
-            "距浅草寺需搭地鐵約 10 分鐘",
-            "商務風格，旅遊氛圍較淡"
-          ],
-          map: "ヴィラフォンテーヌ東京丸の内",
-          link: "https://www.villafontaine.co.jp/hotels/tokyo-marunouchi/"
-        },
-        {
-          name: "Sunroute 飯店 淺草",
-          price: "¥18,000–25,000／室・晚（NT$3,780–5,250）× 2 間",
-          status: "待決定",
-          desc: "銀座線田原町駅徒步 1 分鐘，距雷門 6 分鐘。評論確認廁所浴室獨立，浴缸寬敞。",
-          pros: [
-            "廁所浴室分離已有口碑確認，浴缸寬敞",
-            "田原町駅徒步 1 分鐘，距浅草寺 6 分",
-            "附設中式餐廳，早餐有粥品選擇"
-          ],
-          cons: [
-            "建築年份較久，部分評論有老舊感",
-            "無大浴場",
-            "10 月旺季每室可能超過 NT$5,000（建議直接查價）"
-          ],
-          map: "ホテルサンルート浅草",
-          link: "https://sotetsu-hotels.com/sunroute/asakusa/"
-        }
-      ]
-    },
-    {
-      topic: "住宿方案 B：4人1室 × 1間",
-      note: "4 人同住一間，每晚房費控制在 NT$10,000 以內。注意加床費用通常未含於基本房價，預訂時須確認。10 月旺季建議盡早鎖房。",
-      booking: true,
-      priceChecked: "2026-06-22",
-      options: [
-        {
-          name: "淺草景觀飯店 豪華雙床房（4人入住）",
-          price: "¥40,000–52,000／室・晚（NT$8,400–10,920）",
-          status: "傾向",
-          pick: true,
-          desc: "TX 浅草駅直結。37㎡，雙人床 2 張＋加床 2 張的四人房型。斯凱樹景觀可選。客房已於 2025 年 10 月完成翻新。",
-          pros: [
-            "TX 浅草駅直結——搭乘スペーシアX（日光）最方便",
-            "2025 年 10 月客房翻新完畢，設備新",
-            "可選斯凱樹景觀房型"
-          ],
-          cons: [
-            "37㎡ 住 4 人偏擠，評論有提及",
-            "10 月旺季可能超出 NT$10,000 預算（建議直接查價確認）",
-            "28F 酒吧預定 2026 年 10 月前仍在改裝，暫停開放"
-          ],
-          map: "浅草ビューホテル",
-          link: "https://www.viewhotels.co.jp/asakusa/"
-        },
-        {
-          name: "Premium MONday 淺草I",
-          price: "¥35,000–50,000／室・晚 推估（NT$7,350–10,500）",
-          status: "待決定",
-          desc: "2026 年 6 月新開業。45㎡，最多 7 人，含廚房＋洗烘衣機。TX 浅草駅徒步 2 分鐘，附屋頂露台。",
-          pros: [
-            "45㎡ 空間寬裕，四人住最舒適",
-            "廚房＋洗烘衣機，適合多晚連住",
-            "2026 年 6 月剛開業，設備全新",
-            "屋頂露台可眺望浅草街景"
-          ],
-          cons: [
-            "剛開業，尚無實際入住評論可參考",
-            "10 月實際房價需直接向飯店確認",
-            "公寓式設計，飯店服務感較少"
-          ],
-          map: "Premium MONday 浅草I",
-          link: "https://www.monday-hotel.com/ja/premium-asakusa1/"
-        },
-        {
-          name: "APA 飯店 淺草藏前（4人方案）",
-          price: "¥22,000–35,000／室・晚（NT$4,620–7,350）",
-          status: "待決定",
-          desc: "蔵前駅徒步 2 分鐘，五間中最省錢的 4 人方案。12F 露天大浴殿可補強客房空間不足。",
-          pros: [
-            "五間中預算最省，彈性空間最大",
-            "12F 露天大浴殿讓四人都能好好泡澡",
-            "2025 年 3 月翻新完畢"
-          ],
-          cons: [
-            "四人同住空間更加局促",
-            "評分 ★3.9 為五間最低",
-            "距浅草寺步行約 10 分鐘"
-          ],
-          map: "アパホテル浅草蔵前",
-          link: "http://www.apahotel.com/hotel/shutoken/18_asakusa-kuramae/"
-        },
-        {
-          name: "御宿野乃 淺草（4人方案）",
-          price: "¥32,000–45,000／室・晚（NT$6,720–9,450）",
-          status: "待決定",
-          desc: "TX 浅草駅徒步 4 分鐘。以三人房加一張加床供四人使用。天然黑湯溫泉大浴場＋桑拿。評分最高（★4.4）。",
-          pros: [
-            "評分最高（★4.4），服務與清潔度有保障",
-            "天然溫泉大浴場＋桑拿，四人都能使用",
-            "浅草觀光地理位置最佳"
-          ],
-          cons: [
-            "四人房型庫存少，旺季須盡早預訂",
-            "全館榻榻米地板，進出需反覆穿脫鞋",
-            "TX 浅草駅徒步 4 分鐘"
-          ],
-          map: "御宿野乃浅草",
-          link: "https://dormy-hotels.com/dormyinn/hotels/nono_asakusa/"
-        },
-        {
-          name: "露特英 Grand 飯店 東京淺草橋",
-          price: "¥28,000–40,000／室・晚（NT$5,880–8,400）",
-          status: "待決定",
-          desc: "JR 浅草橋駅旁（浅草一站距離）。家庭房型選擇多，大浴場完備，交通便捷。",
-          pros: [
-            "四人房型庫存較多，旺季較易預訂",
-            "大浴場完備",
-            "秋葉原、浅草、上野皆一站可達"
-          ],
-          cons: [
-            "前往浅草寺須搭車再步行",
-            "周邊較商業，浅草情調較淡",
-            "露特英系列為標準商務裝潢"
-          ],
-          map: "ホテルルートインGrand東京浅草橋",
-          link: "https://www.route-inn.co.jp/hotel_list/tokyo/index_hotel_id_718/"
-        }
-      ]
-    },
-    {
-      topic: "10/27 日光交通方式",
-      note: "電車 vs. 包車，行程節奏與費用差異明顯",
-      options: [
-        {
-          name: "Spacia X 特急列車（推薦）",
-          price: "¥2,720–4,920/人（スタンダード～コンパートメント）",
-          status: "傾向",
-          pick: true,
-          desc: "東武鉄道豪華觀光特急，浅草→東武日光 1 小時 50 分，是日光旅行的亮點體驗",
-          pros: [
-            "不受いろは坂塞車影響",
-            "列車本身即是觀光亮點",
-            "週二平日票好搶",
-            "費用合理（4人 ¥10,880–19,680）"
-          ],
-          cons: [
-            "1日4往復，需提早預訂",
-            "日光山内仍需轉乘巴士"
-          ],
-          link: "https://www.tobu.co.jp/spaciax/"
-        },
-        {
-          name: "全日包車（東京→日光→御徒町→返東京）",
-          price: "¥30,000–45,000/台（4人分攤 ¥7,500–11,250/人）",
-          status: "待決定",
-          desc: "若 10/28 的包車延伸至 10/27 加一天，日光山内停靠更自由，行李無需搬運",
-          pros: [
-            "行李全程放車，自由度最高",
-            "可彈性調整日光各景點時間",
-            "連接多慶屋後直返飯店更順"
-          ],
-          cons: [
-            "いろは坂・奥日光秋季仍有渋滞風險",
-            "停車費＋費用高於電車",
-            "需提早預訂有信譽的台灣包車服務"
-          ]
+          desc: "兩國・東京晴空塔一帶公寓式酒店，含廚房設備，適合家庭型態；地址在東向島，距晴空塔約 25 分鐘步行，非最近距離。",
+          map: "東向島6-13-10",
+          link: "https://www.booking.com/hotel/jp/japan-house-sky-tree.html"
         }
       ]
     }
   ]
 
 }; // end TRIP
+
 /* ============ 以下為渲染程式，一般不用改 ============ */
 const badgeClass={move:"b-move",spot:"b-spot",food:"b-food",shop:"b-shop",hotel:"b-hotel"};
 const gmap=q=>`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
-/* —— 初始化：確保非 overview 的 .day 一開始就隱藏，防止載入閃爍 —— */
-document.querySelectorAll(".day:not(#overview)").forEach(d=>{ d.style.display="none"; d.classList.remove("show"); });
-
 /* —— 封面 / 頁尾 / 總覽底部（讀 TRIP.meta）—— */
 const M=TRIP.meta;
 const ARRIVE_ON=(M.phase==="travelling");
-const LS_PREFIX="tripsbook_ueno202610_";
+const LS_PREFIX="tripsbook_TRIPKEY_";   // ★換趟改成該趟代號，如 tripsbook_kyoto202703_
 document.title=`${M.titleMain}${M.titleAccent}${M.titleTail}`;
 document.getElementById("cvVLabel").textContent=M.vlabel||"";
 document.getElementById("cvStamp").textContent=M.stamp||"";
@@ -1318,7 +1188,7 @@ document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M
         <div class="su-val">${nf(charterEach)}<small>／人</small></div>
         <div class="su-sub">總價 ${nf(o.charterTotal)} ÷ ${o.people}　·　${o.car}<br>${o.carNote}</div></div>
       <div class="su-card"><div class="su-label">🏨 住宿方向</div>
-        <div class="su-val">${o.roomEach?nf(o.roomEach):"待估"}<small>／人</small></div>
+        <div class="su-val">${nf(o.roomEach)}<small>／人</small></div>
         <div class="su-sub">${o.room}　·　${o.roomNote}</div></div>
       <div class="su-card"><div class="su-label">🧳 行李 × 車型</div>
         <div class="su-val" style="font-size:15px;line-height:1.5">${o.car}</div>
@@ -1329,136 +1199,162 @@ document.getElementById("pageFoot").innerHTML=`${M.titleMain}${M.titleAccent}${M
 
 const navBar=document.getElementById("navBar");
 const daysEl=document.getElementById("days");
+const ovGrid=document.getElementById("ovGrid");
 
-/* 總覽分頁按鈕（index 0） */
-const ovBtn=document.createElement("button");
-ovBtn.textContent="🏠 總覽";
-ovBtn.className="extra active";
-ovBtn.onclick=()=>show(0);
-navBar.appendChild(ovBtn);
+/* —— AB 版切換（規格 26）——
+   meta.variants 留空＝無分歧，渲染行為與單版本完全相同（向後相容）。
+   有內容時：只顯示「共用日＋當前版本日」，依 days[] 原始順序重新編號 Day 1…N。
+   純前端切換、不存 localStorage（每次開啟回預設版）。 */
+const VARIANTS=Array.isArray(M.variants)?M.variants:[];
+let curVariant=VARIANTS.length?VARIANTS[0].id:null;
+const variantLabel=id=>{const v=VARIANTS.find(x=>x.id===id);return v?v.label:id;};
+/* variant 模式下 num 重編用的英文序數（超出 14 天以數字 fallback） */
+const DAY_ORD=["ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN"];
+const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>!x.d.variant||x.d.variant===curVariant);
 
-TRIP.days.forEach((d,i)=>{
-  const btn=document.createElement("button");
-  btn.textContent=d.tab;
-  btn.onclick=()=>show(i+1);          // 總覽佔 0，各日往後移一位
-  navBar.appendChild(btn);
-
-  const sec=document.createElement("section");
-  sec.className="day";
-  sec.id="day"+i;
-  let html=`<div class="day-head">
-      <div class="num">${d.num}</div>
-      <h2 class="serif">${d.title}</h2>
-      <div class="date">📅 ${d.date}</div>
-      <div class="theme">${d.theme}</div>
-    </div>
-    <div class="day-summary">
-      <div class="ds-item"><span>📍 主要區域</span><b>${d.area||"—"}</b></div>
-      <div class="ds-item"><span>💰 當日預估</span><b>${d.cost||"—"}</b></div>
-      <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
-      ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
-    </div>
-    ${ARRIVE_ON?`<div class="day-progress" data-day="${i}"><div class="bar"><i style="width:0%"></i></div><div class="txt">0/${d.items.length}</div></div>`:""}
-    <div class="tl">`;
-  d.items.forEach((it,j)=>{
-    const meta=[];
-    if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
-    if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
-    const aKey=i+"-"+j;
-    html+=`<div class="item">
-      <div class="time-col"><div class="time">${it.time}</div>${ARRIVE_ON?`<div class="arrived" data-arrive="${aKey}" data-day="${i}">✓</div>`:""}</div>
-      <div class="card">
-        <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
-        <h3>${it.title}</h3>
-        ${it.desc?`<div class="desc">${it.desc}</div>`:""}
-        ${meta.length?`<div class="metaline">${meta.join("")}</div>`:""}
-        ${it.transit?`<div class="transit">🚇 ${it.transit}</div>`:""}
-        ${it.note?`<div class="note">${it.note}</div>`:""}
-        <div class="btns">
-          ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
-          ${it.link?`<a class="btn-search" target="_blank" rel="noopener" href="${it.link}">🔍 最新資訊</a>`:""}
-          ${it.official?`<a class="btn-official" target="_blank" rel="noopener" href="${it.official}">🏛️ 官網</a>`:""}
-        </div>
-      </div></div>`;
-  });
-  html+=`</div>`;
-  sec.innerHTML=html;
-  daysEl.appendChild(sec);
-});
-
-/* 追加分頁：預算、美食（對應已存在的 #budget / #food，DOM 順序接在各 day 之後） */
-const divider=document.createElement("div");
-divider.className="divider";
-navBar.appendChild(divider);
-const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
-/* 景點推薦分頁：自動彙整各日 type:spot；沒有景點時不顯示 */
+/* 景點推薦、待定分頁不受 variant 影響（全版本共用） */
 const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
-if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
-/* 只有當 TRIP.pending 有內容時，才顯示「飯店推薦」分頁（草稿期候選，定案清空後自動隱藏） */
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
-if(hasPending)extraTabs.push({label:"🏨 飯店推薦"});
-extraTabs.forEach((p,k)=>{
-  const idx=TRIP.days.length+1+k;     // 總覽0 + N天 → 預算/美食/待定 依序接在後面
-  const btn=document.createElement("button");
-  btn.textContent=p.label;
-  btn.className="extra";
-  btn.onclick=()=>show(idx);
-  navBar.appendChild(btn);
-});
 /* 沒有對應內容時，把該分頁從 DOM 移除，避免索引錯位 */
 if(!hasSpots){const se=document.getElementById("spots");if(se)se.remove();}
 if(!hasPending){const pe=document.getElementById("pending");if(pe)pe.remove();}
 
-/* 建立總覽卡片 */
-const ovGrid=document.getElementById("ovGrid");
-TRIP.days.forEach((d,i)=>{
-  const card=document.createElement("div");
-  card.className="ov-card";
-  card.onclick=()=>show(i+1);
-  card.innerHTML=`
-    <div class="ov-day">${d.tab} <span>${d.date}</span></div>
-    <div class="ov-title">${d.title}</div>
-    <div class="ov-theme">${d.theme}</div>
-    <div class="ov-tags">
-      <span>📍 ${d.area||"—"}</span>
-      <span>💰 ${d.cost||"—"}</span>
-    </div>`;
-  ovGrid.appendChild(card);
-});
+/* —— 導覽列＋各日分頁＋總覽日卡（variant 切換時整組重建）—— */
+function renderTrip(){
+  const list=visibleDays();
+  navBar.innerHTML="";daysEl.innerHTML="";ovGrid.innerHTML="";
 
-let _curTab=0;
-function show(i,jumpToFirstCard=false){
-  /* 點同一個分頁不做任何事 */
-  if(i===_curTab)return;
-  _curTab=i;
+  /* 總覽分頁按鈕（index 0） */
+  const ovBtn=document.createElement("button");
+  ovBtn.textContent="🏠 總覽";
+  ovBtn.className="extra active";
+  ovBtn.onclick=()=>show(0);
+  navBar.appendChild(ovBtn);
 
-  /* 先把所有 day 隱藏，再顯示目標，避免 layout 抖動造成閃爍 */
-  const days=document.querySelectorAll(".day");
-  const btns=document.querySelectorAll(".nav button");
-  days.forEach((d,j)=>{
-    d.classList.remove("show");
-    d.style.display=(j===i)?"block":"none";
+  list.forEach((x,k)=>{
+    const d=x.d,oi=x.oi;               // oi＝days[] 原始索引（抵達勾選的 key 用它，切版本不亂）
+    const tabText=VARIANTS.length?`Day ${k+1}`:d.tab;   // 有 AB 版時依可見順序重新編號
+    const numText=VARIANTS.length?`DAY ${DAY_ORD[k]||k+1}`:d.num;
+    const vTag=d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"";
+
+    const btn=document.createElement("button");
+    btn.textContent=tabText;
+    btn.onclick=()=>show(k+1);          // 總覽佔 0，各日往後移一位
+    navBar.appendChild(btn);
+
+    const sec=document.createElement("section");
+    sec.className="day";
+    sec.id="day"+oi;
+    let html=`<div class="day-head">
+        <div class="num">${numText}</div>
+        <h2 class="serif">${d.title}${vTag}</h2>
+        <div class="date">📅 ${d.date}</div>
+        <div class="theme">${d.theme}</div>
+      </div>
+      <div class="day-summary">
+        <div class="ds-item"><span>📍 主要區域</span><b>${d.area||"—"}</b></div>
+        <div class="ds-item"><span>💰 當日預估</span><b>${d.cost||"—"}</b></div>
+        <div class="ds-item"><span>🚶 步調</span><b>${d.walk||"—"}</b></div>
+        ${d.dayMap?`<a class="ds-map" target="_blank" rel="noopener" href="${gmap(d.dayMap)}">📍 今日地圖</a>`:""}
+      </div>
+      ${ARRIVE_ON?`<div class="day-progress" data-day="${oi}"><div class="bar"><i style="width:0%"></i></div><div class="txt">0/${d.items.length}</div></div>`:""}
+      <div class="tl">`;
+    d.items.forEach((it,j)=>{
+      const meta=[];
+      if(it.duration)meta.push(`<span>⏱️ 停留 <b>${it.duration}</b></span>`);
+      if(it.best)meta.push(`<span>✨ 最佳 <b>${it.best}</b></span>`);
+      const aKey=oi+"-"+j;
+      html+=`<div class="item">
+        <div class="time-col"><div class="time">${it.time}</div>${ARRIVE_ON?`<div class="arrived" data-arrive="${aKey}" data-day="${oi}">✓</div>`:""}</div>
+        <div class="card">
+          <span class="badge ${badgeClass[it.type]}">${it.badge}</span>
+          <h3>${it.title}</h3>
+          ${it.desc?`<div class="desc">${it.desc}</div>`:""}
+          ${meta.length?`<div class="metaline">${meta.join("")}</div>`:""}
+          ${it.transit?`<div class="transit">🚇 ${it.transit}</div>`:""}
+          ${it.note?`<div class="note">${it.note}</div>`:""}
+          <div class="btns">
+            ${it.map?`<a class="btn-map" target="_blank" rel="noopener" href="${gmap(it.map)}">📍 地圖</a>`:""}
+            ${it.link?`<a class="btn-link" target="_blank" rel="noopener" href="${it.link}">🔗 介紹</a>`:""}
+          </div>
+        </div></div>`;
+    });
+    html+=`</div>`;
+    sec.innerHTML=html;
+    daysEl.appendChild(sec);
+
+    /* 總覽日卡 */
+    const card=document.createElement("div");
+    card.className="ov-card";
+    card.onclick=()=>show(k+1);
+    card.innerHTML=`
+      <div class="ov-day">${tabText} <span>${d.date}</span>${vTag}</div>
+      <div class="ov-title">${d.title}</div>
+      <div class="ov-theme">${d.theme}</div>
+      <div class="ov-tags">
+        <span>📍 ${d.area||"—"}</span>
+        <span>💰 ${d.cost||"—"}</span>
+      </div>`;
+    ovGrid.appendChild(card);
   });
-  /* 延一幀再加 show，讓 CSS fade-in 動畫正常觸發 */
-  requestAnimationFrame(()=>{ if(days[i])days[i].classList.add("show"); });
-  btns.forEach((b,j)=>b.classList.toggle("active",j===i));
 
-  /* 取導覽列尺寸（sticky nav 高度，作為捲動偏移基準） */
-  const nav=document.querySelector(".nav");
-  const navH=nav?nav.getBoundingClientRect().height:56;
-  const navBottom=nav?nav.getBoundingClientRect().bottom+window.scrollY:0;
+  /* 追加分頁：預算、美食（對應已存在的 #budget / #food，DOM 順序接在各 day 之後） */
+  const divider=document.createElement("div");
+  divider.className="divider";
+  navBar.appendChild(divider);
+  const extraTabs=[{label:"💰 預算"},{label:"🍴 美食推薦"}];
+  if(hasSpots)extraTabs.push({label:"📍 景點推薦"});
+  /* 只有當 TRIP.pending 有內容時，才顯示「待定」分頁（若整組都是住宿候選，可改成「🏨 飯店推薦」更好找） */
+  if(hasPending)extraTabs.push({label:"🤔 待定"});
+  extraTabs.forEach((p,k)=>{
+    const idx=list.length+1+k;          // 總覽0 + 可見天數 → 預算/美食/待定 依序接在後面
+    const btn=document.createElement("button");
+    btn.textContent=p.label;
+    btn.className="extra";
+    btn.onclick=()=>show(idx);
+    navBar.appendChild(btn);
+  });
 
-  if(jumpToFirstCard){
-    /* 從總覽點某天 → 跳到第一個 .card，跳過 DAY ONE 大標區 */
-    const firstCard=days[i]&&days[i].querySelector(".card");
-    if(firstCard){
-      const top=firstCard.getBoundingClientRect().top+window.scrollY-navH-10;
-      window.scrollTo({top,behavior:"smooth"});
-      return;
-    }
+  initArrived();
+  show(0);
+}
+
+/* —— AB 版切換鈕（總覽頁最上方；樣式沿用人數切換器）—— */
+(function(){
+  const bar=document.getElementById("variantBar");if(!bar)return;
+  if(!VARIANTS.length){bar.remove();return;}
+  function render(){
+    bar.innerHTML=`<span class="vb-label">🔀 版本</span><div class="ppl-toggle">${
+      VARIANTS.map(v=>`<button class="${v.id===curVariant?"on":""}" data-v="${v.id}">${v.label}</button>`).join("")}</div>`;
+    bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      if(b.dataset.v===curVariant)return;
+      curVariant=b.dataset.v;render();renderTrip();
+    });
   }
-  /* 一般分頁切換 → 捲到導覽列正下方，不回頁面頂端 */
-  window.scrollTo({top:navBottom,behavior:"smooth"});
+  render();
+})();
+
+/* —— pending 空值防呆（規格 10）：draft 且 pending 空/未定義時提示，final/travelling 不顯示 —— */
+(function(){
+  const el=document.getElementById("pendingGuard");if(!el)return;
+  if(M.phase==="draft"&&!hasPending)el.style.display="block";
+  else el.remove();
+})();
+
+/* —— 匯率基準列（規格 27）：rate/rateDate 留白則不顯示 —— */
+(function(){
+  const el=document.getElementById("rateBase");if(!el)return;
+  if(!M.rate){el.remove();return;}
+  const tag=(M.phase==="draft")?"參考":"定版鎖定";
+  el.innerHTML=`💱 匯率基準：¥1 ≈ NT$<b>${M.rate}</b>${M.rateDate?`（${M.rateDate}）`:""}　·　${tag}`;
+})();
+
+renderTrip();
+
+function show(i){
+  document.querySelectorAll(".day").forEach((d,j)=>d.classList.toggle("show",j===i));
+  document.querySelectorAll(".nav button").forEach((b,j)=>b.classList.toggle("active",j===i));
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 const foodGrid=document.getElementById("foodGrid");
@@ -1495,7 +1391,8 @@ if(hasSpots){
 if(hasPending){
   const pw=document.getElementById("pendingWrap");
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
-  /* 訂房比價（A+B）：住宿類 group 設 booking:true（＋ priceChecked 日期）→ 顯示查價日＋各選項加比價連結 */
+  /* 訂房比價（A+B）：住宿類 group 設 booking:true（可加 priceChecked:"YYYY-MM-DD"）→
+     該組顯示查價日提示，每個選項自動帶訂房網一鍵比價（走 Google 站內導向、永不失效、離線僅不載入） */
   const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
   const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
   TRIP.pending.forEach(group=>{
@@ -1506,7 +1403,7 @@ if(hasPending){
         ${group.note?`<p>${group.note}</p>`:""}
       </div>`;
     if(group.booking){
-      h+=`<div class="price-note">💰 ${group.priceChecked?`房價查詢日：<b>${group.priceChecked}</b>　·　`:""}下列為旺季概估，點各家「比價」看即時房價（記得選你的入住日期與人數）。需要我重新查一輪刷新，喊一聲即可。</div>`;
+      h+=`<div class="price-note">💰 ${group.priceChecked?`房價查詢日：<b>${group.priceChecked}</b>　·　`:""}下列為概估，點各家「比價」看即時房價（記得選你的入住日期與人數）。重新查價後更新 priceChecked 日期即可。</div>`;
     }
     h+=`<div class="cand-grid">`;
     group.options.forEach(o=>{
@@ -1566,7 +1463,8 @@ if(hasPending){
   input.addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("packAddBtn").click();});
   render();
 })();
-(function(){
+/* 抵達打勾：由 renderTrip() 每次重建各日分頁後呼叫重綁（key 用 days[] 原始索引，切版本不亂） */
+function initArrived(){
   if(!ARRIVE_ON)return;
   const KEY=LS_PREFIX+"arrived";let set;
   try{set=new Set(JSON.parse(localStorage.getItem(KEY))||[]);}catch(e){set=new Set();}
@@ -1582,7 +1480,7 @@ if(hasPending){
     el.onclick=()=>{el.classList.toggle("on");el.classList.contains("on")?set.add(k):set.delete(k);save();updateDay(el.dataset.day);};
   });
   TRIP.days.forEach((d,i)=>updateDay(i));
-})();
+}
 (function(){
   const btn=document.getElementById("toTop");if(!btn)return;
   window.addEventListener("scroll",()=>{btn.classList.toggle("show",window.scrollY>400);});
