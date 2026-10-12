@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>共用資源・出國通用</title>
+<style>
+:root{
+  --paper:#F2EBDD;--paper2:#EAE0CC;--card:#FBF7EE;--ink:#2A241E;--ink-soft:#5C5247;
+  --vermilion:#C2402A;--vermilion-d:#9E2F1E;--indigo:#2E4A6B;--matcha:#6E8049;--gold:#B08D3C;
+  --line:#D8CDB6;--shadow:0 8px 28px -12px rgba(42,36,30,.35);
+  --f-sans:"PingFang TC","Microsoft JhengHei","Noto Sans TC","Hiragino Sans",-apple-system,"Segoe UI",sans-serif;
+  --f-serif:"Songti TC","Noto Serif TC","Yu Mincho","MS Mincho","Source Han Serif TC",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f-sans);background:var(--paper);color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 14%,rgba(176,141,60,.06),transparent 42%),radial-gradient(circle at 88% 80%,rgba(46,74,107,.06),transparent 42%);}
+.wrap{max-width:840px;margin:0 auto;padding:0 22px}
+.serif{font-family:var(--f-serif)}
+.masthead{text-align:center;padding:52px 22px 24px}
+.seal{width:70px;height:70px;border:2.5px solid var(--vermilion);border-radius:14px;color:var(--vermilion);
+  display:flex;align-items:center;justify-content:center;font-family:var(--f-serif);font-weight:900;font-size:22px;
+  margin:0 auto 18px;transform:rotate(-6deg);box-shadow:inset 0 0 0 4px rgba(194,64,42,.12)}
+.masthead h1{font-family:var(--f-serif);font-weight:900;font-size:clamp(28px,6vw,42px)}
+.masthead .sub{margin-top:10px;font-size:13.5px;color:var(--ink-soft);letter-spacing:.16em}
+.back{display:inline-block;margin:18px auto 0;font-size:13px;color:var(--indigo);text-decoration:none;border:1.5px solid var(--indigo);padding:6px 16px;border-radius:30px;transition:.18s}
+.back:hover{background:var(--indigo);color:#fff}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:18px;box-shadow:var(--shadow)}
+.sec h2{font-family:var(--f-serif);font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec h2::before{content:"";width:22px;height:3px;background:var(--vermilion);border-radius:2px}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:8px 14px;font-size:14px}
+.kv .k{color:var(--ink-soft)}
+.kv .v{font-weight:500}
+.kv a{color:var(--vermilion);text-decoration:none;font-weight:700}
+.checklist{columns:2;column-gap:28px;font-size:14px;list-style:none}
+.checklist li{padding:5px 0 5px 26px;position:relative;break-inside:avoid}
+.checklist li::before{content:"☐";position:absolute;left:0;color:var(--matcha);font-weight:700}
+.note{background:#faece8;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--vermilion-d);line-height:1.7;margin-top:12px}
+.note b{color:var(--vermilion-d)}
+.editnote{background:#f7efdf;border:1px dashed var(--gold);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--ink-soft);line-height:1.7;margin-bottom:30px}
+.editnote b{color:var(--ink)}
+footer{text-align:center;padding:30px 22px 50px;color:var(--ink-soft);font-size:12px;border-top:1px solid var(--line)}
+.sec h3{font-family:var(--f-serif);font-size:16px;font-weight:700;margin:18px 0 10px}
+.kv .v small{display:block;font-weight:400;font-size:12.5px;color:var(--ink-soft)}
+.kv .nw{white-space:nowrap}
+.kv .num{font-family:var(--f-serif);font-weight:700;font-size:15px;letter-spacing:.02em}
+@media(max-width:600px){.kv{grid-template-columns:90px 1fr}.checklist{columns:1}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="seal">共</div>
+  <h1 class="serif">共用資源・出國通用</h1>
+  <div class="sub">SHARED · EVERY TRIP</div>
+  <br>
+  <a class="back" href="../">← 回書架</a>
+</header>
+
+<main class="wrap">
+
+  <div class="editnote">
+    <b>📝 這頁放每趟都會用到的東西</b>，不必每本重複。改這裡的文字即可，無互動邏輯。各旅遊書總覽頁底部有「🆘 緊急聯絡」入口，連到這頁的 <code>#sos</code>。這頁是公開網頁，不寫個人資料。
+  </div>
+
+  <div class="sec">
+    <h2>📍 我的地圖</h2>
+    <div class="kv">
+      <span class="k">通用地圖</span><span class="v"><a href="https://www.google.com/maps/d/" target="_blank" rel="noopener">開啟我的地圖（替換成你的連結）</a></span>
+      <span class="k">用法</span><span class="v">每趟定案後把景點存進對應圖層，現場找路用。</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>📱 常用 App</h2>
+    <div class="kv">
+      <span class="k">交通</span><span class="v">Google Maps、乗換案内、各鐵路官方 App</span>
+      <span class="k">叫車</span><span class="v">GO（日本計程車）、Uber</span>
+      <span class="k">翻譯</span><span class="v">Google 翻譯（下載離線日文包）</span>
+      <span class="k">支付</span><span class="v">IC 卡（Suica／ICOCA）綁手機錢包</span>
+      <span class="k">入境</span><span class="v">Visit Japan Web（提前填好）</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>🧳 行李清單（範本，依季節增減）</h2>
+    <ul class="checklist">
+      <li>護照（效期 6 個月以上）</li>
+      <li>護照影本／電子備份</li>
+      <li>機票／訂房確認</li>
+      <li>日幣現金</li>
+      <li>信用卡（2 張不同家）</li>
+      <li>手機＋充電線</li>
+      <li>行動電源</li>
+      <li>萬國轉接頭</li>
+      <li>常備藥／個人藥</li>
+      <li>保養與盥洗</li>
+      <li>換洗衣物</li>
+      <li>外套（依季節）</li>
+      <li>雨具／折傘</li>
+      <li>環保袋（採購用）</li>
+      <li>口罩</li>
+      <li>旅遊保險資料</li>
+    </ul>
+    <div class="note">
+      <b>出發前 72 小時：</b>填好 Visit Japan Web、線上劃位、確認天氣與紅葉／花火等時令資訊、下載離線地圖與翻譯包。
+    </div>
+  </div>
+
+  <div class="sec" id="sos">
+    <h2>🆘 緊急聯絡（通用）</h2>
+    <div class="kv">
+      <span class="k">日本報警</span><span class="v"><span class="num">110</span></span>
+      <span class="k">火警・救護車</span><span class="v"><span class="num">119</span></span>
+      <span class="k">訪日旅客熱線</span><span class="v"><span class="num">050-3816-2787</span><small>JNTO Japan Visitor Hotline，24 小時、全年無休，可說中文；事故、急病、災害都能問</small></span>
+      <span class="k">駐日代表處（東京）</span><span class="v"><span class="num">03-3280-7811</span><small>急難救助（日本境內）：<span class="nw">080-1009-7179</span>、<span class="nw">080-1009-7436</span></small></span>
+      <span class="k">駐大阪辦事處</span><span class="v"><span class="num">06-6227-8623</span><small>急難救助（日本境內）：<span class="nw">090-8794-4568</span></small></span>
+      <span class="k">外交部急難專線</span><span class="v"><span class="num">0800-085-095</span><small>旅外國人急難救助服務專線（在台灣撥打）</small></span>
+    </div>
+    <div class="note">
+      <b>急難救助電話只在重大緊急狀況撥打</b>（例如被拘留、遭遇重大犯罪、急需就醫），一般領務請在上班時間打總機。其他地區的辦事處見<a href="https://www.boca.gov.tw/" target="_blank" rel="noopener" style="color:var(--vermilion-d);font-weight:700">外交部領事事務局</a>。號碼查證日 2026-10-11，出發前再看一次。
+    </div>
+
+    <h3>求救用語</h3>
+    <div class="kv">
+      <span class="k">請叫救護車</span><span class="v">救急車をお願いします<small>きゅうきゅうしゃを おねがいします</small></span>
+      <span class="k">請幫幫我</span><span class="v">助けてください<small>たすけてください</small></span>
+      <span class="k">請叫警察</span><span class="v">警察を呼んでください<small>けいさつを よんでください</small></span>
+      <span class="k">醫院在哪裡</span><span class="v">病院はどこですか<small>びょういんは どこですか</small></span>
+    </div>
+
+    <div class="note">
+      <b>個人資料不寫在這頁</b>（這頁是公開網頁）：保單號碼與保險公司海外專線、各張信用卡的掛失電話、家人緊急聯絡人，請記在自己的手機備忘錄或紙本。
+    </div>
+  </div>
+
+</main>
+
+<footer>共用資源・出國通用　·　每趟都會用到的放這裡 🧳</footer>
+</body>
+</html>

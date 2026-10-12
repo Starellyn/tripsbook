@@ -1,0 +1,15 @@
+receipt-tracker/.env
+receipt-tracker/.env.local
+receipt-tracker/.env*.local
+receipt-tracker/test-notion.mjs
+receipt-tracker/node_modules
+receipt-tracker/.next
+receipt-tracker/out
+receipt-tracker/next-env.d.ts
+receipt-tracker/tsconfig.tsbuildinfo
+
+# tripsbook：本機私人比對清單（規格書第二十九章），不進 repo
+tools/privacy-deny.local.txt
+# 套用用的 patch 檔含被刪掉的舊內容，不進 repo
+*.patch
+*.diff

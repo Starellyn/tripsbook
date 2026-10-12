@@ -1,0 +1,14 @@
+#!/bin/sh
+# tripsbook：push 前自動跑發佈前檢查（規格書第二十九章），有錯誤就擋下。
+# 啟用（每個 clone 做一次）：git config core.hooksPath .githooks
+ROOT="$(git rev-parse --show-toplevel)"
+if ! command -v node >/dev/null 2>&1; then
+  echo "✗ 找不到 node，無法執行發佈前檢查（tools/check.mjs）。"
+  echo "  請安裝 Node.js 18 以上再 push；確定要略過：git push --no-verify"
+  exit 1
+fi
+if ! node "$ROOT/tools/check.mjs"; then
+  echo ""
+  echo "✗ 發佈前檢查沒過，push 已取消。修正後再 push；確定要略過：git push --no-verify"
+  exit 1
+fi
