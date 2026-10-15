@@ -281,6 +281,13 @@ body{
 .variant-bar .vb-label{font-family:var(--f-serif);font-size:15px;font-weight:700}
 .v-tag{display:inline-block;font-family:var(--f-sans);font-size:11px;font-weight:700;background:#efe6cf;color:var(--gold);border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
 
+/* ---------- 方案切換（規格 30）：切換鈕沿用 .ppl-toggle 樣式；靜態區塊用 data-plan 屬性顯示／隱藏 ---------- */
+.plan-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:12px}
+.plan-bar .vb-label{font-family:var(--f-serif);font-size:15px;font-weight:700}
+.plan-note{flex-basis:100%;margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+.p-tag{display:inline-block;font-family:var(--f-sans);font-size:11px;font-weight:700;background:#e7eef5;color:var(--indigo);border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+[data-plan][hidden]{display:none!important}
+
 /* ---------- pending 空值防呆提示（規格 10） ---------- */
 .pending-guard{font-size:12.5px;color:var(--ink-soft);margin:-6px 0 16px}
 
@@ -431,6 +438,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <h2 class="section-title">行程總覽</h2>
   <p class="section-sub">一眼看完整趟　·　點任一張卡片跳到當天細節</p>
 
+  <!-- ★ 方案切換鈕（meta.plans 有內容才顯示，規格 30） -->
+  <div class="plan-bar" id="planBar"></div>
+
   <!-- ★ AB 版切換鈕（meta.variants 有內容才顯示，規格 26） -->
   <div class="variant-bar" id="variantBar"></div>
 
@@ -470,6 +480,8 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <!-- ★ 匯率基準列（meta.rate / rateDate 有填才顯示，規格 27） -->
   <div class="rate-base" id="rateBase"></div>
 
+  <!-- 以下 ①② 與 ④ 合計隨方案不同（data-plan，規格 30）；③ 與說明兩個方案共用 -->
+  <div data-plan="p0">
   <!-- ① 已確定 -->
   <div class="bud-sub">① 已確定　<small>金額或票價明確</small></div>
   <table class="btable">
@@ -495,6 +507,32 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
       <tr><td><b>🍛 咖哩</b><br>10/27 錦糸町晚餐（SATHI 或 SAPANA），每人 ¥1,000–2,000</td><td>¥4,000–8,000<br><small>約 NT$800–1,600</small></td></tr>
     </tbody>
   </table>
+  </div>
+  <div data-plan="p1">
+  <!-- ① 已確定 -->
+  <div class="bud-sub">① 已確定　<small>金額或票價明確</small></div>
+  <table class="btable">
+    <thead><tr><th>項目</th><th>4 人合計</th></tr></thead>
+    <tbody>
+      <tr><td><b>🚐 包車尾款</b><br>10/28 錦糸町→成田機場，當天以日幣現金支付</td><td>¥102,000<br><small>約 NT$20,800</small></td></tr>
+      <tr><td><b>🎟️ 門票</b><br>東照宮 ¥1,600＋華嚴瀑布電梯 ¥600，每人 ¥2,200（⚠️ 電梯票價是舊版資料；方案一沒有湯もみ）</td><td>¥8,800<br><small>約 NT$1,800</small></td></tr>
+      <tr><td><b>🚄 新幹線去程（指定席）</b><br>10/26 東京→輕井澤，每人 ¥6,020，取代原案的草輕巴士（⚠️ 票價來自第三方網站，沒有日期）</td><td>¥24,080<br><small>約 NT$4,900</small></td></tr>
+    </tbody>
+  </table>
+
+  <!-- ② 共同餐費預估 -->
+  <div class="bud-sub" style="margin-top:30px">② 共同餐費預估　<small>每餐 4 人一起吃的；各自吃的早餐與點心不算；方案一沒有草津午晚餐</small></div>
+  <table class="btable">
+    <thead><tr><th>餐</th><th>4 人合計</th></tr></thead>
+    <tbody>
+      <tr><td><b>🍱 川豊鰻魚飯</b><br>10/24 成田山川豊本店・午餐，每人 ¥3,000–5,000</td><td>¥12,000–20,000<br><small>約 NT$2,400–4,100</small></td></tr>
+      <tr><td><b>🍔 沢村午餐</b><br>10/26 舊輕井澤，每人 ¥1,500–2,500</td><td>¥6,000–10,000<br><small>約 NT$1,200–2,000</small></td></tr>
+      <tr><td><b>🍙 峠の釜めし</b><br>10/26 新幹線上的晚餐便當，¥1,500 × 4 個（⚠️ 只有一個來源）</td><td>¥6,000<br><small>約 NT$1,200</small></td></tr>
+      <tr><td><b>🍵 和み茶屋 湯葉懷石</b><br>10/27 日光午餐，每人 ¥2,500–3,000（⚠️ 只有一個來源，餐點每月更換）</td><td>¥10,000–12,000<br><small>約 NT$2,000–2,400</small></td></tr>
+      <tr><td><b>🍛 咖哩</b><br>10/27 錦糸町晚餐（SATHI 或 SAPANA），每人 ¥1,000–2,000</td><td>¥4,000–8,000<br><small>約 NT$800–1,600</small></td></tr>
+    </tbody>
+  </table>
+  </div>
 
   <!-- ③ 視實際／未公布（不計入合計） -->
   <div class="bud-sub" style="margin-top:30px">③ 視實際或未公布　<small>不計入下面的合計</small></div>
@@ -508,14 +546,26 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 
   <!-- ④ 合計 = ① + ②（不含 ③） -->
   <div class="bud-sub" style="margin-top:30px">④ 合計　<small>① ＋ ②，不含 ③ 的超時費與展覽入場費</small></div>
-  <div class="total-strip">
-    <div><span>① 已確定</span><b>¥122,560</b><span>約 NT$25,000</span></div>
-    <div><span>② 餐費預估</span><b>¥48,000–76,000</b><span>約 NT$9,800–15,500</span></div>
-    <div class="hot"><span>合計</span><b>¥170,560–198,560</b><span>約 NT$34,800–40,500</span></div>
+  <div data-plan="p0">
+    <div class="total-strip">
+      <div><span>① 已確定</span><b>¥122,560</b><span>約 NT$25,000</span></div>
+      <div><span>② 餐費預估</span><b>¥48,000–76,000</b><span>約 NT$9,800–15,500</span></div>
+      <div class="hot"><span>合計</span><b>¥170,560–198,560</b><span>約 NT$34,800–40,500</span></div>
+    </div>
+  </div>
+  <div data-plan="p1">
+    <div class="total-strip">
+      <div><span>① 已確定</span><b>¥134,880</b><span>約 NT$27,500</span></div>
+      <div><span>② 餐費預估</span><b>¥38,000–56,000</b><span>約 NT$7,800–11,400</span></div>
+      <div class="hot"><span>合計</span><b>¥172,880–190,880</b><span>約 NT$35,300–38,900</span></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b style="color:var(--vermilion-d)">和原案的差別：</b>新幹線去程 ¥24,080 取代草輕巴士 ¥8,960，沒有湯もみ ¥2,800 與草津午晚餐 ¥10,000–20,000，合計約少 ¥7,680 到多 ¥2,320。10/25 東京日的餐費與門票由你們安排後再補；10/26 若退票改東京市區，費用依實際另計。
+    </div>
   </div>
 
   <div class="note" style="margin-top:22px">
-    <b style="color:var(--vermilion-d)">不在公費帳內：</b>個人消費（各自吃的早餐與點心、購物、零用、市區電車）、住宿、機票、JR 車票；10/28 THE SKY 午餐用刷卡付款。<br>
+    <b style="color:var(--vermilion-d)">不在公費帳內：</b>個人消費（各自吃的早餐與點心、購物、零用、市區電車）、住宿、機票、已購的 JR 車票；10/28 THE SKY 午餐用刷卡付款。<br>
     <b style="color:var(--vermilion-d)">最容易變動：</b>10/27 的超時費（B 版直接到台場，通常多超時 0.5–1.5 小時）與台場展覽入場費；和み茶屋、峠の釜めし的價位各只有一個來源；B 版從台場回錦糸町的電車費是個人花費，不在內。<br>
     <b style="color:var(--vermilion-d)">取捨：</b>想壓低支出的話，A 版（回錦糸町休息）超時最少，也沒有展覽入場費。
   </div>
@@ -529,8 +579,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
     <a class="big-btn tool-locked" data-href="../_nikki/" style="margin-left:8px;background:var(--gold)">📔 旅途日記</a>
     <div class="phase-hint" id="phaseHint"></div>
     <div class="hotel-box">
-      <div class="hb">🏨 全程住宿<br><b>錦糸町・民宿</b>（第 1、3、4 晚）；<b>草津・住宿</b>（第 2 晚）</div>
-      <div class="hb">🚉 最近車站<br><b>錦糸町站</b>：JR 總武線快速到東京車站約 10 分，轉乘到上野約 15–20 分，半藏門線轉淺草線到淺草約 20 分</div>
+      <div class="hb" data-plan="p0">🏨 全程住宿<br><b>東京・住宿</b>（第 1、3、4 晚，重訂中）；<b>草津・住宿</b>（第 2 晚，已訂）</div>
+      <div class="hb" data-plan="p1">🏨 全程住宿<br><b>東京・住宿</b>（第 1–4 晚連住，待訂）</div>
+      <div class="hb">🚉 最近車站（暫定）<br><b>錦糸町站</b>：JR 總武線快速到東京車站約 10 分，轉乘到上野約 15–20 分，半藏門線轉淺草線到淺草約 20 分；住宿重訂後若換區域再更新</div>
     </div>
   </div>
 
@@ -578,15 +629,21 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
    type 種類：move(交通) / spot(景點) / food(美食) / shop(購物) / hotel(住宿)
    ============================================================ */
 /* ============================================================
-   tokyo-202610 草稿 TRIP 資料區塊（v6：依確認單（四）收斂候選；預算頁改成公費帳）
-   來源：構想書 v4.4（2026-10-12，存在 claude.ai project，不入 repo）
+   tokyo-202610 草稿 TRIP 資料區塊（v7：加「原案／方案一」切換——颱風備案；東京住宿改為待訂）
+   來源：構想書 v4.5 與颱風備案構想書 v0.2（2026-10-15，存在 claude.ai project，不入 repo）
    狀態：phase = "draft"；meta.variants = A／B，只有 10/27 分歧，其餘共用日不標 variant。
+   meta.plans = 原案／方案一（颱風備案，規格 30）：10/25、10/26 兩天分歧（標 plan），
+   10/24、10/27、10/28 共用；方案一 = 不去草津，10/25 留東京，10/26 從東京搭新幹線去輕井澤。
+   10/20 由擁有者決定走哪一套，之後收斂：刪落選方案、移除 plan 欄與 meta.plans。
 
    ⚠️ 尚未解決事項（不擋草稿，擋定版；清單見構想書第六、七章）：
    - 取票憑證：四萬號、新幹線的取票方式要等 Klook 提供；10/24 在上野領票。
+   - 東京住宿：民宿現有訂單擁有者已決定取消，重訂依 10/20 的決定（原案兩筆、方案一一筆）；
+     10/24 預計 20:20–20:45 才到，新訂單要再講；10/28 退房時間與行李寄放到 14:30 要問新住宿。
+   - 方案一的 10/25 由擁有者另外安排，書上只留框架；10/26 去程新幹線確定走方案一才買。
    - 和み茶屋 訂位是否成功（由使用者向車行確認）。
-   - 待定頁：桃園早餐（自備）、上野早餐（3 間）、草津午餐（4 間）、草津晚餐（3 間）、
-     10/27 傍晚 A／B、咖哩（SATHI、SAPANA 二選一）。
+   - 待定頁：桃園早餐（自備）、上野早餐（3 間，只在原案）、草津午餐（4 間，只在原案）、
+     草津晚餐（3 間，只在原案）、10/27 傍晚 A／B、咖哩（SATHI、SAPANA 二選一）。
    - 查不到：草津超市營業時間、輕井澤站便當營業時間、台場哥吉拉展的
      入場費與開放時段（官方尚未公布）、とり彦與水穂等店的價位、丸之內側商店的營業時間。
    - 紅葉為預測，10/24 前、10/27 前再查一次官方。
@@ -594,7 +651,7 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
    已決定（2026-10-12）：四萬號在上野上車（票面 9:00）；包車 10/24 的 8 小時
    從接到人起算、報價含高速費與停車費；東京車站只逛丸之內側外圍（點燈不看，
    要逛商店，約 35 分鐘是底線；晚到先縮多慶屋）；輕井澤午餐去沢村（不是澤屋）；
-   峠の釜めし 當晚餐便當；東京民宿已說過會晚到；錦糸町自由逛（柏青哥・宝くじ）
+   峠の釜めし 當晚餐便當；錦糸町自由逛（柏青哥・宝くじ）
    10/26 晚與 10/27 A 版都留彈性，當選擇性行程；10/27 咖哩不排カレーリーブス。
 
    公費帳（預算頁）：只列公費付的日本花費（包車尾款、門票、草輕巴士、共同餐費、
@@ -632,11 +689,15 @@ const TRIP = {
     variants: [
       { id: "A", label: "A 版・回錦糸町休息" },
       { id: "B", label: "B 版・台場看哥吉拉" }
+    ],
+    plans: [
+      { id: "p0", label: "原案", note: "照原訂行程：10/25 去草津泡湯過夜，10/26 搭草輕巴士到輕井澤。" },
+      { id: "p1", label: "方案一", note: "颱風備案：不去草津。10/25 留在東京（你們另外安排），10/26 從東京搭新幹線去輕井澤。10/20 決定要不要用。" }
     ]
   },
 
   /* ── 基本設定 ───────────────────────────
-     本趟包車、住宿都已訂，金額不放公開網頁（規格 28），人數切換器與分攤卡沒有能算的數字，
+     本趟包車已訂、住宿重訂中，金額不放公開網頁（規格 28），人數切換器與分攤卡沒有能算的數字，
      所以不填 setup（渲染程式沒有 setup 就整塊不顯示）。
      行李安排見 Day 1、Day 2 的行程點與「預約」分頁。 */
 
@@ -697,6 +758,7 @@ const TRIP = {
           title: "成田山新勝寺・表參道",
           desc: "表參道老鋪散步，參拜新勝寺大本堂，再繞平和大塔與成田山公園。",
           duration: "約 45 分鐘",
+          note: "境內不收門票、不休息。官方網站列的御護摩祈祷是 9:00–15:00 每小時一場，成田山書道美術館 9:00–16:00（入館至 15:30、週一休）；大本堂堂內的開放時間官方沒有列，第三方寫參拜時間 8:00–16:00。晚到的話，先抓 16:00 前能進大本堂。⚠️ 第三方時間沒有日期；10/24 日落約 16:53 是計算值，不是查證。",
           map: "成田山新勝寺"
         },
         {
@@ -742,7 +804,7 @@ const TRIP = {
           type: "move",
           badge: "取票",
           title: "上野站 領取車票",
-          desc: "到上野站的みどりの窓口領取 10/25 草津・四萬與 10/26 輕井澤→東京的新幹線票（中央口 5:30–22:00；新幹線轉乘口 5:30–23:00）。領完票往御徒町的多慶屋，步行約 10–15 分鐘，也可以請包車載。",
+          desc: "到上野站的みどりの窓口領取 10/26 輕井澤→東京的新幹線票（原案另有 10/25 草津・四萬；中央口 5:30–22:00；新幹線轉乘口 5:30–23:00）。領完票往御徒町的多慶屋，步行約 10–15 分鐘，也可以請包車載。",
           duration: "約 30 分鐘",
           note: "⚠️ 取票窗口與方式以旅行社／KKday／Klook 的憑證為準，Klook 的憑證還沒收到；部分憑證只能在指定櫃台兌換，帶護照與憑證。步行時間為估算。",
           map: "上野駅"
@@ -770,9 +832,9 @@ const TRIP = {
           time: "20:20",
           type: "hotel",
           badge: "入住",
-          title: "錦糸町住宿（民宿・第 1 晚）",
-          desc: "放好大行李、休息；明早 07:15 要出門，今晚先把去草津的一大一小行李整理好。",
-          note: "已跟民宿說過會晚到（預計 20:20–20:45）。",
+          title: "錦糸町住宿（第 1 晚）",
+          desc: "放好大行李、休息。原案明早 07:15 要出門去草津，今晚先把一大一小行李整理好；方案一 10/25 不用早起。",
+          note: "⚠️ 住宿重訂中（見「預約」分頁）：預計 20:20–20:45 才到，新訂單要再跟住宿說一次。",
           map: "錦糸町駅"
         }
       ]
@@ -782,6 +844,7 @@ const TRIP = {
     {
       tab: "Day 2",
       num: "DAY TWO",
+      plan: "p0",
       title: "上野早餐 → 草津・四萬號 → 草津溫泉",
       date: "10/25（日）",
       theme: "上野早餐 → 特急草津・四萬 → 草津老街午餐・小吃 → 湯もみ → 泡湯 → 老街晚餐",
@@ -901,10 +964,42 @@ const TRIP = {
       ]
     },
 
-    /* ──────── Day 3：草津 → 輕井澤 → 東京 ──────── */
+    /* ──────── Day 2 方案一：東京自由日（颱風備案；擁有者另外安排，書上只留框架）──────── */
+    {
+      tab: "Day 2",
+      num: "DAY TWO",
+      plan: "p1",
+      title: "東京自由日（你們另外安排）",
+      date: "10/25（日）",
+      theme: "全天由你們安排，晚上住東京；不用趕特急，也不用帶行李去草津",
+      area: "東京",
+      cost: "依你們的安排另計",
+      walk: "依安排",
+      items: [
+        {
+          time: "全天",
+          type: "hotel",
+          badge: "自由日",
+          title: "10/25 由你們另外安排",
+          desc: "方案一不去草津，這天留在東京，去哪裡由你們決定，書上先不排。不用 07:15 出門趕特急，大行李也全部留在住宿。",
+          note: "⚠️ 這天先留空。重訂住宿的區域要看這天的安排決定（見「預約」分頁），安排好再訂最順。"
+        },
+        {
+          time: "晚上",
+          type: "hotel",
+          badge: "住宿",
+          title: "回東京住宿（第 2 晚）",
+          desc: "第 2 晚住東京，前後幾晚連住同一個基地，不用換住宿、不用搬行李。",
+          note: "⚠️ 住宿重訂中，見「預約」分頁。"
+        }
+      ]
+    },
+
+    /* ──────── Day 3 原案：草津 → 輕井澤 → 東京 ──────── */
     {
       tab: "Day 3",
       num: "DAY THREE",
+      plan: "p0",
       title: "草津 → 輕井澤賞楓 → 回東京",
       date: "10/26（一）",
       theme: "草輕巴士 → 雲場池 → 沢村午餐・舊輕井澤銀座 → Outlet → 新幹線 → 東京車站 GRANSTA → 錦糸町",
@@ -1038,7 +1133,158 @@ const TRIP = {
           time: "21:30",
           type: "hotel",
           badge: "入住",
-          title: "回錦糸町住宿（民宿・第 3 晚）",
+          title: "回錦糸町住宿（第 3 晚）",
+          desc: "預計 21:30 前回到住宿；GRANSTA 與錦糸町逛的時間可彈性調整。",
+          map: "錦糸町駅"
+        }
+      ]
+    },
+
+    /* ──────── Day 3 方案一：東京 → 輕井澤 → 東京（颱風備案；新幹線去程，行李留東京）──────── */
+    {
+      tab: "Day 3",
+      num: "DAY THREE",
+      plan: "p1",
+      title: "東京 → 輕井澤賞楓 → 回東京",
+      date: "10/26（一）",
+      theme: "新幹線 → 雲場池 → 沢村午餐・舊輕井澤銀座 → Outlet → 新幹線回東京 → 東京車站 GRANSTA → 回住宿",
+      area: "長野縣輕井澤・東京",
+      cost: "新幹線去程 ¥6,020/人（指定席）｜午餐 ¥1,500–2,500/人｜釜めし便當 ¥1,500/人｜回程新幹線已購｜購物依個人",
+      walk: "中度；輕井澤約 3–4 小時走動",
+      dayMap: "軽井沢駅",
+      route: ["軽井沢駅", "雲場池", "ベーカリー沢村 旧軽井沢", "軽井沢・プリンスショッピングプラザ", "軽井沢駅 新幹線ホーム"],
+      items: [
+        {
+          time: "10/24",
+          type: "move",
+          badge: "判斷",
+          title: "先看天氣，決定去不去輕井澤",
+          desc: "10/23 傍晚先看輕井澤 10/26 的預報。去程新幹線票的退票手續費，10/24 前退最低，10/25 起明顯變高（JR 東日本規定），所以建議 10/24 在上野取票時就決定。天氣太差就退票，改在東京市區。",
+          note: "⚠️ 退票規則取自 JR 東日本官網（頁面沒有日期）；回程淺間 626 號是 Klook 的票，規則看訂單頁。週一北斎美術館、江戶東京博物館、國立科學博物館休館；すみだ水族館、東京ソラマチ有開（⚠️ 部分來源不是官方）。",
+          route: false
+        },
+        {
+          time: "09:15",
+          type: "move",
+          badge: "交通",
+          title: "住宿 → 東京車站",
+          desc: "預留買早餐與找月台的時間，09:30 前到東京車站。若住宿維持錦糸町，JR 總武線快速到東京車站約 10 分鐘。",
+          transit: "住宿 →（JR）→ 東京駅",
+          note: "⚠️ 住宿重訂後位置可能改變，出發前用地圖 App 看一次。",
+          map: "東京駅"
+        },
+        {
+          time: "09:30",
+          type: "food",
+          badge: "早餐",
+          title: "東京車站買早餐（各自）",
+          desc: "新幹線 10:07 發車；早餐在車站買，帶上車吃或發車前吃完。",
+          duration: "約 20 分鐘",
+          note: "⚠️ 早上各店的營業時間沒查，到現場看公告；也可以出門前先在住宿附近買好。",
+          route: false
+        },
+        {
+          time: "10:07",
+          type: "move",
+          badge: "新幹線",
+          title: "東京 → 輕井澤（北陸新幹線 淺間 635 號）",
+          desc: "10:07 發車，11:11 抵達輕井澤站，指定席，4 人 ¥24,080（約 NT$4,912），算公費，取代原案的草輕巴士。比原案約早 20 分鐘到。",
+          transit: "東京駅 →（北陸新幹線あさま）→ 軽井沢駅",
+          note: "確定走方案一（10/20）才買，天氣差可在 10/24 前低成本退票。⚠️ 票價來自第三方網站（沒有日期）；班次依 JR 東日本 2026-10 版時刻表，10/26 有行駛，更早的班次是否行駛沒查；購票方式（えきねっと或窗口）待定。",
+          map: "東京駅"
+        },
+        {
+          time: "11:40",
+          type: "spot",
+          badge: "紅葉",
+          title: "雲場池",
+          desc: "輕井澤賞楓名所。10/11 官方狀況是「見頃前、部分變色」，預測見頃 10 月中旬–11 月上旬；10/26 落在預測區間內，但實際色澤要看當天。",
+          duration: "約 50 分鐘",
+          note: "11:11 到站，行李全留在東京住宿、不用寄放，比原案早約 20 分鐘開始。⚠️ 到雲場池與沢村的交通（步行／計程車／巴士）到站再決定；色澤以當天為準。",
+          map: "雲場池"
+        },
+        {
+          time: "13:00",
+          type: "food",
+          badge: "午餐",
+          title: "ベーカリー＆レストラン沢村 旧軽井沢（午餐）",
+          desc: "舊輕井澤銀座入口附近的人氣麵包坊兼餐廳，內用有漢堡、義大利麵、炸雞排等，午餐約 ¥1,500–2,500/人（約 NT$306–510），咖啡或紅茶另加 ¥275（約 NT$56）。麵包坊可外帶，順便買 10/27 早餐的麵包。",
+          duration: "約 70 分鐘",
+          note: "10/26 週一有營業（兩份資料都寫無休）；營業時間各來源不同（7:00 起，到 20:00、21:00 或 22:00 不等），13:00 都在營業內。⚠️ 價格與餐點內容是 2023–2026 年的口碑與預約網站資料，以現場為準；假日午餐曾排約 10 分鐘，週一應該較寬鬆。",
+          map: "ベーカリー沢村 旧軽井沢"
+        },
+        {
+          time: "14:15",
+          type: "spot",
+          badge: "散步",
+          title: "舊輕井澤銀座",
+          desc: "沢村就在銀座通入口附近，吃完順著銀座通散步，逛伴手禮與果醬店。",
+          duration: "約 45 分鐘",
+          note: "⚠️ 回輕井澤站的交通（巴士或計程車）到站再決定；15:30 要到 Outlet。",
+          map: "旧軽井沢銀座"
+        },
+        {
+          time: "15:30",
+          type: "shop",
+          badge: "購物",
+          title: "軽井沢・プリンスショッピングプラザ（Outlet）",
+          desc: "回到輕井澤站旁的 Outlet 逛街，營業 10:00–19:00；16:30 前準備回站搭車。",
+          duration: "約 1 小時",
+          map: "軽井沢・プリンスショッピングプラザ",
+          link: "https://www.karuizawa-psp.jp/"
+        },
+        {
+          time: "16:20",
+          type: "food",
+          badge: "便當",
+          title: "買晚餐便當（峠の釜めし）",
+          desc: "新幹線上吃的晚餐，已決定買峠の釜めし（荻野屋），一個 ¥1,500（約 NT$306），4 個約 ¥6,000。輕井澤站構內販售所有賣，營業時間未查到，建議 16:30 前買好。",
+          note: "⚠️ 價格只有一個來源（2026-10-06 的介紹文章），以現場標價為準。備案：買不到時改在 Outlet 美食街打包（15:30–16:30 逛街時順便買，未查證）。",
+          map: "軽井沢駅"
+        },
+        {
+          time: "16:56",
+          type: "move",
+          badge: "新幹線",
+          title: "輕井澤 → 東京（北陸新幹線 淺間 626 號）",
+          desc: "16:56 發車，18:12 抵達東京車站，指定席（已購）。",
+          transit: "軽井沢駅 →（北陸新幹線あさま）→ 東京駅",
+          map: "軽井沢駅 新幹線ホーム"
+        },
+        {
+          time: "18:15",
+          type: "shop",
+          badge: "購物",
+          title: "GRANSTA 東京（丸之內改札內）",
+          desc: "改札內免出站：逛手帳文具、東京喫茶メリー（9/16 新開幕，GRANSTA 地下 1F）等，約 1.5 小時。",
+          duration: "約 90 分鐘",
+          note: "⚠️ 各店營業時間以現場公告為準。想把時間留給錦糸町的話，這裡可以縮短。",
+          map: "グランスタ東京"
+        },
+        {
+          time: "19:45",
+          type: "move",
+          badge: "交通",
+          title: "東京車站 → 住宿",
+          desc: "若住宿維持錦糸町，JR 總武線快速約 10 分鐘。",
+          transit: "東京駅 →（JR総武線快速）→ 錦糸町",
+          map: "錦糸町駅"
+        },
+        {
+          time: "20:00",
+          type: "shop",
+          badge: "散策",
+          title: "錦糸町散策（選擇性）",
+          desc: "回到錦糸町後還有約 1.5 小時的彈性：ドン・キホーテ錦糸町北口店 09:00–04:00（站步行約 3 分鐘）；想體驗柏青哥的話，ヒノマルパチンコ錦糸町店 10:00–22:40（南口，丸井旁，18 歲以上）。",
+          duration: "約 60–90 分鐘",
+          note: "⚠️ 營業時間依 2026 年網路資料。柏青哥場內聲音大、不少店可吸菸，先講好預算上限。宝くじ売場：站周邊查到約 9 處，獨立賣場約 18:30–19:00 收，只有みずほ銀行系的出張所（アルカキット、オリナス等）到 20:00；這天約 19:55 才到站，GRANSTA 縮短才趕得上。要買刮刮樂，10/27 傍晚 A 版（見 Day 4）比較從容；選 B 版的話，宝くじ売場就只剩這晚有機會；各賣場賣不賣刮刮樂沒有逐店資料，日光、輕井澤也沒查到賣場資料，到站看有沒有「宝くじ」招牌。",
+          map: "ドン・キホーテ 錦糸町北口店"
+        },
+        {
+          time: "21:30",
+          type: "hotel",
+          badge: "入住",
+          title: "回住宿（第 3 晚）",
           desc: "預計 21:30 前回到住宿；GRANSTA 與錦糸町逛的時間可彈性調整。",
           map: "錦糸町駅"
         }
@@ -1130,7 +1376,7 @@ const TRIP = {
           time: "17:00",
           type: "hotel",
           badge: "休息",
-          title: "回住宿放東西、休息（民宿・第 4 晚）",
+          title: "回住宿放東西、休息（第 4 晚）",
           desc: "放下外套與包包，休息一下；走了一整天，體力不夠就整段跳過下一項。"
         },
         {
@@ -1156,8 +1402,8 @@ const TRIP = {
           time: "21:00",
           type: "hotel",
           badge: "整理",
-          title: "回住宿整理行李（民宿・第 4 晚）",
-          desc: "最後一晚，隔天退房。住宿有洗衣烘乾機，可趁今晚整理行李。",
+          title: "回住宿整理行李（第 4 晚）",
+          desc: "最後一晚，隔天退房，可趁今晚整理行李。⚠️ 有沒有洗衣烘乾機，要看重訂的住宿。",
           map: "錦糸町駅"
         }
       ]
@@ -1277,8 +1523,8 @@ const TRIP = {
           time: "21:00",
           type: "hotel",
           badge: "整理",
-          title: "回住宿整理行李（民宿・第 4 晚）",
-          desc: "最後一晚，隔天退房。住宿有洗衣烘乾機，可趁今晚整理行李。",
+          title: "回住宿整理行李（第 4 晚）",
+          desc: "最後一晚，隔天退房，可趁今晚整理行李。⚠️ 有沒有洗衣烘乾機，要看重訂的住宿。",
           map: "錦糸町駅"
         }
       ]
@@ -1351,7 +1597,7 @@ const TRIP = {
           badge: "交通",
           title: "新大谷 → 錦糸町住宿（取行李）",
           desc: "電車約 35–40 分鐘（含步行，估算），14:30 前回到住宿取行李。",
-          note: "⚠️ 民宿的退房時間，以及退房後大行李能不能留到 14:30，還沒確認；出發前先問民宿。",
+          note: "⚠️ 住宿的退房時間，以及退房後大行李能不能留到 14:30，還沒確認；重訂後先問新住宿。",
           map: "錦糸町駅"
         },
         {
@@ -1385,26 +1631,31 @@ const TRIP = {
     },
     {
       name: "ほんのり屋 エキュート上野店（飯糰＋味噌湯）",
+      plan: "p0",
       price: "飯糰約 ¥200–350/個（約 NT$41–71）",
       desc: "JR 上野站改札內 3F、早上 7:00 起的飯糰店（日曜 7:00–21:00），可自由組合飯糰、炸雞塊與味噌湯。⚠️ 營業時間依 JR-Cross 官網，價格是東京本店 2019 年資料"
     },
     {
       name: "上野 喫茶店（ギャラン／珈琲 王城）",
+      plan: "p0",
       price: "ピザトーストセット ¥1,250（約 NT$255）／トーストセット ¥750（約 NT$153）",
       desc: "兩間都在改札外、8:00 起：ギャラン是昭和風喫茶店，廣小路口步行約 2 分鐘；珈琲 王城在阿美橫丁入口附近，步行約 4 分鐘。想換成咖啡廳早餐時選。⚠️ 價格是 2025-03 資料，王城的公休各資料不一致"
     },
     {
       name: "草津 釜飯（湯畑まんてん）",
+      plan: "p0",
       price: "釜飯 ¥1,419–1,749（約 NT$290–357）",
       desc: "在湯畑正前方（2 樓看得到湯畑），釜飯與お切り込みうどん，午餐晚餐都有開。⚠️ 價格是 2025-09 的新聞稿，夜間每人另收桌位費"
     },
     {
       name: "草津 溫泉饅頭與小吃（湯畑周邊）",
+      plan: "p0",
       price: "炸饅頭 ¥200（約 NT$41）起",
       desc: "松むら饅頭、山びこ、寺子屋本舗、草津温泉プリン、杉養蜂園都在湯畑附近，適合邊走邊吃；溫泉饅頭整袋約 ¥500–800。⚠️ 價格是 2023-12 資料，多數店家 17:00–18:00 收"
     },
     {
       name: "草津 老街定食・洋食・居酒屋（とり彦／どんぐり／空嵐／花／水穂）",
+      plan: "p0",
       price: "午餐約 ¥1,000–2,000／晚餐約 ¥1,500–3,000（估算）",
       desc: "とり彦（定食，午晚都有）、西洋料理どんぐり（洋食）、空嵐（咖啡餐館）適合午餐；OBAHAN GOHAN 花（定食）、いざかや水穂（居酒屋）適合晚餐。町內多在 19:30–20:00 前收單，晚餐 18:30 前入座較保險。⚠️ 營業時間依 2026-10 彙整文章，價位多數查不到"
     },
@@ -1460,25 +1711,36 @@ const TRIP = {
     }
   ],
 
-  /* ── 預約與住宿（規格 4-4；已訂只寫區域與第幾晚，不寫名稱與金額）── */
+  /* ── 預約與住宿（規格 4-4；已訂只寫區域與第幾晚，不寫名稱與金額；取消費用、取消條件與期限不寫，規格 28、30）──
+     住宿：民宿現有訂單擁有者已決定取消（2026-10-15），重訂依 10/20 的決定（原案兩筆、方案一一筆）。 */
   bookings: [
-    { kind: "stay", area: "東京・錦糸町", type: "民宿", night: [1, 3, 4], date: "10/24、10/26、10/27", status: "booked",
-      note: "10/25 晚人在草津、不住這裡，大行李寄放；10/24 預計 20:20–20:45 才到，已跟民宿說過會晚到；10/28 退房後包車去機場。⚠️ 10/28 的退房時間與退房後行李寄放到 14:30 還沒確認" },
-    { kind: "stay", area: "草津溫泉", night: 2, date: "10/25", status: "booked",
+    { kind: "stay", area: "東京", type: "住宿", night: 1, date: "10/24", status: "todo", deadline: "10/23", plan: "p0",
+      note: "原案拆成兩筆：10/24 單獨一筆，去程班機若受颱風影響，可等 10/22–23 航空公司公告再訂，或選可免費取消的；預計 20:20–20:45 才到，訂完要跟住宿說。區域暫以錦糸町規劃，重訂後若換區域，行程與包車接送點跟著調整" },
+    { kind: "stay", area: "東京", type: "住宿", night: [3, 4], date: "10/26–10/27", status: "todo", deadline: "10/20", plan: "p0",
+      note: "原案：草津夾在中間，所以另訂一筆。10/28 退房後包車去機場；訂之前先問退房時間與退房後行李能不能放到 14:30" },
+    { kind: "stay", area: "東京", type: "住宿", night: [1, 2, 3, 4], date: "10/24–10/27", status: "todo", deadline: "10/20", plan: "p1",
+      note: "方案一：四晚連住、合併成一筆最單純；若擔心去程，可拆成 10/24 一筆＋10/25–27 一筆。區域看 10/25 的安排；若不是錦糸町，包車的接送點要跟著改。預計 10/24 20:20–20:45 才到；10/28 退房時間與行李寄放到 14:30 訂之前先問" },
+    { kind: "stay", area: "草津溫泉", night: 2, date: "10/25", status: "booked", plan: "p0",
       note: "含 10/26 早餐" },
+    { kind: "stay", area: "草津溫泉", night: 2, date: "10/25", status: "booked", plan: "p1",
+      note: "方案一不住這裡：10/20 決定後要取消（取消條件看訂單頁，不放在公開網頁）" },
     { kind: "other", what: "包車 ① 成田機場 → 成田山 → 上野 → 錦糸町（8 小時，從接到人起算）", date: "10/24", status: "booked",
       note: "報價含高速費與停車費；約 20:30 結束" },
     { kind: "other", what: "包車 ② 日光一日（06:00 起，10 小時）", date: "10/27", status: "booked",
       note: "預計 16:00–17:30 到錦糸町（A 版）或台場（B 版）；超過 10 小時每小時加收（費率在私人備忘）；報價含高速費與停車費" },
     { kind: "other", what: "包車 ③ 錦糸町 → 成田機場", date: "10/28", status: "booked",
       note: "最晚 15:00–16:00 從住宿出發；尾款當天以日幣現金支付（金額見預算頁）" },
-    { kind: "ticket", what: "JR 特急「草津・四萬」（上野 → 長野原草津口）", date: "10/25", status: "booked",
+    { kind: "ticket", what: "JR 特急「草津・四萬」（上野 → 長野原草津口）", date: "10/25", status: "booked", plan: "p0",
       note: "09:00 上野發車（票面）；⚠️ 10/24 在上野站取票，憑證上的取票方式要等 Klook 提供" },
+    { kind: "ticket", what: "JR 特急「草津・四萬」（上野 → 長野原草津口）", date: "10/25", status: "booked", plan: "p1",
+      note: "方案一不搭：10/20 決定後要取消，取消方式看 Klook 訂單頁（⚠️ 規則還沒確認）" },
+    { kind: "ticket", what: "北陸新幹線（東京 → 輕井澤，10:07 發車，指定席，4 人）", date: "10/26", status: "todo", deadline: "10/20", plan: "p1",
+      note: "確定走方案一才買，金額見預算頁。天氣差要退票的話，10/24 前退手續費最低（JR 東日本規定）；購票方式（えきねっと或窗口）待定" },
     { kind: "ticket", what: "北陸新幹線（輕井澤 → 東京，16:56 發車，指定席）", date: "10/26", status: "booked",
-      note: "⚠️ 和特急票一起在上野取票（以憑證為準）" },
-    { kind: "ticket", what: "草輕交通巴士（草津 → 輕井澤）", date: "10/26", status: "none",
+      note: "⚠️ 10/24 在上野站取票（原案和特急票一起；以憑證為準）；兩個方案都搭這班" },
+    { kind: "ticket", what: "草輕交通巴士（草津 → 輕井澤）", date: "10/26", status: "none", plan: "p0",
       note: "現場購票、直達輕井澤站北口；提早 20–30 分鐘到站" },
-    { kind: "ticket", what: "湯もみショー（熱乃湯）", date: "10/25", status: "none",
+    { kind: "ticket", what: "湯もみショー（熱乃湯）", date: "10/25", status: "none", plan: "p0",
       note: "現場購票；預計 15:30 場" },
     { kind: "table", what: "川豊本店（成田山）", date: "10/24", status: "none",
       note: "現場抽號碼牌、無法預約" },
@@ -1519,6 +1781,7 @@ const TRIP = {
     },
     {
       topic: "10/25 上野早餐（日式為主，其次咖啡廳）",
+      plan: "p0",
       note: "9:00 從上野上車，錦糸町 07:15 前後出發、約 07:40 到上野（車票 10/24 已領好）。你勾了三間：改札內的ほんのり屋（不用出站，ecute 上野 3F），以及改札外的兩間喫茶店（要出站，吃完再進站，走路約 2–4 分鐘）。兩間喫茶店 8:00 才開，選它們的話，錦糸町可以晚約 20 分鐘出門，用餐約 30 分鐘，08:40 前要到月台。以下營業時間來自 2024–2026 年的彙整文章與 JR-Cross 官網，日曜日可能不同；ecute 上野官網的「カフェ・レストラン」標準營業時間是 10:00 起，ほんのり屋的實際開店時間出發前再確認。",
       options: [
         {
@@ -1549,6 +1812,7 @@ const TRIP = {
     },
     {
       topic: "10/25 草津老街午餐（約 12:45 入座，不含蕎麥）",
+      plan: "p0",
       note: "10/25 是週日，湯畑一帶中午人多。你勾了四間：釜飯（まんてん）、定食（とり彦）、洋食（どんぐり）、咖啡餐館（空嵐）。晚餐另開一題，とり彦兩題都有勾，午晚只吃一餐，另一餐換別間。營業時間與公休來自 2026-02 與 2026-10 的彙整文章，價位多數查不到。",
       options: [
         {
@@ -1587,6 +1851,7 @@ const TRIP = {
     },
     {
       topic: "10/25 草津老街晚餐（不含蕎麥）",
+      plan: "p0",
       note: "住宿沒含晚餐，你說午晚餐都在老街解決。町內多數店 19:30–20:00 就收單，建議 18:30 前入座。你勾了三間：居酒屋（水穂）、定食（とり彦、花）；とり彦午餐題也有勾，午晚只吃一餐。以下營業時間來自 2026-10 的彙整文章（週日都有開，但不定休的店要看當天公告）；午餐選了哪間，晚餐就挑別間換口味。",
       options: [
         {
@@ -1751,11 +2016,23 @@ const ovGrid=document.getElementById("ovGrid");
 const VARIANTS=Array.isArray(M.variants)?M.variants:[];
 let curVariant=VARIANTS.length?VARIANTS[0].id:null;
 const variantLabel=id=>{const v=VARIANTS.find(x=>x.id===id);return v?v.label:id;};
+
+/* —— 方案切換（規格 30）——
+   meta.plans 留空＝無方案分歧，渲染行為與單方案完全相同（向後相容）。
+   有內容時：days[]／bookings[]／pending[]／food[] 標 plan 的項目只在該方案顯示，沒標的共用；
+   景點分頁依當前方案的日子彙整；預算頁等靜態區塊用 data-plan 屬性（見 applyPlanBlocks）。
+   與 variant 可同時存在：日子要同時符合 plan 與 variant 才顯示。
+   預設顯示 plans[0]；純前端切換、不存 localStorage（每次開啟回預設方案）。 */
+const PLANS=Array.isArray(M.plans)?M.plans:[];
+let curPlan=PLANS.length?PLANS[0].id:null;
+const planLabel=id=>{const p=PLANS.find(x=>x.id===id);return p?p.label:id;};
+const planOk=o=>!o.plan||!PLANS.length||o.plan===curPlan;   // 沒標 plan＝共用；沒有 meta.plans 時一律顯示
 /* variant 模式下 num 重編用的英文序數（超出 14 天以數字 fallback） */
 const DAY_ORD=["ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN"];
-const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>!x.d.variant||x.d.variant===curVariant);
+const RENUM=VARIANTS.length>0||PLANS.length>0;   // 有版本或方案時，Day 依可見順序重新編號
+const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>planOk(x.d)&&(!x.d.variant||x.d.variant===curVariant));
 
-/* 景點推薦、待定分頁不受 variant 影響（全版本共用） */
+/* 景點推薦、待定分頁不受 variant 影響（全版本共用）；有方案時則依當前方案過濾（規格 30） */
 const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
 /* 沒有對應內容時，把該分頁從 DOM 移除，避免索引錯位 */
@@ -1780,9 +2057,10 @@ function renderTrip(){
 
   list.forEach((x,k)=>{
     const d=x.d,oi=x.oi;               // oi＝days[] 原始索引（抵達勾選的 key 用它，切版本不亂）
-    const tabText=VARIANTS.length?`Day ${k+1}`:d.tab;   // 有 AB 版時依可見順序重新編號
-    const numText=VARIANTS.length?`DAY ${DAY_ORD[k]||k+1}`:d.num;
-    const vTag=d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"";
+    const tabText=RENUM?`Day ${k+1}`:d.tab;   // 有 AB 版或方案時依可見順序重新編號
+    const numText=RENUM?`DAY ${DAY_ORD[k]||k+1}`:d.num;
+    const vTag=((PLANS.length&&d.plan)?`<span class="p-tag">${planLabel(d.plan)}</span>`:"")
+      +(d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"");   // 方案標籤在前、版本標籤在後
 
     const btn=document.createElement("button");
     btn.textContent=tabText;
@@ -1871,11 +2149,11 @@ function renderTrip(){
   show(0);
 }
 
-/* —— 預約與住宿（規格 4-4）：隨 variant 過濾。
+/* —— 預約與住宿（規格 4-4）：隨 plan／variant 過濾。
    公開站規則（規格 28）：已訂的只顯示區域・類型・第幾晚，candidates／name 一律不顯示 —— */
 function renderBookings(){
   const wrap=document.getElementById("bookingsWrap");if(!wrap)return;
-  const rows=BOOKINGS.filter(b=>!b.variant||b.variant===curVariant);
+  const rows=BOOKINGS.filter(b=>planOk(b)&&(!b.variant||b.variant===curVariant));
   const ST={booked:["已訂","bk-booked"],todo:["待訂","bk-todo"],none:["免預約","bk-none"]};
   const nights=n=>Array.isArray(n)?`第 ${n.join("、")} 晚`:(n?`第 ${n} 晚`:"");
   const todo=rows.filter(b=>b.status==="todo").length;
@@ -1889,7 +2167,8 @@ function renderBookings(){
       const what=b.kind==="stay"?[b.area,b.type,nights(b.night)].filter(Boolean).join("・"):(b.what||"");
       const cands=b.status!=="booked"&&(b.candidates||[]).length?`候選：${b.candidates.join("、")}`:"";
       const sub=[cands,b.note||""].filter(Boolean).join("　·　");
-      const vTag=b.variant?`<span class="v-tag">${variantLabel(b.variant)}</span>`:"";
+      const vTag=((PLANS.length&&b.plan)?`<span class="p-tag">${planLabel(b.plan)}</span>`:"")
+        +(b.variant?`<span class="v-tag">${variantLabel(b.variant)}</span>`:"");
       h+=`<div class="bk-row">
         <div class="bk-what">${what}${vTag}${b.date?`<span class="bk-when">📅 ${b.date}</span>`:""}</div>
         <span class="bk-st ${st[1]}">${st[0]}${b.status==="todo"&&b.deadline?` · ${b.deadline} 前`:""}</span>
@@ -1915,6 +2194,28 @@ function renderBookings(){
   }
   render();
 })();
+
+/* —— 方案切換鈕（規格 30；總覽頁最上方，樣式沿用人數切換器）——
+   切換時：日程、預約、待定、美食、景點，以及帶 data-plan 屬性的靜態區塊（預算頁等）一起換。 */
+function applyPlanBlocks(){
+  document.querySelectorAll("[data-plan]").forEach(el=>{el.hidden=PLANS.length>0&&el.dataset.plan!==curPlan;});
+}
+(function(){
+  const bar=document.getElementById("planBar");if(!bar)return;
+  if(!PLANS.length){bar.remove();return;}
+  function render(){
+    const cur=PLANS.find(p=>p.id===curPlan)||PLANS[0];
+    bar.innerHTML=`<span class="vb-label">🧭 方案</span><div class="ppl-toggle">${
+      PLANS.map(p=>`<button class="${p.id===curPlan?"on":""}" data-pid="${p.id}">${p.label}</button>`).join("")}</div>${
+      cur.note?`<p class="plan-note">${cur.note}</p>`:""}`;
+    bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      if(b.dataset.pid===curPlan)return;
+      curPlan=b.dataset.pid;render();applyPlanBlocks();renderTrip();renderSpots();renderFood();renderPending();
+    });
+  }
+  render();
+})();
+applyPlanBlocks();
 
 /* —— pending 空值防呆（規格 10）：draft 且 pending 空/未定義時提示，final/travelling 不顯示 —— */
 (function(){
@@ -1956,20 +2257,30 @@ function show(i){
 }
 
 const foodGrid=document.getElementById("foodGrid");
-TRIP.food.forEach(f=>{
-  const el=document.createElement("div");
-  el.className="food";
-  el.innerHTML=`<h4>${f.name}</h4><span class="price">${f.price}</span><p>${f.desc}</p>
-    <a target="_blank" rel="noopener" href="${gmap(f.name)}">📍 在地圖查看 →</a>`;
-  foodGrid.appendChild(el);
-});
+function renderFood(){   // 有方案時只顯示當前方案的美食（規格 30），切換方案時重畫
+  foodGrid.innerHTML="";
+  TRIP.food.filter(planOk).forEach(f=>{
+    const el=document.createElement("div");
+    el.className="food";
+    el.innerHTML=`<h4>${f.name}</h4><span class="price">${f.price}</span><p>${f.desc}</p>
+      <a target="_blank" rel="noopener" href="${gmap(f.name)}">📍 在地圖查看 →</a>`;
+    foodGrid.appendChild(el);
+  });
+}
+renderFood();
 
-/* —— 景點推薦：自動彙整各日 type:spot 行程點 —— */
-if(hasSpots){
-  const spotGrid=document.getElementById("spotGrid");
+/* —— 景點推薦：自動彙整各日 type:spot 行程點。
+   有方案時只收當前方案的日子；同名景點只留一個（A／B 版或兩個方案共有的景點不重複）；切換方案時重畫 —— */
+function renderSpots(){
+  if(!hasSpots)return;
+  const spotGrid=document.getElementById("spotGrid");if(!spotGrid)return;
+  spotGrid.innerHTML="";
+  const seenSpot=new Set();
   TRIP.days.forEach(d=>{
+    if(!planOk(d))return;
     (d.items||[]).forEach(it=>{
-      if(it.type!=="spot")return;
+      if(it.type!=="spot"||seenSpot.has(it.title))return;
+      seenSpot.add(it.title);
       const meta=[];
       if(it.duration)meta.push(`⏱️ ${it.duration}`);
       if(it.best)meta.push(`✨ ${it.best}`);
@@ -1984,20 +2295,25 @@ if(hasSpots){
     });
   });
 }
+renderSpots();
 
-/* —— 待定／候選比較 —— */
-if(hasPending){
-  const pw=document.getElementById("pendingWrap");
+/* —— 待定／候選比較（有方案時只顯示當前方案的題目，切換方案時重畫）—— */
+function renderPending(){
+  if(!hasPending)return;
+  const pw=document.getElementById("pendingWrap");if(!pw)return;
+  pw.innerHTML="";
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
   /* 訂房比價（A+B）：住宿類 group 設 booking:true（可加 priceChecked:"YYYY-MM-DD"）→
      該組顯示查價日提示，每個選項自動帶訂房網一鍵比價（走 Google 站內導向、永不失效、離線僅不載入） */
   const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
   const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
-  TRIP.pending.forEach(group=>{
+  const groups=TRIP.pending.filter(planOk);
+  if(!groups.length){pw.innerHTML=`<p class="bk-empty">這個方案沒有待定項目。</p>`;return;}
+  groups.forEach(group=>{
     const block=document.createElement("div");
     block.className="pgroup";
     let h=`<div class="pgroup-head">
-        <h3>${group.topic}</h3>
+        <h3>${group.topic}${(PLANS.length&&group.plan)?`<span class="p-tag">${planLabel(group.plan)}</span>`:""}</h3>
         ${group.note?`<p>${group.note}</p>`:""}
       </div>`;
     if(group.booking){
@@ -2024,6 +2340,7 @@ if(hasPending){
     pw.appendChild(block);
   });
 }
+renderPending();
 
 /* ===== 新功能：倒數、故事、分享、打包、抵達打勾、進度、回頂部 ===== */
 (function(){

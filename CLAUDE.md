@@ -1,6 +1,6 @@
 # CLAUDE.md — 給 AI 的專案說明
 
-> **版本:v2.4(2026-10-12)** — 對應規格書／規劃準則 v2.4:公開站規則加「擁有者同意的例外」(單筆確切金額)、預算頁可寫成公費帳。(v2.3:公開站規則、構想書改存 claude.ai project、`bookings[]`、發佈前檢查 `tools/check.mjs`;v2.2:定版 checklist、修正規格書章數)
+> **版本:v2.5(2026-10-15)** — 對應規格書／規劃準則 v2.5:新增 `meta.plans` 方案切換(原案/備案,規格 30);景點推薦同名只留一個。(v2.4:對應規格書／規劃準則 v2.4:公開站規則加「擁有者同意的例外」(單筆確切金額)、預算頁可寫成公費帳。(v2.3:公開站規則、構想書改存 claude.ai project、`bookings[]`、發佈前檢查 `tools/check.mjs`;v2.2:定版 checklist、修正規格書章數))
 >
 > 在 VS Code（或任何 AI 工具）開這個專案時，先讀這份。它是「30 秒上手卡」；
 > 詳細規範在 `旅遊行程書_規格書.md`，需要細節時去查對應章節。
@@ -52,6 +52,7 @@ Fail Loud… 見 `~/.claude/CLAUDE.md`）。
 - 產出後在書架 `index.html` 的 `BOOKS` 加一張卡（含 `url`、`sortKey`），並提醒發佈流程。
 - 可留白的欄位就留白，不要塞佔位字；該元素會自動不顯示。
 - 有 AB 版分歧時：`meta.variants` 定義版本、分歧日標 `variant`、共用日不標（規格 26）。
+- 有備案方案（原案／方案一，例：颱風）時：`meta.plans` 定義方案；分歧的 `days[]`／`bookings[]`／`pending[]`／`food[]` 項目標 `plan`，預算頁區塊用 `data-plan`，共用的不標（規格 30）。決定後要收斂（刪落選方案、移除 `plan` 與 `meta.plans`）。
 - 要訂的東西（住宿、餐廳、票券、包車）列進 `bookings[]`，已訂只寫區域（規格 4-4）。
 - `meta.rate`／`rateDate` 為台幣換算基準：草稿期參考值、定版鎖當日（規格 27）。
 
@@ -93,7 +94,7 @@ tripsbook/
 ├── index.html              ← 書架首頁（所有旅遊書總目錄）
 ├── CLAUDE.md               ← 本檔
 ├── 規劃準則.md              ← 排行程的內容面準則（規劃前先讀）
-├── 旅遊行程書_規格書.md      ← 完整技術規範（29 章，細節看這）
+├── 旅遊行程書_規格書.md      ← 完整技術規範（30 章，細節看這）
 ├── 旅遊行程書_模版.html      ← 空白模版（產新書的基礎）
 ├── tokyo-202610/index.html ← 一本行程書（資料夾名 = 地點-YYYYMM）
 ├── _shared/index.html      ← 共用資源（每趟通用，含緊急聯絡 #sos）
@@ -126,6 +127,7 @@ tripsbook/
 行程點 `type`：`move`(藍) / `spot`(金) / `food`(朱紅) / `shop`(綠) / `hotel`(灰)。
 留白原則：可留白欄位不填，該元素就不出現，不留空殼。
 AB 版：`meta.variants` 定義版本清單，日層級 `variant` 標分歧日（規格 26）。
+方案（原案／備案）：`meta.plans` 定義方案清單，`days[]`／`bookings[]`／`pending[]`／`food[]` 的 `plan` 欄標分歧項目（規格 30）。
 匯率：`meta.rate` + `rateDate` 為全書台幣換算基準（規格 27）。
 
 ## 旅程階段（`meta.phase`）
@@ -160,9 +162,9 @@ AB 版：`meta.variants` 定義版本清單，日層級 `variant` 標分歧日�
 
 0. **構想階段（claude.ai）**：產「旅遊構想書」→ 主軸確認 → 依轉換 checklist 轉 TRIP（規劃準則.md 第二～四章）。VS Code 從步驟 1 接手。構想書留在 claude.ai project，不入 repo。
 1. 複製模版 → 新資料夾 `地點-YYYYMM/index.html`。
-2. 貼上 claude.ai 交付的 `meta`(含 `phase:"draft"`、`rate`/`rateDate`、`departDate`) → `setup` → `days`(分歧日含 `variant`) → `food` → `bookings` → `pending`。
+2. 貼上 claude.ai 交付的 `meta`(含 `phase:"draft"`、`rate`/`rateDate`、`departDate`) → `setup` → `days`(分歧日含 `variant`／`plan`) → `food` → `bookings` → `pending`。
 3. 在書架 `index.html` 的 `BOOKS` 加一張卡（含 `url`、`sortKey`）。
-4. 定案：依規劃準則 4-2 定版 checklist 逐項執行（清 pending、收斂 variant、鎖匯率並**校對全書 NT$**、phase 改 final、存我的地圖）。
+4. 定案：依規劃準則 4-2 定版 checklist 逐項執行（清 pending、收斂 variant 與 plan、鎖匯率並**校對全書 NT$**、phase 改 final、存我的地圖）。
 5. 出發：`phase` 改 `travelling`。
 6. `node tools/check.mjs` 錯誤清零 → push（pre-push 掛鉤會再跑一次；第一次 clone 後先執行 `git config core.hooksPath .githooks`）→ `node tools/check.mjs --deploy <資料夾>` 等它回報已上線。
 

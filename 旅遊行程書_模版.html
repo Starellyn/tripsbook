@@ -281,6 +281,13 @@ body{
 .variant-bar .vb-label{font-family:var(--f-serif);font-size:15px;font-weight:700}
 .v-tag{display:inline-block;font-family:var(--f-sans);font-size:11px;font-weight:700;background:#efe6cf;color:var(--gold);border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
 
+/* ---------- 方案切換（規格 30）：切換鈕沿用 .ppl-toggle 樣式；靜態區塊用 data-plan 屬性顯示／隱藏 ---------- */
+.plan-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:12px}
+.plan-bar .vb-label{font-family:var(--f-serif);font-size:15px;font-weight:700}
+.plan-note{flex-basis:100%;margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+.p-tag{display:inline-block;font-family:var(--f-sans);font-size:11px;font-weight:700;background:#e7eef5;color:var(--indigo);border-radius:20px;padding:2px 10px;margin-left:8px;vertical-align:middle;letter-spacing:.03em;white-space:nowrap}
+[data-plan][hidden]{display:none!important}
+
 /* ---------- pending 空值防呆提示（規格 10） ---------- */
 .pending-guard{font-size:12.5px;color:var(--ink-soft);margin:-6px 0 16px}
 
@@ -431,6 +438,9 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
   <h2 class="section-title">行程總覽</h2>
   <p class="section-sub">一眼看完整趟　·　點任一張卡片跳到當天細節</p>
 
+  <!-- ★ 方案切換鈕（meta.plans 有內容才顯示，規格 30） -->
+  <div class="plan-bar" id="planBar"></div>
+
   <!-- ★ AB 版切換鈕（meta.variants 有內容才顯示，規格 26） -->
   <div class="variant-bar" id="variantBar"></div>
 
@@ -466,6 +476,8 @@ footer{text-align:center;padding:30px 20px 50px;color:var(--ink-soft);font-size:
 <section class="wrap day" id="budget" style="padding-top:30px">
   <h2 class="section-title">旅費預算</h2>
   <p class="section-sub">以每人計　·　匯率與數字依實際調整　·　＜編輯說明：此頁為靜態表格，直接改文字即可＞</p>
+  <!-- ★ 有方案分歧（meta.plans）時，隨方案不同的表格、總計、說明，各用 <div data-plan="方案id">…</div> 包起來，
+       切換方案時自動顯示／隱藏；沒有分歧的部分不用包（規格 30）。決定方案後，留下的 div 拆掉外層、落選的整塊刪除 -->
 
   <!-- ★ 匯率基準列（meta.rate / rateDate 有填才顯示，規格 27） -->
   <div class="rate-base" id="rateBase"></div>
@@ -587,6 +599,11 @@ const TRIP = {
     /* AB 版切換（規格 26）：如 [{id:"A",label:"花火票版"},{id:"B",label:"無票版"}]
        留空＝無分歧，一切照舊。分歧日在 days[] 該日加 variant:"A"，共用日不標 */
     variants:[],
+    /* 方案切換（規格 30）：如 [{id:"p0",label:"原案",note:"一句話說明"},{id:"p1",label:"方案一",note:"…"}]
+       留空＝無方案分歧，一切照舊。plans[0] 是預設顯示。分歧的 days[]／bookings[]／pending[]／food[] 項目加 plan:"p1"
+       （id 要對得上），共用的不標；預算頁等靜態區塊加 data-plan="p1" 屬性。可和 variants 同時存在。
+       方案決定後要收斂：刪掉落選方案的資料，移除 plan 欄與 meta.plans */
+    plans:[],
     vlabel:"○○の旅",                                 // 封面右側直書小標
     titleMain:"目的地名稱", titleAccent:"X 日",        // 主標：前段（黑）＋ 強調段（朱紅）
     titleTail:"旅遊行程書",                            // 主標尾
@@ -622,6 +639,7 @@ const TRIP = {
      · type 種類：move(交通) spot(景點) food(美食) shop(購物) hotel(住宿)
      · 每個欄位都可留白；留白的就不會顯示
      · AB 版分歧日加 variant:"A"（共用日不標；同一天兩種走法寫成兩個 day 物件相鄰排列，A 在前。規格 26）
+     · 方案分歧日加 plan:"p1"（共用日不標；兩個方案的同一天寫成兩個 day 物件。規格 30）
      · 今日路線：自動把當天行程點的 map 依序串起；要手動指定就加 route:["地點A","地點B"]，
        某點不想算進路線就在該點加 route:false（規格 5）
      · ★ 公開站規則（規格 28）：不寫航班編號與起降時刻（只寫「約 07:30 前抵達機場」）；
@@ -681,7 +699,7 @@ const TRIP = {
     }
   ],
 
-  /* ===== 美食分頁（與每日行程獨立，放整趟想推薦的店）===== */
+  /* ===== 美食分頁（與每日行程獨立，放整趟想推薦的店；有方案時項目可加 plan:"p1" 只在該方案顯示）===== */
   food:[
     {name:"餐廳一", price:"¥X,XXX–X,XXX", desc:"招牌與特色一句話。"},
     {name:"餐廳二", price:"¥X,XXX–X,XXX", desc:"招牌與特色一句話。"},
@@ -696,7 +714,7 @@ const TRIP = {
      · 住宿用 area＋type＋night（第幾晚，可寫 [1,3,4]）；其他用 what
      · ★ 公開站規則（規格 28）：已訂的只寫區域・類型・第幾晚；名稱、地址、電話、確認號、金額記私人備忘。
        未訂時可在 candidates 列候選名稱，status 改成 booked 後要清掉（驗證腳本會擋）
-     · 有 AB 版時可加 variant:"A"，只在該版本顯示
+     · 有 AB 版時可加 variant:"A"，只在該版本顯示；有方案時可加 plan:"p1"，只在該方案顯示（規格 30）
      · 留空（bookings:[]）→ 分頁自動隱藏                                          */
   bookings:[
     {kind:"stay", area:"區域", type:"商務飯店", night:1, date:"M/D", status:"todo", deadline:"M/D",
@@ -712,6 +730,7 @@ const TRIP = {
      · 住宿類 group 加 booking:true（＋ priceChecked:"YYYY-MM-DD"）
        → 該組顯示查價日提示，每個選項自動帶 Booking/Agoda/樂天/Jalan 一鍵比價連結
        （非住宿候選別設 booking，才不會冒出訂房網連結）
+     · 有方案時，group 可加 plan:"p1"，只在該方案顯示（規格 30）
      · 若整個 pending 都是住宿候選，可把上方 extraTabs 的「🤔 待定」改成「🏨 飯店推薦」更好找
      · 全部決定後：把整個 pending:[ ] 清空（或刪掉這個欄位），分頁會自動消失
        → 同一份檔案就從「草稿」變成「正式版」                                  */
@@ -826,11 +845,23 @@ const ovGrid=document.getElementById("ovGrid");
 const VARIANTS=Array.isArray(M.variants)?M.variants:[];
 let curVariant=VARIANTS.length?VARIANTS[0].id:null;
 const variantLabel=id=>{const v=VARIANTS.find(x=>x.id===id);return v?v.label:id;};
+
+/* —— 方案切換（規格 30）——
+   meta.plans 留空＝無方案分歧，渲染行為與單方案完全相同（向後相容）。
+   有內容時：days[]／bookings[]／pending[]／food[] 標 plan 的項目只在該方案顯示，沒標的共用；
+   景點分頁依當前方案的日子彙整；預算頁等靜態區塊用 data-plan 屬性（見 applyPlanBlocks）。
+   與 variant 可同時存在：日子要同時符合 plan 與 variant 才顯示。
+   預設顯示 plans[0]；純前端切換、不存 localStorage（每次開啟回預設方案）。 */
+const PLANS=Array.isArray(M.plans)?M.plans:[];
+let curPlan=PLANS.length?PLANS[0].id:null;
+const planLabel=id=>{const p=PLANS.find(x=>x.id===id);return p?p.label:id;};
+const planOk=o=>!o.plan||!PLANS.length||o.plan===curPlan;   // 沒標 plan＝共用；沒有 meta.plans 時一律顯示
 /* variant 模式下 num 重編用的英文序數（超出 14 天以數字 fallback） */
 const DAY_ORD=["ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","ELEVEN","TWELVE","THIRTEEN","FOURTEEN"];
-const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>!x.d.variant||x.d.variant===curVariant);
+const RENUM=VARIANTS.length>0||PLANS.length>0;   // 有版本或方案時，Day 依可見順序重新編號
+const visibleDays=()=>TRIP.days.map((d,oi)=>({d,oi})).filter(x=>planOk(x.d)&&(!x.d.variant||x.d.variant===curVariant));
 
-/* 景點推薦、待定分頁不受 variant 影響（全版本共用） */
+/* 景點推薦、待定分頁不受 variant 影響（全版本共用）；有方案時則依當前方案過濾（規格 30） */
 const hasSpots=TRIP.days.some(d=>(d.items||[]).some(it=>it.type==="spot"));
 const hasPending=Array.isArray(TRIP.pending)&&TRIP.pending.length>0;
 /* 沒有對應內容時，把該分頁從 DOM 移除，避免索引錯位 */
@@ -855,9 +886,10 @@ function renderTrip(){
 
   list.forEach((x,k)=>{
     const d=x.d,oi=x.oi;               // oi＝days[] 原始索引（抵達勾選的 key 用它，切版本不亂）
-    const tabText=VARIANTS.length?`Day ${k+1}`:d.tab;   // 有 AB 版時依可見順序重新編號
-    const numText=VARIANTS.length?`DAY ${DAY_ORD[k]||k+1}`:d.num;
-    const vTag=d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"";
+    const tabText=RENUM?`Day ${k+1}`:d.tab;   // 有 AB 版或方案時依可見順序重新編號
+    const numText=RENUM?`DAY ${DAY_ORD[k]||k+1}`:d.num;
+    const vTag=((PLANS.length&&d.plan)?`<span class="p-tag">${planLabel(d.plan)}</span>`:"")
+      +(d.variant?`<span class="v-tag">${variantLabel(d.variant)}</span>`:"");   // 方案標籤在前、版本標籤在後
 
     const btn=document.createElement("button");
     btn.textContent=tabText;
@@ -946,11 +978,11 @@ function renderTrip(){
   show(0);
 }
 
-/* —— 預約與住宿（規格 4-4）：隨 variant 過濾。
+/* —— 預約與住宿（規格 4-4）：隨 plan／variant 過濾。
    公開站規則（規格 28）：已訂的只顯示區域・類型・第幾晚，candidates／name 一律不顯示 —— */
 function renderBookings(){
   const wrap=document.getElementById("bookingsWrap");if(!wrap)return;
-  const rows=BOOKINGS.filter(b=>!b.variant||b.variant===curVariant);
+  const rows=BOOKINGS.filter(b=>planOk(b)&&(!b.variant||b.variant===curVariant));
   const ST={booked:["已訂","bk-booked"],todo:["待訂","bk-todo"],none:["免預約","bk-none"]};
   const nights=n=>Array.isArray(n)?`第 ${n.join("、")} 晚`:(n?`第 ${n} 晚`:"");
   const todo=rows.filter(b=>b.status==="todo").length;
@@ -964,7 +996,8 @@ function renderBookings(){
       const what=b.kind==="stay"?[b.area,b.type,nights(b.night)].filter(Boolean).join("・"):(b.what||"");
       const cands=b.status!=="booked"&&(b.candidates||[]).length?`候選：${b.candidates.join("、")}`:"";
       const sub=[cands,b.note||""].filter(Boolean).join("　·　");
-      const vTag=b.variant?`<span class="v-tag">${variantLabel(b.variant)}</span>`:"";
+      const vTag=((PLANS.length&&b.plan)?`<span class="p-tag">${planLabel(b.plan)}</span>`:"")
+        +(b.variant?`<span class="v-tag">${variantLabel(b.variant)}</span>`:"");
       h+=`<div class="bk-row">
         <div class="bk-what">${what}${vTag}${b.date?`<span class="bk-when">📅 ${b.date}</span>`:""}</div>
         <span class="bk-st ${st[1]}">${st[0]}${b.status==="todo"&&b.deadline?` · ${b.deadline} 前`:""}</span>
@@ -990,6 +1023,28 @@ function renderBookings(){
   }
   render();
 })();
+
+/* —— 方案切換鈕（規格 30；總覽頁最上方，樣式沿用人數切換器）——
+   切換時：日程、預約、待定、美食、景點，以及帶 data-plan 屬性的靜態區塊（預算頁等）一起換。 */
+function applyPlanBlocks(){
+  document.querySelectorAll("[data-plan]").forEach(el=>{el.hidden=PLANS.length>0&&el.dataset.plan!==curPlan;});
+}
+(function(){
+  const bar=document.getElementById("planBar");if(!bar)return;
+  if(!PLANS.length){bar.remove();return;}
+  function render(){
+    const cur=PLANS.find(p=>p.id===curPlan)||PLANS[0];
+    bar.innerHTML=`<span class="vb-label">🧭 方案</span><div class="ppl-toggle">${
+      PLANS.map(p=>`<button class="${p.id===curPlan?"on":""}" data-pid="${p.id}">${p.label}</button>`).join("")}</div>${
+      cur.note?`<p class="plan-note">${cur.note}</p>`:""}`;
+    bar.querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      if(b.dataset.pid===curPlan)return;
+      curPlan=b.dataset.pid;render();applyPlanBlocks();renderTrip();renderSpots();renderFood();renderPending();
+    });
+  }
+  render();
+})();
+applyPlanBlocks();
 
 /* —— pending 空值防呆（規格 10）：draft 且 pending 空/未定義時提示，final/travelling 不顯示 —— */
 (function(){
@@ -1031,20 +1086,30 @@ function show(i){
 }
 
 const foodGrid=document.getElementById("foodGrid");
-TRIP.food.forEach(f=>{
-  const el=document.createElement("div");
-  el.className="food";
-  el.innerHTML=`<h4>${f.name}</h4><span class="price">${f.price}</span><p>${f.desc}</p>
-    <a target="_blank" rel="noopener" href="${gmap(f.name)}">📍 在地圖查看 →</a>`;
-  foodGrid.appendChild(el);
-});
+function renderFood(){   // 有方案時只顯示當前方案的美食（規格 30），切換方案時重畫
+  foodGrid.innerHTML="";
+  TRIP.food.filter(planOk).forEach(f=>{
+    const el=document.createElement("div");
+    el.className="food";
+    el.innerHTML=`<h4>${f.name}</h4><span class="price">${f.price}</span><p>${f.desc}</p>
+      <a target="_blank" rel="noopener" href="${gmap(f.name)}">📍 在地圖查看 →</a>`;
+    foodGrid.appendChild(el);
+  });
+}
+renderFood();
 
-/* —— 景點推薦：自動彙整各日 type:spot 行程點 —— */
-if(hasSpots){
-  const spotGrid=document.getElementById("spotGrid");
+/* —— 景點推薦：自動彙整各日 type:spot 行程點。
+   有方案時只收當前方案的日子；同名景點只留一個（A／B 版或兩個方案共有的景點不重複）；切換方案時重畫 —— */
+function renderSpots(){
+  if(!hasSpots)return;
+  const spotGrid=document.getElementById("spotGrid");if(!spotGrid)return;
+  spotGrid.innerHTML="";
+  const seenSpot=new Set();
   TRIP.days.forEach(d=>{
+    if(!planOk(d))return;
     (d.items||[]).forEach(it=>{
-      if(it.type!=="spot")return;
+      if(it.type!=="spot"||seenSpot.has(it.title))return;
+      seenSpot.add(it.title);
       const meta=[];
       if(it.duration)meta.push(`⏱️ ${it.duration}`);
       if(it.best)meta.push(`✨ ${it.best}`);
@@ -1059,20 +1124,25 @@ if(hasSpots){
     });
   });
 }
+renderSpots();
 
-/* —— 待定／候選比較 —— */
-if(hasPending){
-  const pw=document.getElementById("pendingWrap");
+/* —— 待定／候選比較（有方案時只顯示當前方案的題目，切換方案時重畫）—— */
+function renderPending(){
+  if(!hasPending)return;
+  const pw=document.getElementById("pendingWrap");if(!pw)return;
+  pw.innerHTML="";
   const statusClass={"待決定":"st-open","傾向":"st-lean","已排除":"st-out"};
   /* 訂房比價（A+B）：住宿類 group 設 booking:true（可加 priceChecked:"YYYY-MM-DD"）→
      該組顯示查價日提示，每個選項自動帶訂房網一鍵比價（走 Google 站內導向、永不失效、離線僅不載入） */
   const BOOK_SITES=[["Booking","Booking.com"],["Agoda","Agoda"],["樂天","楽天トラベル"],["Jalan","じゃらん"]];
   const gsearch=q=>"https://www.google.com/search?q="+encodeURIComponent(q)+"&hl=zh-TW";
-  TRIP.pending.forEach(group=>{
+  const groups=TRIP.pending.filter(planOk);
+  if(!groups.length){pw.innerHTML=`<p class="bk-empty">這個方案沒有待定項目。</p>`;return;}
+  groups.forEach(group=>{
     const block=document.createElement("div");
     block.className="pgroup";
     let h=`<div class="pgroup-head">
-        <h3>${group.topic}</h3>
+        <h3>${group.topic}${(PLANS.length&&group.plan)?`<span class="p-tag">${planLabel(group.plan)}</span>`:""}</h3>
         ${group.note?`<p>${group.note}</p>`:""}
       </div>`;
     if(group.booking){
@@ -1099,6 +1169,7 @@ if(hasPending){
     pw.appendChild(block);
   });
 }
+renderPending();
 
 /* ===== 新功能：倒數、故事、分享、打包、抵達打勾、進度、回頂部 ===== */
 (function(){

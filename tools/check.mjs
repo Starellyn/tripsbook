@@ -221,6 +221,31 @@ function checkTrip(file, text, isTemplate) {
     if (AMOUNT.test(JSON.stringify(b))) add(name, ln, "隱私", "error", `預約「${label}」寫了金額（實付金額記在私人備忘）`);
   });
 
+  // 方案（plan，規格 30）：days／bookings／pending／food 的 plan 與預算頁等的 data-plan 都要對得上 meta.plans
+  const plans = Array.isArray(M.plans) ? M.plans : [];
+  const pids = plans.map(p => p.id);
+  const foods = Array.isArray(T.food) ? T.food : [];
+  const blank = m => m.replace(/[^\n]/g, " ");
+  const html = stripStyle(text).replace(/<script[\s\S]*?<\/script>/gi, blank).replace(/<!--[\s\S]*?-->/g, blank);
+  const planRef = (kind, label, o, ln) => {
+    if (o.plan && !pids.includes(o.plan))
+      add(name, ln, "結構", "error", `${kind}「${label}」標了 plan "${o.plan}"，但 meta.plans 沒有這個方案`);
+  };
+  (T.days || []).forEach(d => planRef("日程", d.title, d, L(d.title)));
+  bookings.forEach(b => planRef("預約", b.what || [b.area, b.type].filter(Boolean).join("・") || "(未命名)", b, L(b.what || b.area || "bookings")));
+  pending.forEach(g => planRef("待定", g.topic, g, L(g.topic)));
+  foods.forEach(f => planRef("美食", f.name, f, L(f.name)));
+  for (const m of html.matchAll(/data-plan="([^"]*)"/g))
+    if (!pids.includes(m[1])) add(name, lineAt(html, m.index), "結構", "error", `data-plan "${m[1]}" 對不到 meta.plans`);
+  plans.forEach((p, i) => {
+    if (!p.id || !p.label) add(name, L("plans"), "結構", "error", `meta.plans 第 ${i + 1} 項要有 id 與 label`);
+    else if (pids.indexOf(p.id) !== i) add(name, L("plans"), "結構", "error", `meta.plans 的 id "${p.id}" 重複`);
+    const used = [...(T.days || []), ...bookings, ...pending, ...foods].some(o => o.plan === p.id) || html.includes(`data-plan="${p.id}"`);
+    if (p.id && !used) add(name, L("plans"), "結構", "warn", `方案 "${p.id}" 沒有任何分歧的日子、預約、待定、美食或預算區塊`);
+  });
+  if (M.phase !== "draft" && plans.length)
+    add(name, L("plans"), "結構", "error", "已定版（phase 不是 draft）但 meta.plans 還在：方案要先收斂（規格 30）");
+
   // setup：金額只放預估
   ((T.setup || {}).options || []).forEach(o => {
     const ln = L("roomEach") > L("渲染程式") && L("渲染程式") ? L("setup") : L("roomEach");
